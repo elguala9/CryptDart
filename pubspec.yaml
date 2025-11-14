@@ -1,0 +1,13 @@
+name: cryptdart
+version: 0.1.0
+description: A Dart project under LGPL-3.0 license.
+author: lgualandi
+homepage: https://example.com
+repository: https://example.com/cryptdart
+license: LGPL-3.0
+environment:
+  sdk: '>=2.12.0 <4.0.0'
+dependencies:
+  # Add your dependencies here
+dev_dependencies:
+  # Add your dev dependencies here
