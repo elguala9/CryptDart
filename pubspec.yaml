@@ -6,8 +6,8 @@ homepage: https://example.com
 repository: https://example.com/cryptdart
 license: LGPL-3.0
 environment:
-  sdk: '>=2.12.0 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 dependencies:
-  # Add your dependencies here
+  pointycastle: ^3.7.3
 dev_dependencies:
   # Add your dev dependencies here
