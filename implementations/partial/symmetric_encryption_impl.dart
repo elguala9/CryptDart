@@ -2,12 +2,13 @@ import '../../interfaces/i_shsp_simmetric_enc.dart';
 import '../../types/crypto_algorithm.dart';
 import 'encryption_impl.dart';
 
-abstract class SymmetricEncryption extends Encryption implements ISimmetricEncryption {
+abstract class SymmetricCipher extends Cipher implements ISimmetricCipher {
   final String _key;
+  final DateTime? expirationDate;
 
-  SymmetricEncryption({
+  SymmetricCipher({
     required CryptoAlgorithm algorithm,
-    required DateTime expirationDate,
+    this.expirationDate,
     required String key,
   }) : _key = key,
        super(algorithm: algorithm, expirationDate: expirationDate);

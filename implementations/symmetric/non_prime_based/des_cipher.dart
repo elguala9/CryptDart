@@ -1,11 +1,11 @@
+// DES/TripleDES: algoritmo simmetrico non basato su numeri primi
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
+import '../../../types/crypto_algorithm.dart';
+import '../../partial/symmetric_encryption_impl.dart';
 
-import '../types/crypto_algorithm.dart';
-import 'partial/symmetric_encryption_impl.dart';
-
-class DESEncryption extends SymmetricEncryption {
-  DESEncryption({required String key, required DateTime expirationDate})
+class DESCipher extends SymmetricCipher {
+  DESCipher({required String key, DateTime? expirationDate})
       : super(
           algorithm: CryptoAlgorithm.DES,
           expirationDate: expirationDate,
@@ -16,8 +16,7 @@ class DESEncryption extends SymmetricEncryption {
   List<int> encrypt(List<int> data) {
     final keyBytes = Uint8List.fromList(key.codeUnits);
     final cipher = DESedeEngine();
-    final params = KeyParameter(keyBytes);
-    cipher.init(true, params);
+    cipher.init(true, KeyParameter(keyBytes));
     return cipher.process(Uint8List.fromList(data));
   }
 
@@ -25,8 +24,7 @@ class DESEncryption extends SymmetricEncryption {
   List<int> decrypt(List<int> data) {
     final keyBytes = Uint8List.fromList(key.codeUnits);
     final cipher = DESedeEngine();
-    final params = KeyParameter(keyBytes);
-    cipher.init(false, params);
+    cipher.init(false, KeyParameter(keyBytes));
     return cipher.process(Uint8List.fromList(data));
   }
 }
