@@ -1,10 +1,11 @@
+// AES: algoritmo simmetrico non basato su numeri primi
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
-import 'partial/symmetric_encryption_impl.dart';
-import '../types/crypto_algorithm.dart';
+import '../../../types/crypto_algorithm.dart';
+import '../../partial/symmetric_encryption_impl.dart';
 
-class AESEncryption extends SymmetricEncryption {
-  AESEncryption({required String key, required DateTime expirationDate})
+class AESCipher extends SymmetricCipher {
+  AESCipher({required String key, DateTime? expirationDate})
       : super(
           algorithm: CryptoAlgorithm.AES,
           expirationDate: expirationDate,
