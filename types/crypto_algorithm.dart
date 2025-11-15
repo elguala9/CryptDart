@@ -17,4 +17,8 @@ enum CryptoAlgorithm {
   CAST5,
   SEED,
   SM4,
+  HMAC,
+  RSA_SIGNATURE,
+  ECDSA,
+  EDDSA,
 }
