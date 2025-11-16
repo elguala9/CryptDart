@@ -3,6 +3,7 @@ import '../implementations/symmetric/aes_cipher.dart';
 import '../implementations/symmetric/des_cipher.dart';
 import '../implementations/symmetric/chacha20_cipher.dart';
 import 'dart:typed_data';
+import '../types/crypto_algorithm.dart';
 
 Uint8List padToBlockSize(List<int> data, int blockSize) {
   final padLen = blockSize - (data.length % blockSize);
@@ -24,6 +25,7 @@ void main() {
       final encrypted = cipher.encrypt(padded);
       final decrypted = cipher.decrypt(encrypted);
       expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.AES));
     });
     test('DES encrypt/decrypt', () {
       final cipher = DESCipher((key: '1234567890123456', expirationDate: DateTime.now().add(Duration(days: 1))));
@@ -32,6 +34,7 @@ void main() {
       final encrypted = cipher.encrypt(padded);
       final decrypted = cipher.decrypt(encrypted);
       expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.DES));
     });
     test('ChaCha20 encrypt/decrypt', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
@@ -40,6 +43,7 @@ void main() {
       final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);
       expect(decrypted, equals(data));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.CHACHA20));
     });
     test('AES encrypt/decrypt without expirationDate', () {
       final cipher = AESCipher((key: '1234567890123456', expirationDate: null));

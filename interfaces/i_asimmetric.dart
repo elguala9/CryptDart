@@ -3,7 +3,7 @@ import 'i_sign.dart';
 
 abstract interface class IAsymmetric{
   String get publicKey;
-  String get privateKey;
+  String? get privateKey;
   static KeyPair generateKeyPair() {
     throw UnimplementedError('generateKeyPair needs to be implemented');
   }
