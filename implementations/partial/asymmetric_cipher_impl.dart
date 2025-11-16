@@ -6,12 +6,12 @@ typedef InputAsymmetricCipher = ({
   CryptoAlgorithm algorithm,
   DateTime? expirationDate,
   String publicKey,
-  String privateKey,
+  String? privateKey,
 });
 
 abstract class AsymmetricCipher extends Cipher implements IAsymmetricCipher {
   final String publicKey;
-  final String privateKey;
+  final String? privateKey;
 
   AsymmetricCipher(InputAsymmetricCipher input)
       : publicKey = input.publicKey,

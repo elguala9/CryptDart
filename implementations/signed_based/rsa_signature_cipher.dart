@@ -1,19 +1,19 @@
 // RSA Signature: algoritmo di firma digitale basato su RSA
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
-import 'package:basic_utils/basic_utils.dart';
 import '../../types/crypto_algorithm.dart';
 import '../partial/asymmetric_sign_impl.dart';
+import '../../utils/crypto_utils.dart';
 
 typedef InputRSASignatureCipher = ({
   String publicKey,
-  String privateKey,
+  String? privateKey,
   DateTime? expirationDate,
 });
 
 class RSASignatureCipher extends AsymmetricSign {
   late final RSAPublicKey _pubKey;
-  late final RSAPrivateKey _privKey;
+  late final RSAPrivateKey? _privKey;
 
   RSASignatureCipher(InputRSASignatureCipher input)
       : super((
@@ -22,31 +22,28 @@ class RSASignatureCipher extends AsymmetricSign {
           publicKey: input.publicKey,
           privateKey: input.privateKey,
         )) {
-    _pubKey = CryptoUtils.rsaPublicKeyFromPem(input.publicKey);
-    _privKey = CryptoUtils.rsaPrivateKeyFromPem(input.privateKey);
+    final keys = RSAKeyUtils.parseKeyPair(
+      publicKey: input.publicKey,
+      privateKey: input.privateKey,
+    );
+    _pubKey = keys.publicKey;
+    _privKey = keys.privateKey;
   }
+
 
   /// Generates an RSA key pair (PEM format) for signature
   static Future<Map<String, String>> generateKeyPair({int bitLength = 2048}) async {
-    final keyParams = RSAKeyGeneratorParameters(BigInt.parse('65537'), bitLength, 64);
-    final secureRandom = SecureRandom('AES/CTR/AUTO-SEED-PRNG');
-    secureRandom.seed(KeyParameter(Uint8List.fromList(List.generate(32, (_) => DateTime.now().microsecond % 256))));
-    final rngParams = ParametersWithRandom(keyParams, secureRandom);
-    final generator = RSAKeyGenerator();
-    generator.init(rngParams);
-    final pair = generator.generateKeyPair();
-    final pub = pair.publicKey as RSAPublicKey;
-    final priv = pair.privateKey as RSAPrivateKey;
-    final pubPem = CryptoUtils.encodeRSAPublicKeyToPem(pub);
-    final privPem = CryptoUtils.encodeRSAPrivateKeyToPem(priv);
-    return {'publicKey': pubPem, 'privateKey': privPem};
+    return RSAKeyUtils.generateKeyPair(bitLength: bitLength);
   }
 
   @override
   List<int> sign(List<int> data) {
+    if (_privKey == null) {
+      throw StateError('Private key is required for signing');
+    }
     // In RSA signature, "sign" represents signing the data with private key
     final signer = RSASigner(SHA256Digest(), '0609608648016503040201');
-    signer.init(true, PrivateKeyParameter<RSAPrivateKey>(_privKey));
+    signer.init(true, PrivateKeyParameter<RSAPrivateKey>(_privKey!));
     final signature = signer.generateSignature(Uint8List.fromList(data));
     return signature.bytes;
   }

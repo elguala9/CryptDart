@@ -13,7 +13,4 @@ abstract interface class ISymmetricCipher extends ICipher implements ISymmetric{
 }
 
 abstract interface class ISymmetricSign extends ISymmetric implements ISign{
-  static String generateKey() {
-    throw UnimplementedError('generateKey needs to be implemented in symmetric signature class');
-  }
 }
