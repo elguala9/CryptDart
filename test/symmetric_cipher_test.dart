@@ -19,7 +19,18 @@ List<int> unpad(Uint8List data) {
 void main() {
   group('SymmetricCipher', () {
     test('AES encrypt/decrypt', () {
-      final cipher = AESCipher((key: '1234567890123456', expirationDate: DateTime.now().add(Duration(days: 1))));
+      final cipher = AESCipher((
+        parent: (
+          key: '1234567890123456',
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.AES,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       final padded = padToBlockSize(data, 16);
       final encrypted = cipher.encrypt(padded);
@@ -28,7 +39,18 @@ void main() {
       expect(cipher.algorithm, equals(CryptoAlgorithm.AES));
     });
     test('DES encrypt/decrypt', () {
-      final cipher = DESCipher((key: '1234567890123456', expirationDate: DateTime.now().add(Duration(days: 1))));
+      final cipher = DESCipher((
+        parent: (
+          key: '1234567890123456',
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.DES,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [10, 20, 30, 40, 50, 60, 70, 80];
       final padded = padToBlockSize(data, 8);
       final encrypted = cipher.encrypt(padded);
@@ -38,7 +60,20 @@ void main() {
     });
     test('ChaCha20 encrypt/decrypt', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
-      final cipher = ChaCha20Cipher((key: '12345678901234567890123456789012', expirationDate: DateTime.now().add(Duration(days: 1)), nonce: nonce));
+      final expirationDate = DateTime.now().add(Duration(days: 1));
+      final cipher = ChaCha20Cipher((
+        nonce: nonce,
+        parent: (
+          key: '12345678901234567890123456789012',
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.CHACHA20,
+              expirationDate: expirationDate,
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [100, 101, 102, 103, 104, 105, 106, 107];
       final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);
@@ -46,7 +81,18 @@ void main() {
       expect(cipher.algorithm, equals(CryptoAlgorithm.CHACHA20));
     });
     test('AES encrypt/decrypt without expirationDate', () {
-      final cipher = AESCipher((key: '1234567890123456', expirationDate: null));
+      final cipher = AESCipher((
+        parent: (
+          key: '1234567890123456',
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.AES,
+              expirationDate: null,
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       final padded = padToBlockSize(data, 16);
       final encrypted = cipher.encrypt(padded);
@@ -55,7 +101,18 @@ void main() {
       expect(cipher.isExpired(), isTrue);
     });
     test('DES encrypt/decrypt without expirationDate', () {
-      final cipher = DESCipher((key: '1234567890123456', expirationDate: null));
+      final cipher = DESCipher((
+        parent: (
+          key: '1234567890123456',
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.DES,
+              expirationDate: null,
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [10, 20, 30, 40, 50, 60, 70, 80];
       final padded = padToBlockSize(data, 8);
       final encrypted = cipher.encrypt(padded);
@@ -65,7 +122,19 @@ void main() {
     });
     test('ChaCha20 encrypt/decrypt without expirationDate', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
-      final cipher = ChaCha20Cipher((key: '12345678901234567890123456789012', nonce: nonce, expirationDate: null));
+      final cipher = ChaCha20Cipher((
+        nonce: nonce,
+        parent: (
+          key: '12345678901234567890123456789012',
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.CHACHA20,
+              expirationDate: null,
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [100, 101, 102, 103, 104, 105, 106, 107];
       final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);

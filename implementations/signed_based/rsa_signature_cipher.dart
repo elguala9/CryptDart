@@ -1,34 +1,26 @@
 // RSA Signature: algoritmo di firma digitale basato su RSA
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
-import '../../types/crypto_algorithm.dart';
 import '../partial/asymmetric_sign_impl.dart';
 import '../../utils/crypto_utils.dart';
 
 typedef InputRSASignatureCipher = ({
-  String publicKey,
-  String? privateKey,
-  DateTime? expirationDate,
+  InputAsymmetricSign parent,
 });
 
 class RSASignatureCipher extends AsymmetricSign {
   late final RSAPublicKey _pubKey;
   late final RSAPrivateKey? _privKey;
 
-  RSASignatureCipher(InputRSASignatureCipher input)
-      : super((
-          algorithm: CryptoAlgorithm.RSA_SIGNATURE,
-          expirationDate: input.expirationDate,
-          publicKey: input.publicKey,
-          privateKey: input.privateKey,
-        )) {
-    final keys = RSAKeyUtils.parseKeyPair(
-      publicKey: input.publicKey,
-      privateKey: input.privateKey,
-    );
-    _pubKey = keys.publicKey;
-    _privKey = keys.privateKey;
-  }
+    RSASignatureCipher(InputRSASignatureCipher input)
+        : super(input.parent) {
+      final keys = RSAKeyUtils.parseKeyPair(
+        publicKey: input.parent.publicKey,
+        privateKey: input.parent.privateKey,
+      );
+      _pubKey = keys.publicKey;
+      _privKey = keys.privateKey;
+    }
 
 
   /// Generates an RSA key pair (PEM format) for signature

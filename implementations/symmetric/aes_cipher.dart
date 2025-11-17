@@ -1,22 +1,16 @@
 // AES: algoritmo simmetrico non basato su numeri primi
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
-import '../../types/crypto_algorithm.dart';
 import '../partial/symmetric_cipher_impl.dart';
 import '../../utils/crypto_utils.dart';
 
 typedef InputAESCipher = ({
-  String key,
-  DateTime? expirationDate,
+  InputSymmetricCipher parent,
 });
 
 class AESCipher extends SymmetricCipher {
-  AESCipher(InputAESCipher input)
-      : super((
-          algorithm: CryptoAlgorithm.AES,
-          expirationDate: input.expirationDate,
-          key: input.key,
-        ));
+    AESCipher(InputAESCipher input)
+      : super(input.parent);
 
 
   /// Generates a random 256-bit AES key as a hex string
