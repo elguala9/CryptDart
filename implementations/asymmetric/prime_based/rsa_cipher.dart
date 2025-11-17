@@ -1,34 +1,26 @@
 // RSA: algoritmo asimmetrico basato su numeri primi
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
-import '../../../types/crypto_algorithm.dart';
 import '../../partial/asymmetric_cipher_impl.dart';
 import '../../../utils/crypto_utils.dart';
 
 typedef InputRSACipher = ({
-  String publicKey,
-  String? privateKey,
-  DateTime? expirationDate,
+  InputAsymmetricCipher parent,
 });
 
 class RSACipher extends AsymmetricCipher {
   late final RSAPublicKey _pubKey;
   late final RSAPrivateKey? _privKey;
 
-  RSACipher(InputRSACipher input)
-      : super((
-          algorithm: CryptoAlgorithm.RSA,
-          expirationDate: input.expirationDate,
-          publicKey: input.publicKey,
-          privateKey: input.privateKey,
-        )) {
-    final keys = RSAKeyUtils.parseKeyPair(
-      publicKey: input.publicKey,
-      privateKey: input.privateKey,
-    );
-    _pubKey = keys.publicKey;
-    _privKey = keys.privateKey;
-  }
+    RSACipher(InputRSACipher input)
+        : super(input.parent) {
+      final keys = RSAKeyUtils.parseKeyPair(
+        publicKey: input.parent.publicKey,
+        privateKey: input.parent.privateKey,
+      );
+      _pubKey = keys.publicKey;
+      _privKey = keys.privateKey;
+    }
 
 
   /// Generates an RSA key pair (PEM format)

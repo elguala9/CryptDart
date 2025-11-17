@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 import '../implementations/asymmetric/prime_based/rsa_cipher.dart';
+import '../types/crypto_algorithm.dart';
 // import '../implementations/asymmetric/prime_based/ecc_cipher.dart'; // ECC test only if implemented
 
 void main() {
@@ -42,7 +43,19 @@ Mqq+H4NPVgR92OeuMJOoyYtt+9+kdLDkOLfdX0m8vfRc70YZnDFpBha+TD8Lk9nw
 HYQO19pjopyeTzV0EdPNxPrZzcLanxf1CwcTOkYmzRv2WEv/j2PRjeoHw5JRvOSc
 bX2NFAnbaGQW/Wnmw0lnXnk=
 -----END PRIVATE KEY-----''';
-      final cipher = RSACipher((publicKey: publicKey, privateKey: privateKey, expirationDate: DateTime.now().add(Duration(days: 1))));
+      final cipher = RSACipher((
+        parent: (
+          publicKey: publicKey,
+          privateKey: privateKey,
+          parent: (
+            parent: (
+              algorithm: CryptoAlgorithm.RSA,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+          ),
+        ),
+      ));
       final data = [1, 2, 3, 4, 5];
       final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);

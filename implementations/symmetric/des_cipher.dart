@@ -1,22 +1,16 @@
 // DES/TripleDES: algoritmo simmetrico non basato su numeri primi
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
-import '../../types/crypto_algorithm.dart';
 import '../partial/symmetric_cipher_impl.dart';
 import '../../utils/crypto_utils.dart';
 
 typedef InputDESCipher = ({
-  String key,
-  DateTime? expirationDate,
+  InputSymmetricCipher parent,
 });
 
 class DESCipher extends SymmetricCipher {
-  DESCipher(InputDESCipher input)
-      : super((
-          algorithm: CryptoAlgorithm.DES,
-          expirationDate: input.expirationDate,
-          key: input.key,
-        ));
+    DESCipher(InputDESCipher input)
+      : super(input.parent);
 
 
   /// Generates a random 192-bit TripleDES key as a hex string
