@@ -1,28 +1,11 @@
 import '../../interfaces/i_sign.dart';
+import 'expiration_base.dart';
 import '../../types/crypto_algorithm.dart';
 
 typedef InputSign = ({
-  CryptoAlgorithm algorithm,
-  DateTime? expirationDate,
-}); 
+  InputExpirationBase parent
+});
 
-abstract class Sign implements ISign {
-  final CryptoAlgorithm _algorithm;
-  final DateTime? _expirationDate;
-
-  Sign(InputSign input)
-      : _algorithm = input.algorithm,
-        _expirationDate = input.expirationDate;
-
-  @override
-  bool isExpired() {
-    if (_expirationDate == null) return true;
-    return DateTime.now().isAfter(_expirationDate!);
-  }
-
-  @override
-  DateTime? get expirationDate => _expirationDate;
-
-  @override
-  CryptoAlgorithm get algorithm => _algorithm;
+abstract class Sign extends ExpirationBase implements ISign {
+  Sign(InputSign input) : super(input.parent);
 }

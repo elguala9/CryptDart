@@ -3,20 +3,16 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 import '../../types/crypto_algorithm.dart';
 import '../partial/symmetric_sign_impl.dart';
+import '../partial/sign_impl.dart';
 import '../../utils/crypto_utils.dart';
 
 typedef InputHMACSign = ({
-  String key,
-  DateTime? expirationDate,
+  InputSymmetricSign parent,
 });
 
 class HMACSign extends SymmetricSign {
-  HMACSign(InputHMACSign input)
-      : super((
-          algorithm: CryptoAlgorithm.HMAC,
-          expirationDate: input.expirationDate,
-          key: input.key,
-        ));
+    HMACSign(InputHMACSign input)
+      : super(input.parent);
 
 
   @override
