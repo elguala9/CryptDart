@@ -1,6 +1,5 @@
 import '../../interfaces/i_cipher.dart';
 import 'expiration_base.dart';
-import '../../types/crypto_algorithm.dart';
 
 typedef InputCipher = ({
   InputExpirationBase parent
