@@ -1,6 +1,5 @@
 import '../../interfaces/i_sign.dart';
 import 'expiration_base.dart';
-import '../../types/crypto_algorithm.dart';
 
 typedef InputSign = ({
   InputExpirationBase parent

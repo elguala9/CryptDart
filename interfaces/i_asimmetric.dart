@@ -1,7 +1,8 @@
 import 'i_cipher.dart';
+import 'i_expiration.dart';
 import 'i_sign.dart';
 
-abstract interface class IAsymmetric{
+abstract interface class IAsymmetric extends IExpiration{
   String get publicKey;
   String? get privateKey;
   static KeyPair generateKeyPair() {
