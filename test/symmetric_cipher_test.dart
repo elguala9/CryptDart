@@ -1,9 +1,9 @@
 import 'package:test/test.dart';
-import '../implementations/symmetric/aes_cipher.dart';
-import '../implementations/symmetric/des_cipher.dart';
-import '../implementations/symmetric/chacha20_cipher.dart';
+import '../lib/implementations/symmetric/aes_cipher.dart';
+import '../lib/implementations/symmetric/des_cipher.dart';
+import '../lib/implementations/symmetric/chacha20_cipher.dart';
 import 'dart:typed_data';
-import '../types/crypto_algorithm.dart';
+import '../lib/types/crypto_algorithm.dart';
 
 Uint8List padToBlockSize(List<int> data, int blockSize) {
   final padLen = blockSize - (data.length % blockSize);
