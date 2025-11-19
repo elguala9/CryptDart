@@ -1,12 +1,59 @@
+
+
 # CryptDart
 
-A Dart project under the LGPL-3.0 license.
+[![pub package](https://img.shields.io/pub/v/cryptdart.svg)](https://pub.dev/packages/cryptdart)
+[![license](https://img.shields.io/badge/license-LGPL3-blue.svg)](LICENSE)
 
-## Getting Started
+Unified cryptography library for Dart. Provides easy-to-use interfaces for symmetric/asymmetric encryption, digital signatures, and key management. Built on PointyCastle and BasicUtils.
 
-1. Install Dart SDK: https://dart.dev/get-dart
-2. Run `dart pub get` to fetch dependencies.
-3. Start coding in `lib/`.
+## Features
+
+- Symmetric encryption: AES, TripleDES, ChaCha20
+- Asymmetric encryption: RSA
+- Digital signatures: HMAC, RSA signature
+- Key generation and management
+- Expiration logic for keys and ciphers
+- Centralized utilities for encoding, random generation, and PEM parsing
+
+## Installation
+
+Add to your `pubspec.yaml`:
+
+```yaml
+dependencies:
+	cryptdart: ^1.0.0
+```
+
+Run:
+
+```sh
+dart pub get
+```
+
+## Usage Example
+
+```dart
+import 'package:cryptdart/cryptdart.dart';
+
+void main() async {
+	// Generate AES key
+	final aesKey = AESCipher.generateKey();
+	final cipher = AESCipher((parent: (key: aesKey)));
+	final encrypted = cipher.encrypt([1, 2, 3, 4]);
+	final decrypted = cipher.decrypt(encrypted);
+
+	// Generate RSA key pair
+	final rsaKeys = await RSACipher.generateKeyPair();
+	final rsaCipher = RSACipher((parent: (publicKey: rsaKeys['publicKey']!, privateKey: rsaKeys['privateKey']!)));
+	final rsaEncrypted = rsaCipher.encrypt([1, 2, 3, 4]);
+	final rsaDecrypted = rsaCipher.decrypt(rsaEncrypted);
+}
+```
+
+## Documentation
+
+See [API reference](https://pub.dev/documentation/cryptdart/latest/) for details.
 
 ## License
 
