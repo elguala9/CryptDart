@@ -5,7 +5,7 @@ import 'package:cryptdart/interfaces/i_handler.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 
 typedef InputHandler<T extends IExpiration> = ({
-  T initialCrypt, 
+  T initialCrypt,
   int maxCrypts,
   int? maxExpiredCrypts, // 0 = no limit, -1 = remove all immediately (expiredCrypts always empty)
   int? maxDaysExpiredCrypts, // 0 = no limit, -1 = remove all immediately
@@ -22,7 +22,8 @@ abstract class Handler<T extends IExpiration> implements IHandler<T> {
 
   Handler(InputHandler<T> input)
       : protectedCrypts = [input.initialCrypt],
-        protectedExpiredCrypts = input.initialCrypt.isExpired() ? [input.initialCrypt] : [],
+        protectedExpiredCrypts =
+            input.initialCrypt.isExpired() ? [input.initialCrypt] : [],
         maxCrypts = input.maxCrypts,
         maxExpiredCrypts = input.maxExpiredCrypts,
         maxDaysExpiredCrypts = input.maxDaysExpiredCrypts;
@@ -73,13 +74,14 @@ abstract class Handler<T extends IExpiration> implements IHandler<T> {
       return;
     }
     if (protectedExpiredCrypts.length > maxExpiredCrypts!) {
-      protectedExpiredCrypts.removeRange(0, protectedExpiredCrypts.length - maxExpiredCrypts!);
+      protectedExpiredCrypts.removeRange(
+          0, protectedExpiredCrypts.length - maxExpiredCrypts!);
     }
   }
 
   @override
   void setNextCrypt(T obj) {
-    if(protectedCrypts.length + protectedExpiredCrypts.length >= maxCrypts) {
+    if (protectedCrypts.length + protectedExpiredCrypts.length >= maxCrypts) {
       throw StateError('Maximum number of crypts reached');
     }
     cleanCrypts();
@@ -90,8 +92,8 @@ abstract class Handler<T extends IExpiration> implements IHandler<T> {
     protectedCrypts.add(obj);
   }
 
-  void nextCrypt(){
-    if(protectedCrypts.length < 2) {
+  void nextCrypt() {
+    if (protectedCrypts.length < 2) {
       throw StateError('No next crypt available');
     }
     final expiredCrypt = protectedCrypts.removeAt(0);
@@ -99,7 +101,9 @@ abstract class Handler<T extends IExpiration> implements IHandler<T> {
   }
 
   @override
-  T get currentCrypt => protectedCrypts.isNotEmpty ? protectedCrypts.first : throw StateError('No current crypt available');
+  T get currentCrypt => protectedCrypts.isNotEmpty
+      ? protectedCrypts.first
+      : throw StateError('No current crypt available');
 
   @override
   List<T> get crypts => List.unmodifiable(protectedCrypts);
@@ -121,8 +125,3 @@ abstract class Handler<T extends IExpiration> implements IHandler<T> {
   @override
   CryptoAlgorithm get algorithm => currentCrypt.algorithm;
 }
-
-
-
-
-

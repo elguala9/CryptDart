@@ -49,7 +49,7 @@ bX2NFAnbaGQW/Wnmw0lnXnk=
           privateKey: privateKey,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.RSA,
+              algorithm: CryptoAlgorithm.rsa,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),

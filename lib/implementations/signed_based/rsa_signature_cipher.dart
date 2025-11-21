@@ -16,8 +16,7 @@ class RSASignatureCipher extends AsymmetricSign {
   late final RSAPrivateKey? _privKey;
 
   /// Constructs an [RSASignatureCipher] with the given input parameters.
-  RSASignatureCipher(InputRSASignatureCipher input)
-      : super(input.parent) {
+  RSASignatureCipher(InputRSASignatureCipher input) : super(input.parent) {
     final keys = RSAKeyUtils.parseKeyPair(
       publicKey: input.parent.publicKey,
       privateKey: input.parent.privateKey,
@@ -27,7 +26,8 @@ class RSASignatureCipher extends AsymmetricSign {
   }
 
   /// Generates an RSA key pair (PEM format) for signature.
-  static Future<Map<String, String>> generateKeyPair({int bitLength = 2048}) async {
+  static Future<Map<String, String>> generateKeyPair(
+      {int bitLength = 2048}) async {
     return RSAKeyUtils.generateKeyPair(bitLength: bitLength);
   }
 
@@ -45,14 +45,9 @@ class RSASignatureCipher extends AsymmetricSign {
   }
 
   @override
-  bool verify(List<int> data) {
-    // For signature verification, you need both data and signature
-    // This method should accept signature as parameter
-    throw UnimplementedError('Use verifySignature(data, signature) instead');
-  }
 
   /// Verify a signature against the original data
-  bool verifySignature(List<int> data, List<int> signature) {
+  bool verify(List<int> data, List<int> signature) {
     final signer = RSASigner(SHA256Digest(), '0609608648016503040201');
     signer.init(false, PublicKeyParameter<RSAPublicKey>(_pubKey));
     final rsaSignature = RSASignature(Uint8List.fromList(signature));

@@ -15,8 +15,7 @@ typedef InputHMACSign = ({
 /// Extends [SymmetricSign] and provides HMAC signing and verification.
 class HMACSign extends SymmetricSign {
   /// Constructs an [HMACSign] with the given input parameters.
-  HMACSign(InputHMACSign input)
-      : super(input.parent);
+  HMACSign(InputHMACSign input) : super(input.parent);
 
   /// Signs data using HMAC-SHA256.
   @override
@@ -27,14 +26,9 @@ class HMACSign extends SymmetricSign {
     return hmac.process(Uint8List.fromList(data));
   }
 
-  /// Throws UnimplementedError. Use [verifyHMAC] instead.
-  @override
-  bool verify(List<int> data) {
-    throw UnimplementedError('Use verifyHMAC(data, signature) instead');
-  }
-
   /// Verifies HMAC signature against the original data.
-  bool verifyHMAC(List<int> data, List<int> signature) {
+  @override
+  bool verify(List<int> data, List<int> signature) {
     final expected = sign(data);
     if (expected.length != signature.length) return false;
     for (int i = 0; i < expected.length; i++) {

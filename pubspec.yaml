@@ -1,13 +1,17 @@
 name: cryptdart
-version: 0.1.0
-description: A Dart project under LGPL-3.0 license.
-homepage: https://example.com
-repository: https://example.com/cryptdart
+version: 0.1.2
+description: |
+  CryptDart is a unified cryptography library for Dart, providing easy-to-use interfaces for symmetric and asymmetric encryption, digital signatures (including ECDSA), and key management. Built on PointyCastle and BasicUtils, LGPL-3.0.
+homepage: https://github.com/elguala9/CryptDart
+repository: https://github.com/elguala9/CryptDart
 license: LGPL-3.0
 environment:
   sdk: '>=3.0.0 <4.0.0'
 dependencies:
-  pointycastle: ^3.7.3
-  basic_utils: ^5.6.0
+  pointycastle: ^4.0.0
+  basic_utils: ^5.8.2
+  meta: ^1.17.0
 dev_dependencies:
   test: ^1.24.0
+example:
+  - example/main.dart

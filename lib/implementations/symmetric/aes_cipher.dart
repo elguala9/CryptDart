@@ -13,8 +13,7 @@ typedef InputAESCipher = ({
 /// Extends [SymmetricCipher] and provides AES encryption/decryption.
 class AESCipher extends SymmetricCipher {
   /// Constructs an [AESCipher] with the given input parameters.
-  AESCipher(InputAESCipher input)
-      : super(input.parent);
+  AESCipher(InputAESCipher input) : super(input.parent);
 
   /// Generates a random 256-bit AES key as a hex string.
   static String generateKey() {

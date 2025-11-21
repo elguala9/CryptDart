@@ -6,7 +6,8 @@ import 'handler.dart';
 import 'handler_asymmetric.dart';
 import 'handler_symmetric.dart';
 
-mixin HandlerCipher<T extends ICipher> on Handler<T> implements IHandlerCipher<T> {
+mixin HandlerCipher<T extends ICipher> on Handler<T>
+    implements IHandlerCipher<T> {
   @override
   List<int> decrypt(List<int> data) {
     cleanCrypts();
@@ -20,18 +21,12 @@ mixin HandlerCipher<T extends ICipher> on Handler<T> implements IHandlerCipher<T
   }
 }
 
-
-
-class HandlerCipherSymmetric<T extends ISymmetricCipher>
-    extends Handler<T>
+class HandlerCipherSymmetric<T extends ISymmetricCipher> extends Handler<T>
     with HandlerCipher<T>, HandlerSymmetric<T> {
   HandlerCipherSymmetric(InputHandler<T> input) : super(input);
 }
 
-
-
-class HandlerCipherAsymmetric<T extends IAsymmetricCipher>
-    extends Handler<T>
+class HandlerCipherAsymmetric<T extends IAsymmetricCipher> extends Handler<T>
     with HandlerCipher<T>, HandlerAsymmetric<T> {
   HandlerCipherAsymmetric(InputHandler<T> input) : super(input);
 }

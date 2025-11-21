@@ -19,7 +19,8 @@ abstract interface class IAsymmetric extends IExpiration {
 
 /// Interface for asymmetric ciphers.
 /// Combines [IAsymmetric] and [ICipher].
-abstract interface class IAsymmetricCipher extends IAsymmetric implements ICipher {
+abstract interface class IAsymmetricCipher extends IAsymmetric
+    implements ICipher {
   // publicKey, privateKey, generateKeyPair già definiti in IAsymmetric
 }
 

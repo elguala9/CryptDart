@@ -8,9 +8,8 @@ class SecureRandomUtils {
   /// Creates and seeds a SecureRandom instance
   static SecureRandom createSeeded({int seedLength = 32}) {
     final rnd = SecureRandom('AES/CTR/AUTO-SEED-PRNG');
-    final seed = Uint8List.fromList(
-      List.generate(seedLength, (_) => DateTime.now().microsecondsSinceEpoch % 256)
-    );
+    final seed = Uint8List.fromList(List.generate(
+        seedLength, (_) => DateTime.now().microsecondsSinceEpoch % 256));
     rnd.seed(KeyParameter(seed));
     return rnd;
   }
@@ -51,19 +50,21 @@ class KeyEncodingUtils {
 /// Utilities for RSA key operations.
 class RSAKeyUtils {
   /// Generates an RSA key pair in PEM format
-  static Future<Map<String, String>> generateKeyPair({int bitLength = 2048}) async {
-    final keyParams = RSAKeyGeneratorParameters(BigInt.parse('65537'), bitLength, 64);
+  static Future<Map<String, String>> generateKeyPair(
+      {int bitLength = 2048}) async {
+    final keyParams =
+        RSAKeyGeneratorParameters(BigInt.parse('65537'), bitLength, 64);
     final secureRandom = SecureRandomUtils.createSeeded();
     final rngParams = ParametersWithRandom(keyParams, secureRandom);
     final generator = RSAKeyGenerator();
     generator.init(rngParams);
     final pair = generator.generateKeyPair();
-    
+
     final pub = pair.publicKey as RSAPublicKey;
     final priv = pair.privateKey as RSAPrivateKey;
     final pubPem = BasicUtils.CryptoUtils.encodeRSAPublicKeyToPem(pub);
     final privPem = BasicUtils.CryptoUtils.encodeRSAPrivateKeyToPem(priv);
-    
+
     return {'publicKey': pubPem, 'privateKey': privPem};
   }
 
