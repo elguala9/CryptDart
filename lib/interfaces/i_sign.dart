@@ -7,5 +7,5 @@ abstract interface class ISign extends IExpiration {
   List<int> sign(List<int> data);
 
   /// Verifies the given data against a signature.
-  bool verify(List<int> data);
+  bool verify(List<int> data, List<int> signature);
 }

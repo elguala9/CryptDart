@@ -1,25 +1,11 @@
 /// Supported cryptographic algorithms.
 enum CryptoAlgorithm {
-  AES,
-  DES,
-  TDES, // Triple DES
-  RSA,
-  ECC,
-  BLOWFISH,
-  TWOFISH,
-  CHACHA20,
-  SALSA20,
-  RC4,
-  RC5,
-  RC6,
-  IDEA,
-  CAMELLIA,
-  SERPENT,
-  CAST5,
-  SEED,
-  SM4,
-  HMAC,
-  RSA_SIGNATURE,
-  ECDSA,
-  EDDSA,
+  aes,
+  des,
+  chacha20,
+  rsa,
+  hmac,
+  rsaSignature,
+  ecdsa,
+  // Add new algorithms here
 }

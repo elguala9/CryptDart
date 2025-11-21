@@ -1,4 +1,3 @@
-
 import 'package:cryptdart/types/crypto_algorithm.dart';
 
 /// Interface for expiration logic in cryptographic objects.
@@ -19,4 +18,3 @@ abstract class IExpiration {
   /// The cryptographic algorithm associated with this object.
   CryptoAlgorithm get algorithm;
 }
-

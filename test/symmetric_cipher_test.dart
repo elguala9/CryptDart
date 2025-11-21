@@ -24,7 +24,7 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.AES,
+              algorithm: CryptoAlgorithm.aes,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -36,7 +36,7 @@ void main() {
       final encrypted = cipher.encrypt(padded);
       final decrypted = cipher.decrypt(encrypted);
       expect(unpad(Uint8List.fromList(decrypted)), equals(data));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.AES));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.aes));
     });
     test('DES encrypt/decrypt', () {
       final cipher = DESCipher((
@@ -44,7 +44,7 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.DES,
+              algorithm: CryptoAlgorithm.des,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -56,7 +56,7 @@ void main() {
       final encrypted = cipher.encrypt(padded);
       final decrypted = cipher.decrypt(encrypted);
       expect(unpad(Uint8List.fromList(decrypted)), equals(data));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.DES));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.des));
     });
     test('ChaCha20 encrypt/decrypt', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
@@ -67,7 +67,7 @@ void main() {
           key: '12345678901234567890123456789012',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.CHACHA20,
+              algorithm: CryptoAlgorithm.chacha20,
               expirationDate: expirationDate,
               expirationTimes: null,
             ),
@@ -78,7 +78,7 @@ void main() {
       final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);
       expect(decrypted, equals(data));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.CHACHA20));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.chacha20));
     });
     test('AES encrypt/decrypt without expirationDate', () {
       final cipher = AESCipher((
@@ -86,7 +86,7 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.AES,
+              algorithm: CryptoAlgorithm.aes,
               expirationDate: null,
               expirationTimes: null,
             ),
@@ -106,7 +106,7 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.DES,
+              algorithm: CryptoAlgorithm.des,
               expirationDate: null,
               expirationTimes: null,
             ),
@@ -128,7 +128,7 @@ void main() {
           key: '12345678901234567890123456789012',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.CHACHA20,
+              algorithm: CryptoAlgorithm.chacha20,
               expirationDate: null,
               expirationTimes: null,
             ),

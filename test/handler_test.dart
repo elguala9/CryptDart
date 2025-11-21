@@ -27,7 +27,7 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.AES,
+              algorithm: CryptoAlgorithm.aes,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -59,7 +59,7 @@ void main() {
           privateKey: keyPair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.RSA,
+              algorithm: CryptoAlgorithm.rsa,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -88,7 +88,7 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.HMAC,
+              algorithm: CryptoAlgorithm.hmac,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -106,7 +106,7 @@ void main() {
       final data = [1, 2, 3, 4, 5];
       final signature = handler.sign(data);
       // HMACSign.verify lancia UnimplementedError, quindi usiamo verifyHMAC
-      final verified = handler.currentCrypt.verifyHMAC(data, signature);
+      final verified = handler.currentCrypt.verify(data, signature);
       expect(verified, isTrue);
     });
   });
@@ -120,7 +120,7 @@ void main() {
           privateKey: keyPair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.RSA_SIGNATURE,
+              algorithm: CryptoAlgorithm.rsaSignature,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -138,7 +138,7 @@ void main() {
       final data = [1, 2, 3, 4, 5];
       final signature = handler.sign(data);
       // RSASignatureCipher.verify lancia UnimplementedError, quindi usiamo verifySignature
-      final verified = handler.currentCrypt.verifySignature(data, signature);
+      final verified = handler.currentCrypt.verify(data, signature);
       expect(verified, isTrue);
     });
   });

@@ -18,8 +18,7 @@ class RSACipher extends AsymmetricCipher {
   late final RSAPrivateKey? _privKey;
 
   /// Constructs an [RSACipher] with the given input parameters.
-  RSACipher(InputRSACipher input)
-      : super(input.parent) {
+  RSACipher(InputRSACipher input) : super(input.parent) {
     final keys = RSAKeyUtils.parseKeyPair(
       publicKey: input.parent.publicKey,
       privateKey: input.parent.privateKey,
@@ -29,7 +28,8 @@ class RSACipher extends AsymmetricCipher {
   }
 
   /// Generates an RSA key pair (PEM format).
-  static Future<Map<String, String>> generateKeyPair({int bitLength = 2048}) async {
+  static Future<Map<String, String>> generateKeyPair(
+      {int bitLength = 2048}) async {
     return RSAKeyUtils.generateKeyPair(bitLength: bitLength);
   }
 

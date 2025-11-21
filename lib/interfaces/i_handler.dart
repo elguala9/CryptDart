@@ -27,19 +27,22 @@ abstract class IHandler<T extends IExpiration> implements IExpiration {
 }
 
 /// Handler for asymmetric cryptographic objects.
-abstract class IHandlerAsymmetric<T extends IAsymmetric> implements IAsymmetric, IHandler<T> {
+abstract class IHandlerAsymmetric<T extends IAsymmetric>
+    implements IAsymmetric, IHandler<T> {
   @override
   T get currentCrypt;
 }
 
 /// Handler for symmetric cryptographic objects.
-abstract class IHandlerSymmetric<T extends ISymmetric> implements ISymmetric, IHandler<T> {
+abstract class IHandlerSymmetric<T extends ISymmetric>
+    implements ISymmetric, IHandler<T> {
   @override
   T get currentCrypt;
 }
 
 /// Handler for cipher objects.
-abstract class IHandlerCipher<T extends ICipher> implements ICipher, IHandler<T> {
+abstract class IHandlerCipher<T extends ICipher>
+    implements ICipher, IHandler<T> {
   @override
   T get currentCrypt;
 }
@@ -49,4 +52,3 @@ abstract class IHandlerSign<T extends ISign> implements ISign, IHandler<T> {
   @override
   T get currentCrypt;
 }
-
