@@ -9,12 +9,7 @@ Unified cryptography library for Dart. Provides easy-to-use interfaces for symme
 
 ## Features
 
-- Symmetric encryption: AES, TripleDES, ChaCha20
-- Asymmetric encryption: RSA
-- Digital signatures: HMAC, RSA signature
-- Key generation and management
-- Expiration logic for keys and ciphers
-- Centralized utilities for encoding, random generation, and PEM parsing
+ - Digital signatures: HMAC, RSA signature, ECDSA
 
 ## Installation
 
@@ -48,6 +43,12 @@ void main() async {
 	final rsaCipher = RSACipher((parent: (publicKey: rsaKeys['publicKey']!, privateKey: rsaKeys['privateKey']!)));
 	final rsaEncrypted = rsaCipher.encrypt([1, 2, 3, 4]);
 	final rsaDecrypted = rsaCipher.decrypt(rsaEncrypted);
+  
+		// ECDSA sign/verify
+		final ecdsaSign = ECDSASign((parent: (publicKey: '...', privateKey: '...'))); // Inserisci chiavi PEM
+		final signature = ecdsaSign.sign([1, 2, 3, 4]);
+		final verified = ecdsaSign.verifySignature([1, 2, 3, 4], signature);
+		print('ECDSA signature verified: $verified');
 }
 ```
 

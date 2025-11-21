@@ -13,8 +13,7 @@ typedef InputDESCipher = ({
 /// Extends [SymmetricCipher] and provides TripleDES encryption/decryption.
 class DESCipher extends SymmetricCipher {
   /// Constructs a [DESCipher] with the given input parameters.
-  DESCipher(InputDESCipher input)
-      : super(input.parent);
+  DESCipher(InputDESCipher input) : super(input.parent);
 
   /// Generates a random 192-bit TripleDES key as a hex string.
   static String generateKey() {

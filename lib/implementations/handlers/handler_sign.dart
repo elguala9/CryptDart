@@ -14,20 +14,18 @@ mixin HandlerSign<T extends ISign> on Handler<T> implements IHandlerSign<T> {
   }
 
   @override
-  bool verify(List<int> data) {
+  bool verify(List<int> data, List<int> signature) {
     cleanCrypts();
-    return currentCrypt.verify(data);
+    return currentCrypt.verify(data, signature);
   }
 }
 
-class HandlerSignSymmetric<T extends ISymmetricSign>
-    extends Handler<T>
+class HandlerSignSymmetric<T extends ISymmetricSign> extends Handler<T>
     with HandlerSign<T>, HandlerSymmetric<T> {
   HandlerSignSymmetric(InputHandler<T> input) : super(input);
 }
 
-class HandlerSignAsymmetric<T extends IAsymmetricSign>
-    extends Handler<T>
+class HandlerSignAsymmetric<T extends IAsymmetricSign> extends Handler<T>
     with HandlerSign<T>, HandlerAsymmetric<T> {
   HandlerSignAsymmetric(InputHandler<T> input) : super(input);
 }

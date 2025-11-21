@@ -18,14 +18,14 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.AES,
+              algorithm: CryptoAlgorithm.aes,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.AES));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.aes));
     });
     test('DES key generation', () {
       final key = DESCipher.generateKey();
@@ -35,34 +35,34 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.DES,
+              algorithm: CryptoAlgorithm.des,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.DES));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.des));
     });
     test('ChaCha20 key generation', () {
       final key = ChaCha20Cipher.generateKey();
       expect(key.length, 64); // 256 bit in hex
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
-        final expirationDate = DateTime.now().add(Duration(days: 1));
-        final cipher = ChaCha20Cipher((
-          nonce: nonce,
+      final expirationDate = DateTime.now().add(Duration(days: 1));
+      final cipher = ChaCha20Cipher((
+        nonce: nonce,
+        parent: (
+          key: '12345678901234567890123456789012',
           parent: (
-            key: '12345678901234567890123456789012',
             parent: (
-              parent: (
-                algorithm: CryptoAlgorithm.CHACHA20,
-                expirationDate: expirationDate,
-                expirationTimes: null,
-              ),
+              algorithm: CryptoAlgorithm.chacha20,
+              expirationDate: expirationDate,
+              expirationTimes: null,
             ),
           ),
-        ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.CHACHA20));
+        ),
+      ));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.chacha20));
     });
     test('HMAC key generation', () {
       final key = HMACSign.generateKey();
@@ -72,14 +72,14 @@ void main() {
           key: '12345678901234567890123456789012',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.HMAC,
+              algorithm: CryptoAlgorithm.hmac,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.HMAC));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.hmac));
     });
   });
 
@@ -94,35 +94,34 @@ void main() {
           privateKey: pair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.RSA,
+              algorithm: CryptoAlgorithm.rsa,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.RSA));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.rsa));
     });
     test('RSA Signature key pair generation', () async {
       final pair = await RSASignatureCipher.generateKeyPair();
       expect(pair['publicKey'], contains('BEGIN PUBLIC KEY'));
       expect(pair['privateKey'], contains('BEGIN PRIVATE KEY'));
-        final expirationDate = DateTime.now().add(Duration(days: 1));
-        final cipher = RSASignatureCipher((
+      final expirationDate = DateTime.now().add(Duration(days: 1));
+      final cipher = RSASignatureCipher((
+        parent: (
+          publicKey: pair['publicKey']!,
+          privateKey: pair['privateKey']!,
           parent: (
-            publicKey: pair['publicKey']!,
-            privateKey: pair['privateKey']!,
             parent: (
-              parent: (
-                algorithm: CryptoAlgorithm.RSA_SIGNATURE,
-                expirationDate: expirationDate,
-                expirationTimes: null,
-              ),
+              algorithm: CryptoAlgorithm.rsaSignature,
+              expirationDate: expirationDate,
+              expirationTimes: null,
             ),
           ),
-        ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.RSA_SIGNATURE));
+        ),
+      ));
+      expect(cipher.algorithm, equals(CryptoAlgorithm.rsaSignature));
     });
-
   });
 }

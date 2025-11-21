@@ -24,8 +24,10 @@ class ExpirationBase implements IExpiration {
 
   @override
   bool isExpired() {
-    if (_expirationTimesRemaining != null && _expirationTimesRemaining! <= 0) return true;
-    if(_expirationDate != null) return DateTime.now().isAfter(_expirationDate!);
+    if (_expirationTimesRemaining != null && _expirationTimesRemaining! <= 0)
+      return true;
+    if (_expirationDate != null)
+      return DateTime.now().isAfter(_expirationDate!);
     return true;
   }
 
