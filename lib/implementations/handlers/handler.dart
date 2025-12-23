@@ -124,4 +124,9 @@ abstract class Handler<T extends IExpiration> implements IHandler<T> {
 
   @override
   CryptoAlgorithm get algorithm => currentCrypt.algorithm;
+
+  @override
+  void incrementUse() {
+    currentCrypt.incrementUse();
+  }
 }

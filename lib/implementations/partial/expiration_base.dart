@@ -30,7 +30,13 @@ class ExpirationBase implements IExpiration {
       return DateTime.now().isAfter(_expirationDate!);
     return true;
   }
-
+  @override
+  void incrementUse() {
+    if (_expirationTimes != null) {
+      _expirationTimesRemaining ??= _expirationTimes!;
+      _expirationTimesRemaining = _expirationTimesRemaining! - 1;
+    }
+  }
   @override
   DateTime? get expirationDate => _expirationDate;
 
