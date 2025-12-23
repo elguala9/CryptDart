@@ -11,6 +11,7 @@ export 'interfaces/i_asimmetric.dart';
 
 // Types
 export 'types/crypto_algorithm.dart';
+export 'types/key_exchange_algorithm.dart';
 
 // Utilities
 export 'utils/crypto_utils.dart';
@@ -28,3 +29,12 @@ export 'implementations/handlers/handler_cipher.dart';
 export 'implementations/handlers/handler_symmetric.dart';
 export 'implementations/handlers/handler_asymmetric.dart';
 export 'implementations/handlers/handler_sign.dart';
+
+// Key Exchange and Session Management
+export 'interfaces/key_exchange/i_key_exchange.dart';
+export 'interfaces/key_exchange/i_algorithm_negotiation.dart';
+export 'interfaces/key_exchange/i_crypto_session.dart';
+export 'implementations/key_exchange/ecdh_key_exchange.dart';
+export 'implementations/session/algorithm_negotiation.dart';
+export 'implementations/session/crypto_session_manager.dart';
+export 'implementations/session/secure_communication_factory.dart';

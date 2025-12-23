@@ -98,3 +98,70 @@ class SymmetricKeyUtils {
     return KeyEncodingUtils.bytesToHex(keyBytes);
   }
 }
+
+/// Utilities for ECC key operations.
+class ECCKeyUtils {
+  /// Standard curve names
+  static const String secp256r1 = 'secp256r1';
+  static const String secp384r1 = 'secp384r1';
+  static const String secp521r1 = 'secp521r1';
+
+  /// Generates an ECC key pair for the specified curve
+  static Future<Map<String, String>> generateKeyPair({
+    String curve = secp256r1,
+  }) async {
+    final curveParams = ECDomainParameters(curve);
+    final keyParams = ECKeyGeneratorParameters(curveParams);
+    final secureRandom = SecureRandomUtils.createSeeded();
+    final rngParams = ParametersWithRandom(keyParams, secureRandom);
+    
+    final generator = ECKeyGenerator();
+    generator.init(rngParams);
+    final pair = generator.generateKeyPair();
+
+    final privateKey = pair.privateKey as ECPrivateKey;
+    final publicKey = pair.publicKey as ECPublicKey;
+
+    // Convert to PEM format
+    final publicPem = BasicUtils.CryptoUtils.encodeEcPublicKeyToPem(publicKey);
+    final privatePem = BasicUtils.CryptoUtils.encodeEcPrivateKeyToPem(privateKey);
+
+    return {
+      'publicKey': publicPem,
+      'privateKey': privatePem,
+      'curve': curve,
+    };
+  }
+
+  /// Parses ECC public key from PEM string
+  static ECPublicKey parsePublicKey(String pemKey) {
+    return BasicUtils.CryptoUtils.ecPublicKeyFromPem(pemKey);
+  }
+
+  /// Parses ECC private key from PEM string
+  static ECPrivateKey parsePrivateKey(String pemKey) {
+    return BasicUtils.CryptoUtils.ecPrivateKeyFromPem(pemKey);
+  }
+
+  /// Parses both public and private keys
+  static ({ECPublicKey publicKey, ECPrivateKey? privateKey}) parseKeyPair({
+    required String publicKey,
+    String? privateKey,
+  }) {
+    final pubKey = parsePublicKey(publicKey);
+    final privKey = privateKey != null ? parsePrivateKey(privateKey) : null;
+    return (publicKey: pubKey, privateKey: privKey);
+  }
+
+  /// Performs ECDH key agreement
+  static Uint8List performECDH(ECPrivateKey privateKey, ECPublicKey publicKey) {
+    final agreement = ECDHBasicAgreement();
+    agreement.init(privateKey);
+    final sharedSecret = agreement.calculateAgreement(publicKey);
+    
+    // Convert BigInt to bytes
+    final bytes = sharedSecret.toRadixString(16);
+    final paddedBytes = bytes.length % 2 == 0 ? bytes : '0$bytes';
+    return KeyEncodingUtils.hexToBytes(paddedBytes);
+  }
+}
