@@ -1,30 +1,19 @@
 import 'package:test/test.dart';
 import 'dart:typed_data';
-import '../lib/implementations/symmetric/aes_cipher.dart';
-import '../lib/implementations/handlers/handler_cipher.dart';
-import '../lib/implementations/handlers/handler_sign.dart';
-import '../lib/implementations/signed_based/hmac_sign.dart';
-import '../lib/implementations/asymmetric/prime_based/rsa_cipher.dart';
-import '../lib/implementations/signed_based/rsa_signature_cipher.dart';
-import '../lib/types/crypto_algorithm.dart';
+import 'package:cryptdart/implementations/symmetric/aes_cipher.dart';
+import 'package:cryptdart/implementations/handlers/handler_cipher.dart';
+import 'package:cryptdart/implementations/handlers/handler_sign.dart';
+import 'package:cryptdart/implementations/signed_based/hmac_sign.dart';
+import 'package:cryptdart/implementations/asymmetric/prime_based/rsa_cipher.dart';
+import 'package:cryptdart/implementations/signed_based/rsa_signature_cipher.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
 
 void main() {
   group('HandlerCipherSymmetric', () {
-    Uint8List padToBlockSize(List<int> data, int blockSize) {
-      final padLen = blockSize - (data.length % blockSize);
-      return Uint8List.fromList([...data, ...List.filled(padLen, padLen)]);
-    }
-
-    List<int> unpad(Uint8List data) {
-      final padLen = data.last;
-      if (padLen <= 0 || padLen > data.length) return data;
-      return data.sublist(0, data.length - padLen);
-    }
-
     test('AES encrypt/decrypt', () {
       final cipher = AESCipher((
         parent: (
-          key: '1234567890123456',
+          key: AESCipher.generateKey(),
           parent: (
             parent: (
               algorithm: CryptoAlgorithm.aes,
@@ -43,10 +32,9 @@ void main() {
         ),
       );
       final data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      final padded = padToBlockSize(data, 16);
-      final encrypted = handler.encrypt(padded);
+      final encrypted = handler.encrypt(data);
       final decrypted = handler.decrypt(encrypted);
-      expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(decrypted, equals(data));
     });
   });
 

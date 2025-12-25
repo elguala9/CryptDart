@@ -20,21 +20,21 @@ class DESCipher extends SymmetricCipher {
     return SymmetricKeyUtils.generateKey(bitLength: 192);
   }
 
-  /// Encrypts data using TripleDES.
+  /// Encrypts data using TripleDES with PKCS7 padding.
   @override
   List<int> encrypt(List<int> data) {
-    final keyBytes = KeyEncodingUtils.stringKeyToBytes(key);
-    final cipher = DESedeEngine();
-    cipher.init(true, KeyParameter(keyBytes));
+    final keyBytes = KeyEncodingUtils.hexToBytes(key);
+    final cipher = PaddedBlockCipherImpl(PKCS7Padding(), DESedeEngine());
+    cipher.init(true, PaddedBlockCipherParameters(KeyParameter(keyBytes), null));
     return cipher.process(Uint8List.fromList(data));
   }
 
-  /// Decrypts data using TripleDES.
+  /// Decrypts data using TripleDES with PKCS7 padding.
   @override
   List<int> decrypt(List<int> data) {
-    final keyBytes = KeyEncodingUtils.stringKeyToBytes(key);
-    final cipher = DESedeEngine();
-    cipher.init(false, KeyParameter(keyBytes));
+    final keyBytes = KeyEncodingUtils.hexToBytes(key);
+    final cipher = PaddedBlockCipherImpl(PKCS7Padding(), DESedeEngine());
+    cipher.init(false, PaddedBlockCipherParameters(KeyParameter(keyBytes), null));
     return cipher.process(Uint8List.fromList(data));
   }
 }

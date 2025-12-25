@@ -68,12 +68,20 @@ void main() {
     });
 
     test('should fail with incompatible algorithms', () async {
+      // Alice only supports ECDH and ChaCha20
       final aliceCapabilities = SecureCommunicationFactory.createDefaultCapabilities(
         peerId: 'alice',
+        supportedKeyExchange: [KeyExchangeAlgorithm.ecdh],
+        supportedAsymmetric: [CryptoAlgorithm.rsa],
+        supportedSymmetric: [CryptoAlgorithm.chacha20],
       );
 
+      // Bob only supports RSA key exchange and AES (incompatible key exchange)
       final bobCapabilities = SecureCommunicationFactory.createDefaultCapabilities(
         peerId: 'bob',
+        supportedKeyExchange: [KeyExchangeAlgorithm.rsa],
+        supportedAsymmetric: [CryptoAlgorithm.rsa], 
+        supportedSymmetric: [CryptoAlgorithm.aes],
       );
 
       final aliceSessionManager = CryptoSessionManager();
@@ -81,7 +89,7 @@ void main() {
 
       final initiationMessage = await aliceSessionManager.initiateSession(aliceCapabilities);
 
-      // Should fail due to incompatible algorithms
+      // Should fail due to incompatible key exchange algorithms
       expect(
         () => bobSessionManager.respondToSession(initiationMessage, bobCapabilities),
         throwsA(isA<StateError>()),

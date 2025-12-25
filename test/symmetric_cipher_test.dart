@@ -1,27 +1,16 @@
 import 'package:test/test.dart';
-import '../lib/implementations/symmetric/aes_cipher.dart';
-import '../lib/implementations/symmetric/des_cipher.dart';
-import '../lib/implementations/symmetric/chacha20_cipher.dart';
+import 'package:cryptdart/implementations/symmetric/aes_cipher.dart';
+import 'package:cryptdart/implementations/symmetric/des_cipher.dart';
+import 'package:cryptdart/implementations/symmetric/chacha20_cipher.dart';
 import 'dart:typed_data';
-import '../lib/types/crypto_algorithm.dart';
-
-Uint8List padToBlockSize(List<int> data, int blockSize) {
-  final padLen = blockSize - (data.length % blockSize);
-  return Uint8List.fromList([...data, ...List.filled(padLen, padLen)]);
-}
-
-List<int> unpad(Uint8List data) {
-  final padLen = data.last;
-  if (padLen <= 0 || padLen > data.length) return data;
-  return data.sublist(0, data.length - padLen);
-}
+import 'package:cryptdart/types/crypto_algorithm.dart';
 
 void main() {
   group('SymmetricCipher', () {
     test('AES encrypt/decrypt', () {
       final cipher = AESCipher((
         parent: (
-          key: '1234567890123456',
+          key: AESCipher.generateKey(), // Use generated hex key
           parent: (
             parent: (
               algorithm: CryptoAlgorithm.aes,
@@ -32,16 +21,15 @@ void main() {
         ),
       ));
       final data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      final padded = padToBlockSize(data, 16);
-      final encrypted = cipher.encrypt(padded);
+      final encrypted = cipher.encrypt(data); // No manual padding needed
       final decrypted = cipher.decrypt(encrypted);
-      expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(decrypted, equals(data)); // No manual unpadding needed
       expect(cipher.algorithm, equals(CryptoAlgorithm.aes));
     });
     test('DES encrypt/decrypt', () {
       final cipher = DESCipher((
         parent: (
-          key: '1234567890123456',
+          key: DESCipher.generateKey(), // Use generated hex key
           parent: (
             parent: (
               algorithm: CryptoAlgorithm.des,
@@ -52,10 +40,9 @@ void main() {
         ),
       ));
       final data = [10, 20, 30, 40, 50, 60, 70, 80];
-      final padded = padToBlockSize(data, 8);
-      final encrypted = cipher.encrypt(padded);
+      final encrypted = cipher.encrypt(data); // No manual padding needed
       final decrypted = cipher.decrypt(encrypted);
-      expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(decrypted, equals(data)); // No manual unpadding needed
       expect(cipher.algorithm, equals(CryptoAlgorithm.des));
     });
     test('ChaCha20 encrypt/decrypt', () {
@@ -83,7 +70,7 @@ void main() {
     test('AES encrypt/decrypt without expirationDate', () {
       final cipher = AESCipher((
         parent: (
-          key: '1234567890123456',
+          key: AESCipher.generateKey(),
           parent: (
             parent: (
               algorithm: CryptoAlgorithm.aes,
@@ -94,16 +81,15 @@ void main() {
         ),
       ));
       final data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      final padded = padToBlockSize(data, 16);
-      final encrypted = cipher.encrypt(padded);
+      final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);
-      expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(decrypted, equals(data));
       expect(cipher.isExpired(), isTrue);
     });
     test('DES encrypt/decrypt without expirationDate', () {
       final cipher = DESCipher((
         parent: (
-          key: '1234567890123456',
+          key: DESCipher.generateKey(),
           parent: (
             parent: (
               algorithm: CryptoAlgorithm.des,
@@ -114,10 +100,9 @@ void main() {
         ),
       ));
       final data = [10, 20, 30, 40, 50, 60, 70, 80];
-      final padded = padToBlockSize(data, 8);
-      final encrypted = cipher.encrypt(padded);
+      final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);
-      expect(unpad(Uint8List.fromList(decrypted)), equals(data));
+      expect(decrypted, equals(data));
       expect(cipher.isExpired(), isTrue);
     });
     test('ChaCha20 encrypt/decrypt without expirationDate', () {
