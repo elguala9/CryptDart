@@ -1,7 +1,7 @@
 import 'package:test/test.dart';
-import '../lib/implementations/asymmetric/prime_based/rsa_cipher.dart';
-import '../lib/types/crypto_algorithm.dart';
-// import '../implementations/asymmetric/prime_based/ecc_cipher.dart'; // ECC test only if implemented
+import 'package:cryptdart/implementations/asymmetric/prime_based/rsa_cipher.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
+// import 'package:cryptdart/implementations/asymmetric/prime_based/ecc_cipher.dart'; // ECC test only if implemented
 
 void main() {
   group('AsymmetricCipher', () {
