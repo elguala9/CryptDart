@@ -20,21 +20,21 @@ class AESCipher extends SymmetricCipher {
     return SymmetricKeyUtils.generateKey(bitLength: 256);
   }
 
-  /// Encrypts data using AES.
+  /// Encrypts data using AES with PKCS7 padding.
   @override
   List<int> encrypt(List<int> data) {
-    final keyBytes = KeyEncodingUtils.stringKeyToBytes(key);
-    final cipher = AESEngine();
-    cipher.init(true, KeyParameter(keyBytes));
+    final keyBytes = KeyEncodingUtils.hexToBytes(key);
+    final cipher = PaddedBlockCipherImpl(PKCS7Padding(), AESEngine());
+    cipher.init(true, PaddedBlockCipherParameters(KeyParameter(keyBytes), null));
     return cipher.process(Uint8List.fromList(data));
   }
 
-  /// Decrypts data using AES.
+  /// Decrypts data using AES with PKCS7 padding.
   @override
   List<int> decrypt(List<int> data) {
-    final keyBytes = KeyEncodingUtils.stringKeyToBytes(key);
-    final cipher = AESEngine();
-    cipher.init(false, KeyParameter(keyBytes));
+    final keyBytes = KeyEncodingUtils.hexToBytes(key);
+    final cipher = PaddedBlockCipherImpl(PKCS7Padding(), AESEngine());
+    cipher.init(false, PaddedBlockCipherParameters(KeyParameter(keyBytes), null));
     return cipher.process(Uint8List.fromList(data));
   }
 }
