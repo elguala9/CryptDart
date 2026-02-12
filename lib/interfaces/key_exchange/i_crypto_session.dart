@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../i_handler.dart';
 import 'i_algorithm_negotiation.dart';
 
@@ -11,6 +12,7 @@ typedef SecureSession = ({
 });
 
 /// Interface for managing cryptographic sessions between peers.
+@includeInBarrelFile
 abstract class ICryptoSession {
   /// Initiates a session establishment process with remote peer.
   /// Returns the handshake message to send to the remote peer.

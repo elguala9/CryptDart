@@ -1,6 +1,7 @@
 // RSA Signature: digital signature algorithm based on RSA
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 
@@ -11,6 +12,7 @@ typedef InputRSASignatureCipher = ({
 
 /// RSA signature implementation.
 /// Extends [AsymmetricSign] and provides RSA digital signature operations.
+@includeInBarrelFile
 class RSASignatureCipher extends AsymmetricSign {
   late final RSAPublicKey _pubKey;
   late final RSAPrivateKey? _privKey;

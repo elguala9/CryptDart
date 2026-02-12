@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../../interfaces/key_exchange/i_key_exchange.dart';
 import '../../implementations/partial/key_exchange_base.dart';
 import '../../types/key_exchange_algorithm.dart';
@@ -11,6 +12,7 @@ typedef InputECDHKeyExchange = ({
 });
 
 /// ECDH key exchange implementation
+@includeInBarrelFile
 class ECDHKeyExchange extends KeyExchangeBase implements IKeyExchange {
   final String _publicKey;
   final String _privateKey;

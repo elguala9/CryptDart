@@ -1,7 +1,9 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../i_base_expiration.dart';
 import '../../types/key_exchange_algorithm.dart';
 
 /// Interface for key exchange protocols like ECDH.
+@includeInBarrelFile
 abstract class IKeyExchange implements IBaseExpiration {
   /// The key exchange algorithm used by this implementation.
   KeyExchangeAlgorithm get algorithm;
