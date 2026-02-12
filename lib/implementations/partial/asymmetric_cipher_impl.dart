@@ -8,8 +8,11 @@ typedef InputAsymmetricCipher = ({
   String? privateKey,
 });
 
+/// Base class for asymmetric cipher implementations.
+/// Extends [Cipher], mixes in [IAsymmetric] for keyId implementation, and implements [IAsymmetricCipher].
 @includeInBarrelFile
-abstract class AsymmetricCipher extends Cipher implements IAsymmetricCipher {
+abstract class AsymmetricCipher extends Cipher with IAsymmetric
+    implements IAsymmetricCipher {
   final String publicKey;
   final String? privateKey;
 
@@ -17,7 +20,4 @@ abstract class AsymmetricCipher extends Cipher implements IAsymmetricCipher {
       : publicKey = input.publicKey,
         privateKey = input.privateKey,
         super(input.parent);
-
-  @override
-  int get keyId => publicKey.hashCode;
 }
