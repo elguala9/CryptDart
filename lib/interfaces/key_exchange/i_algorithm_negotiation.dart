@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../../types/crypto_algorithm.dart';
 import '../../types/key_exchange_algorithm.dart';
 
@@ -20,6 +21,7 @@ typedef NegotiationResult = ({
 });
 
 /// Interface for algorithm negotiation between cryptographic peers.
+@includeInBarrelFile
 abstract class IAlgorithmNegotiation {
   /// Creates a handshake message containing this peer's capabilities.
   Map<String, dynamic> createHandshakeMessage(CryptoPeerCapabilities capabilities);

@@ -2,8 +2,10 @@
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 import 'package:basic_utils/basic_utils.dart' as BasicUtils;
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 
 /// Utilities for SecureRandom generation.
+@includeInBarrelFile
 class SecureRandomUtils {
   /// Creates and seeds a SecureRandom instance
   static SecureRandom createSeeded({int seedLength = 32}) {
@@ -22,6 +24,7 @@ class SecureRandomUtils {
 }
 
 /// Utilities for key encoding and conversion.
+@includeInBarrelFile
 class KeyEncodingUtils {
   /// Converts bytes to hex string
   static String bytesToHex(List<int> bytes) {
@@ -48,6 +51,7 @@ class KeyEncodingUtils {
 }
 
 /// Utilities for RSA key operations.
+@includeInBarrelFile
 class RSAKeyUtils {
   /// Generates an RSA key pair in PEM format
   static Future<Map<String, String>> generateKeyPair(
@@ -90,6 +94,7 @@ class RSAKeyUtils {
 }
 
 /// Utilities for symmetric key generation.
+@includeInBarrelFile
 class SymmetricKeyUtils {
   /// Generates a symmetric key as hex string
   static String generateKey({int bitLength = 256}) {
@@ -100,6 +105,7 @@ class SymmetricKeyUtils {
 }
 
 /// Utilities for ECC key operations.
+@includeInBarrelFile
 class ECCKeyUtils {
   /// Standard curve names
   static const String secp256r1 = 'secp256r1';

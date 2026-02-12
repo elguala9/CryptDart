@@ -1,6 +1,7 @@
 // import 'package:pointycastle/export.dart';
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 import 'package:basic_utils/basic_utils.dart' as BasicUtils;
 
@@ -11,6 +12,7 @@ typedef InputECDSASign = ({
 
 /// ECDSA signature implementation.
 /// Extends [AsymmetricSign] and provides ECC-based digital signature operations.
+@includeInBarrelFile
 class ECDSASign extends AsymmetricSign {
   late final ECPublicKey _pubKey;
   late final ECPrivateKey? _privKey;

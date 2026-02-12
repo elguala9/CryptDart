@@ -1,12 +1,17 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'i_cipher.dart';
 import 'i_expiration.dart';
+import 'i_key_id.dart';
 import 'i_sign.dart';
 
 /// Interface for symmetric key objects.
 /// Extends [IExpiration] for expiration logic.
-abstract interface class ISymmetric extends IExpiration {
+@includeInBarrelFile
+abstract interface class ISymmetric extends IExpiration implements IKeyId {
   /// The symmetric key as a string.
   String get key;
+  @override
+  int get keyId => key.hashCode;
 
   /// Generates a new symmetric key (to be implemented by concrete classes).
   static String generateKey() {

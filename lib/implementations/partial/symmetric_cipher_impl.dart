@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_simmetric.dart';
 import 'package:cryptdart/implementations/partial/cipher_impl.dart';
 
@@ -9,6 +10,7 @@ typedef InputSymmetricCipher = ({
 
 /// Base class for symmetric cipher implementations.
 /// Extends [Cipher] and implements [ISymmetricCipher].
+@includeInBarrelFile
 abstract class SymmetricCipher extends Cipher implements ISymmetricCipher {
   final String _key;
 
@@ -19,4 +21,7 @@ abstract class SymmetricCipher extends Cipher implements ISymmetricCipher {
 
   @override
   String get key => _key;
+
+  @override
+  int get keyId => key.hashCode;
 }

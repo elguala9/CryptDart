@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../../interfaces/key_exchange/i_crypto_session.dart';
 import '../../interfaces/key_exchange/i_algorithm_negotiation.dart';
 import '../../implementations/session/crypto_session_manager.dart';
@@ -5,6 +6,7 @@ import '../../types/crypto_algorithm.dart';
 import '../../types/key_exchange_algorithm.dart';
 
 /// High-level factory for creating secure bidirectional communication sessions
+@includeInBarrelFile
 class SecureCommunicationFactory {
   /// Creates a default peer capability set
   static CryptoPeerCapabilities createDefaultCapabilities({

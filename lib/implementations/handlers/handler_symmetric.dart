@@ -1,7 +1,9 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_handler.dart';
 import 'package:cryptdart/interfaces/i_simmetric.dart';
 import 'package:cryptdart/implementations/handlers/handler.dart';
 
+@includeInBarrelFile
 mixin HandlerSymmetric<T extends ISymmetric> on Handler<T>
     implements IHandlerSymmetric<T> {
   @override

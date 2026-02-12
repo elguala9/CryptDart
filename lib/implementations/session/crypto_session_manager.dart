@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../../interfaces/key_exchange/i_crypto_session.dart';
 import '../../interfaces/key_exchange/i_algorithm_negotiation.dart';
 import '../../implementations/session/algorithm_negotiation.dart';
@@ -14,6 +15,7 @@ import '../symmetric/des_cipher.dart';
 import '../asymmetric/prime_based/rsa_cipher.dart';
 
 /// Manages cryptographic sessions between peers with algorithm negotiation and key exchange
+@includeInBarrelFile
 class CryptoSessionManager implements ICryptoSession {
   final IAlgorithmNegotiation _negotiator;
   SecureSession? _currentSession;

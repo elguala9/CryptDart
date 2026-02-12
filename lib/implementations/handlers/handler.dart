@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_expiration.dart';
 import 'package:cryptdart/interfaces/i_handler.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
@@ -11,6 +12,7 @@ typedef InputHandler<T extends IExpiration> = ({
   int? maxDaysExpiredCrypts, // 0 = no limit, -1 = remove all immediately
 });
 
+@includeInBarrelFile
 abstract class Handler<T extends IExpiration> implements IHandler<T> {
   @protected
   final List<T> protectedCrypts;

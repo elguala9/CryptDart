@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'i_asimmetric.dart';
 import 'i_cipher.dart';
 import 'i_expiration.dart';
@@ -6,6 +7,7 @@ import 'i_simmetric.dart';
 
 /// Generic handler interface for cryptographic objects.
 /// Manages a chain of crypts and expiration logic.
+@includeInBarrelFile
 abstract class IHandler<T extends IExpiration> implements IExpiration {
   /// Sets the next crypt object in the chain.
   void setNextCrypt(T obj);

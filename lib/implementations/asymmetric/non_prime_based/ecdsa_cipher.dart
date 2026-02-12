@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 
@@ -10,6 +11,7 @@ typedef InputECDSACipher = ({
 
 /// ECDSA asymmetric cipher implementation (encryption/decryption).
 /// Extends [AsymmetricCipher] and provides ECC-based operations.
+@includeInBarrelFile
 class ECDSACipher extends AsymmetricCipher {
   late final ECPublicKey _pubKey;
   late final ECPrivateKey? _privKey;

@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:pointycastle/export.dart';
 
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
 
@@ -13,6 +14,7 @@ typedef InputRSACipher = ({
 
 /// RSA asymmetric cipher implementation.
 /// Extends [AsymmetricCipher] and provides RSA encryption/decryption.
+@includeInBarrelFile
 class RSACipher extends AsymmetricCipher {
   late final RSAPublicKey _pubKey;
   late final RSAPrivateKey? _privKey;
