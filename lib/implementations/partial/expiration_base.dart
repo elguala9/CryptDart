@@ -4,7 +4,6 @@ import 'package:cryptdart/interfaces/i_expiration.dart';
 
 /// Input parameters for [ExpirationBase] constructor.
 typedef InputExpirationBase = ({
-  CryptoAlgorithm algorithm,
   DateTime? expirationDate,
   int? expirationTimes,
 });
@@ -12,16 +11,14 @@ typedef InputExpirationBase = ({
 /// Base class for expiration logic in cryptographic objects.
 /// Implements [IExpiration] and manages expiration date, usage limits, and algorithm.
 @includeInBarrelFile
-class ExpirationBase implements IExpiration {
+abstract class ExpirationBase implements IExpiration {
   final DateTime? _expirationDate;
   final int? _expirationTimes;
   int? _expirationTimesRemaining;
-  final CryptoAlgorithm _algorithm;
 
   /// Constructs an [ExpirationBase] with the given input parameters.
   ExpirationBase(InputExpirationBase input)
-      : _algorithm = input.algorithm,
-        _expirationDate = input.expirationDate,
+      : _expirationDate = input.expirationDate,
         _expirationTimes = input.expirationTimes;
 
   @override
@@ -49,5 +46,5 @@ class ExpirationBase implements IExpiration {
   int? get expirationTimesRemaining => _expirationTimesRemaining;
 
   @override
-  CryptoAlgorithm get algorithm => _algorithm;
+  CryptoAlgorithm get algorithm;
 }

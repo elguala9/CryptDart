@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:basic_utils/basic_utils.dart' as BasicUtils;
 
 /// Input parameters for [ECDSASign] constructor.
@@ -48,6 +49,13 @@ class ECDSASign extends AsymmetricSign {
     final privPem = BasicUtils.CryptoUtils.encodeEcPrivateKeyToPem(privKey);
     return {'publicKey': pubPem, 'privateKey': privPem};
   }
+
+  /// Creates an [ECDSASign] with full control over all parameters.
+  ///
+  /// Accepts the complete [InputECDSASign] record, allowing complete customization
+  /// of all nested parameters. This factory automatically adapts to any changes
+  /// in the input structure without requiring modifications.
+  static ECDSASign createFull(InputECDSASign input) => ECDSASign(input);
 
   @override
   List<int> sign(List<int> data) {
@@ -99,4 +107,7 @@ class ECDSASign extends AsymmetricSign {
   String _bytesToHex(List<int> bytes) {
     return bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
   }
+
+  @override
+  CryptoAlgorithm get algorithm => AsymmetricSignAlgorithm.ecdsa;
 }

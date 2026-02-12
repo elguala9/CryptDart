@@ -67,4 +67,12 @@ class ECDHKeyExchange extends KeyExchangeBase implements IKeyExchange {
   }) async {
     return ECCKeyUtils.generateKeyPair(curve: curve);
   }
+
+  /// Creates an [ECDHKeyExchange] with full control over all parameters.
+  ///
+  /// Accepts the complete [InputECDHKeyExchange] record, allowing complete customization
+  /// of all nested parameters. This factory automatically adapts to any changes
+  /// in the input structure without requiring modifications.
+  static ECDHKeyExchange createFull(InputECDHKeyExchange input) =>
+      ECDHKeyExchange(input);
 }

@@ -25,12 +25,12 @@ class SecureCommunicationFactory {
         KeyExchangeAlgorithm.rsa,
       ],
       asymmetric: supportedAsymmetric ?? [
-        CryptoAlgorithm.rsa,
+        AsymmetricCipherAlgorithm.rsa,
       ],
       symmetric: supportedSymmetric ?? [
-        CryptoAlgorithm.chacha20,
-        CryptoAlgorithm.aes,
-        CryptoAlgorithm.des,
+        SymmetricCipherAlgorithm.chacha20,
+        SymmetricCipherAlgorithm.aes,
+        SymmetricCipherAlgorithm.des,
       ],
     );
   }
@@ -129,8 +129,8 @@ extension SecureSessionExtensions on SecureSession {
   String get sessionInfo {
     return 'Session established at ${establishedAt.toIso8601String()}\n'
         'Key Exchange: ${negotiationResult.keyExchange.name}\n'
-        'Asymmetric: ${negotiationResult.asymmetric.name}\n'
-        'Symmetric: ${negotiationResult.symmetric.name}\n'
+        'Asymmetric: ${(negotiationResult.asymmetric as dynamic).name}\n'
+        'Symmetric: ${(negotiationResult.symmetric as dynamic).name}\n'
         'Local Peer: ${negotiationResult.localPeerId}\n'
         'Remote Peer: ${negotiationResult.remotePeerId}\n'
         'Is Initiator: ${negotiationResult.isInitiator}';
