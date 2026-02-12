@@ -2,6 +2,7 @@
 /// Auto-generated barrel file - DO NOT EDIT manually.
 /// Run: dart run bin/generate_barrel.dart
 
+export 'factories/cipher_factory.dart';
 export 'implementations/asymmetric/non_prime_based/ecdsa_cipher.dart';
 export 'implementations/asymmetric/prime_based/rsa_cipher.dart';
 export 'implementations/handlers/handler.dart';
