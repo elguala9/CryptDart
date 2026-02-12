@@ -13,15 +13,15 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
   ];
 
   /// Priority order for asymmetric algorithms (most secure first)
-  static const List<CryptoAlgorithm> _asymmetricPriority = [
-    CryptoAlgorithm.rsa,
+  static const List<AsymmetricCipherAlgorithm> _asymmetricPriority = [
+    AsymmetricCipherAlgorithm.rsa,
   ];
 
   /// Priority order for symmetric algorithms (most secure first)
-  static const List<CryptoAlgorithm> _symmetricPriority = [
-    CryptoAlgorithm.chacha20,
-    CryptoAlgorithm.aes,
-    CryptoAlgorithm.des,
+  static const List<SymmetricCipherAlgorithm> _symmetricPriority = [
+    SymmetricCipherAlgorithm.chacha20,
+    SymmetricCipherAlgorithm.aes,
+    SymmetricCipherAlgorithm.des,
   ];
 
   @override
@@ -32,10 +32,10 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
           .map((e) => e.name)
           .toList(),
       'asymmetric': capabilities.asymmetric
-          .map((e) => e.name)
+          .map((e) => (e as dynamic).name)
           .toList(),
       'symmetric': capabilities.symmetric
-          .map((e) => e.name)
+          .map((e) => (e as dynamic).name)
           .toList(),
       'version': '1.0',
       'timestamp': DateTime.now().millisecondsSinceEpoch,
@@ -133,12 +133,7 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
 
   /// Helper method to convert string to CryptoAlgorithm
   CryptoAlgorithm? _stringToAlgorithm(String algorithmName) {
-    try {
-      return CryptoAlgorithm.values
-          .firstWhere((e) => e.name == algorithmName);
-    } catch (e) {
-      return null;
-    }
+    return CryptoAlgorithm.findByName(algorithmName);
   }
 
   /// Helper method to convert string to KeyExchangeAlgorithm

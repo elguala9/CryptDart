@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 
 /// Input parameters for [AESCipher] constructor.
@@ -22,6 +23,13 @@ class AESCipher extends SymmetricCipher {
     return SymmetricKeyUtils.generateKey(bitLength: 256);
   }
 
+  /// Creates an [AESCipher] with full control over all parameters.
+  ///
+  /// Accepts the complete [InputAESCipher] record, allowing complete customization
+  /// of all nested parameters. This factory automatically adapts to any changes
+  /// in the input structure without requiring modifications.
+  static AESCipher createFull(InputAESCipher input) => AESCipher(input);
+
   /// Encrypts data using AES with PKCS7 padding.
   @override
   List<int> encrypt(List<int> data) {
@@ -39,4 +47,7 @@ class AESCipher extends SymmetricCipher {
     cipher.init(false, PaddedBlockCipherParameters(KeyParameter(keyBytes), null));
     return cipher.process(Uint8List.fromList(data));
   }
+
+  @override
+  CryptoAlgorithm get algorithm => SymmetricCipherAlgorithm.aes;
 }

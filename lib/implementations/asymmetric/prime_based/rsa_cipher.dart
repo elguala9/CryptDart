@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
 
@@ -35,6 +36,13 @@ class RSACipher extends AsymmetricCipher {
     return RSAKeyUtils.generateKeyPair(bitLength: bitLength);
   }
 
+  /// Creates an [RSACipher] with full control over all parameters.
+  ///
+  /// Accepts the complete [InputRSACipher] record, allowing complete customization
+  /// of all nested parameters. This factory automatically adapts to any changes
+  /// in the input structure without requiring modifications.
+  static RSACipher createFull(InputRSACipher input) => RSACipher(input);
+
   /// Encrypts data using RSA.
   @override
   List<int> encrypt(List<int> data) {
@@ -53,4 +61,7 @@ class RSACipher extends AsymmetricCipher {
       ..init(false, PrivateKeyParameter<RSAPrivateKey>(_privKey!));
     return decryptor.process(Uint8List.fromList(data));
   }
+
+  @override
+  CryptoAlgorithm get algorithm => AsymmetricCipherAlgorithm.rsa;
 }

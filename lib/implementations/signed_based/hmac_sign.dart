@@ -4,6 +4,7 @@ import 'package:pointycastle/export.dart';
 // ...existing code...
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/symmetric_sign_impl.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
 // ...existing code...
 import 'package:cryptdart/utils/crypto_utils.dart';
 
@@ -43,4 +44,14 @@ class HMACSign extends SymmetricSign {
   static String generateKey() {
     return SymmetricKeyUtils.generateKey(bitLength: 256);
   }
+
+  /// Creates an [HMACSign] with full control over all parameters.
+  ///
+  /// Accepts the complete [InputHMACSign] record, allowing complete customization
+  /// of all nested parameters. This factory automatically adapts to any changes
+  /// in the input structure without requiring modifications.
+  static HMACSign createFull(InputHMACSign input) => HMACSign(input);
+
+  @override
+  CryptoAlgorithm get algorithm => SymmetricSignAlgorithm.hmac;
 }

@@ -103,8 +103,8 @@ class CryptoSessionManager implements ICryptoSession {
     final responseMessage = _negotiator.createHandshakeMessage(localCapabilities);
     responseMessage['negotiation'] = {
       'keyExchange': _negotiationResult!.keyExchange.name,
-      'asymmetric': _negotiationResult!.asymmetric.name,
-      'symmetric': _negotiationResult!.symmetric.name,
+      'asymmetric': (_negotiationResult!.asymmetric as dynamic).name,
+      'symmetric': (_negotiationResult!.symmetric as dynamic).name,
     };
     responseMessage['keyExchangeData'] = {
       'type': 'ecdh',
@@ -128,10 +128,8 @@ class CryptoSessionManager implements ICryptoSession {
     _negotiationResult = (
       keyExchange: KeyExchangeAlgorithm.values
           .firstWhere((e) => e.name == negotiation['keyExchange']),
-      asymmetric: CryptoAlgorithm.values
-          .firstWhere((e) => e.name == negotiation['asymmetric']),
-      symmetric: CryptoAlgorithm.values
-          .firstWhere((e) => e.name == negotiation['symmetric']),
+      asymmetric: CryptoAlgorithm.findByName(negotiation['asymmetric'])!,
+      symmetric: CryptoAlgorithm.findByName(negotiation['symmetric'])!,
       localPeerId: 'local',
       remotePeerId: remoteCapabilities.peerId,
       isInitiator: true,
@@ -185,7 +183,7 @@ class CryptoSessionManager implements ICryptoSession {
   Future<HandlerCipherAsymmetric> _createAsymmetricHandler(
       CryptoAlgorithm algorithm) async {
     switch (algorithm) {
-      case CryptoAlgorithm.rsa:
+      case AsymmetricCipherAlgorithm.rsa:
         final keyPair = await RSACipher.generateKeyPair();
         final rsaCipher = RSACipher((
           parent: (
@@ -193,7 +191,6 @@ class CryptoSessionManager implements ICryptoSession {
             privateKey: keyPair['privateKey']!,
             parent: (
               parent: (
-                algorithm: CryptoAlgorithm.rsa,
                 expirationDate: DateTime.now().add(const Duration(hours: 24)),
                 expirationTimes: null,
               ),
@@ -221,13 +218,12 @@ class CryptoSessionManager implements ICryptoSession {
     );
 
     switch (algorithm) {
-      case CryptoAlgorithm.aes:
+      case SymmetricCipherAlgorithm.aes:
         final aesCipher = AESCipher((
           parent: (
             key: derivedKey,
             parent: (
               parent: (
-                algorithm: CryptoAlgorithm.aes,
                 expirationDate: DateTime.now().add(const Duration(hours: 24)),
                 expirationTimes: null,
               ),
@@ -241,14 +237,13 @@ class CryptoSessionManager implements ICryptoSession {
           maxDaysExpiredCrypts: 7,
         ));
 
-      case CryptoAlgorithm.chacha20:
+      case SymmetricCipherAlgorithm.chacha20:
         final nonce = SecureRandomUtils.generateRandomBytes(8); // ChaCha20 uses 8-byte IV in PointyCastle
         final chacha20Cipher = ChaCha20Cipher((
           parent: (
             key: derivedKey,
             parent: (
               parent: (
-                algorithm: CryptoAlgorithm.chacha20,
                 expirationDate: DateTime.now().add(const Duration(hours: 24)),
                 expirationTimes: null,
               ),
@@ -263,7 +258,7 @@ class CryptoSessionManager implements ICryptoSession {
           maxDaysExpiredCrypts: 7,
         ));
 
-      case CryptoAlgorithm.des:
+      case SymmetricCipherAlgorithm.des:
         // DES uses smaller keys
         final desKey = derivedKey.substring(0, 16);
         final desCipher = DESCipher((
@@ -271,7 +266,6 @@ class CryptoSessionManager implements ICryptoSession {
             key: desKey,
             parent: (
               parent: (
-                algorithm: CryptoAlgorithm.des,
                 expirationDate: DateTime.now().add(const Duration(hours: 24)),
                 expirationTimes: null,
               ),
