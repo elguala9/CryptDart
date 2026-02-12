@@ -1,5 +1,8 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+
 /// Base interface for expiration logic in cryptographic objects.
 /// Provides expiration date and usage limits.
+@includeInBarrelFile
 abstract class IBaseExpiration {
   /// Returns true if the object is expired.
   bool isExpired();

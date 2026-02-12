@@ -2,6 +2,7 @@
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 // ...existing code...
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/symmetric_sign_impl.dart';
 // ...existing code...
 import 'package:cryptdart/utils/crypto_utils.dart';
@@ -13,6 +14,7 @@ typedef InputHMACSign = ({
 
 /// HMAC (Hash-based Message Authentication Code) signature implementation.
 /// Extends [SymmetricSign] and provides HMAC signing and verification.
+@includeInBarrelFile
 class HMACSign extends SymmetricSign {
   /// Constructs an [HMACSign] with the given input parameters.
   HMACSign(InputHMACSign input) : super(input.parent);

@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_asimmetric.dart';
 import 'package:cryptdart/interfaces/i_cipher.dart';
 import 'package:cryptdart/interfaces/i_handler.dart';
@@ -21,12 +22,20 @@ mixin HandlerCipher<T extends ICipher> on Handler<T>
   }
 }
 
+@includeInBarrelFile
 class HandlerCipherSymmetric<T extends ISymmetricCipher> extends Handler<T>
     with HandlerCipher<T>, HandlerSymmetric<T> {
   HandlerCipherSymmetric(InputHandler<T> input) : super(input);
+
+  @override
+  int get keyId => currentCrypt.keyId;
 }
 
+@includeInBarrelFile
 class HandlerCipherAsymmetric<T extends IAsymmetricCipher> extends Handler<T>
     with HandlerCipher<T>, HandlerAsymmetric<T> {
   HandlerCipherAsymmetric(InputHandler<T> input) : super(input);
+
+  @override
+  int get keyId => currentCrypt.keyId;
 }

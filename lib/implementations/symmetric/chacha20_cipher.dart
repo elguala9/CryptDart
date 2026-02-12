@@ -1,6 +1,7 @@
 // ChaCha20: symmetric algorithm not based on prime numbers
 import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 
@@ -12,6 +13,7 @@ typedef InputChaCha20Cipher = ({
 
 /// ChaCha20 symmetric cipher implementation.
 /// Extends [SymmetricCipher] and provides ChaCha20 encryption/decryption.
+@includeInBarrelFile
 class ChaCha20Cipher extends SymmetricCipher {
   /// Nonce used for ChaCha20 encryption/decryption.
   final Uint8List nonce;

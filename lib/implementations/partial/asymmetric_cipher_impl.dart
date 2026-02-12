@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_asimmetric.dart';
 import 'package:cryptdart/implementations/partial/cipher_impl.dart';
 
@@ -7,6 +8,7 @@ typedef InputAsymmetricCipher = ({
   String? privateKey,
 });
 
+@includeInBarrelFile
 abstract class AsymmetricCipher extends Cipher implements IAsymmetricCipher {
   final String publicKey;
   final String? privateKey;
@@ -15,4 +17,7 @@ abstract class AsymmetricCipher extends Cipher implements IAsymmetricCipher {
       : publicKey = input.publicKey,
         privateKey = input.privateKey,
         super(input.parent);
+
+  @override
+  int get keyId => publicKey.hashCode;
 }

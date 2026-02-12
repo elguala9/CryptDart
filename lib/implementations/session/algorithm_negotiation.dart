@@ -1,8 +1,10 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import '../../interfaces/key_exchange/i_algorithm_negotiation.dart';
 import '../../types/crypto_algorithm.dart';
 import '../../types/key_exchange_algorithm.dart';
 
 /// Default implementation of algorithm negotiation
+@includeInBarrelFile
 class AlgorithmNegotiation implements IAlgorithmNegotiation {
   /// Priority order for key exchange algorithms (most secure first)
   static const List<KeyExchangeAlgorithm> _keyExchangePriority = [

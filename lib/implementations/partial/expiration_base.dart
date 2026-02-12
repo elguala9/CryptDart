@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/interfaces/i_expiration.dart';
 
@@ -10,6 +11,7 @@ typedef InputExpirationBase = ({
 
 /// Base class for expiration logic in cryptographic objects.
 /// Implements [IExpiration] and manages expiration date, usage limits, and algorithm.
+@includeInBarrelFile
 class ExpirationBase implements IExpiration {
   final DateTime? _expirationDate;
   final int? _expirationTimes;

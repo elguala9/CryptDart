@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dart analyze:*)",
+      "mcp__serena__find_symbol",
+      "mcp__serena__get_symbols_overview"
+    ]
+  }
+}

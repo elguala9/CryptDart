@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/types/key_exchange_algorithm.dart';
 import 'package:cryptdart/interfaces/i_base_expiration.dart';
 
@@ -10,6 +11,7 @@ typedef InputKeyExchangeBase = ({
 
 /// Base class for key exchange implementations with expiration logic.
 /// Implements [IBaseExpiration] and manages expiration date, usage limits, and key exchange algorithm.
+@includeInBarrelFile
 class KeyExchangeBase implements IBaseExpiration {
   final DateTime? _expirationDate;
   final int? _expirationTimes;

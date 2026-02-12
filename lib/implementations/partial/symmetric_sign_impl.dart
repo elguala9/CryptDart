@@ -1,3 +1,4 @@
+import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_simmetric.dart';
 import 'package:cryptdart/implementations/partial/sign_impl.dart';
 
@@ -9,6 +10,7 @@ typedef InputSymmetricSign = ({
 
 /// Base class for symmetric signature implementations.
 /// Extends [Sign] and implements [ISymmetricSign].
+@includeInBarrelFile
 abstract class SymmetricSign extends Sign implements ISymmetricSign {
   final String _key;
 
@@ -19,4 +21,7 @@ abstract class SymmetricSign extends Sign implements ISymmetricSign {
 
   @override
   String get key => _key;
+
+  @override
+  int get keyId => key.hashCode;
 }
