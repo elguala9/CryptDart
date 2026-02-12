@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
+import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 
 /// Input parameters for [ECDSACipher] constructor.
@@ -38,4 +39,7 @@ class ECDSACipher extends AsymmetricCipher {
   List<int> decrypt(List<int> data) {
     throw UnimplementedError('ECC decryption not yet implemented');
   }
+
+  @override
+  CryptoAlgorithm get algorithm => AsymmetricCipherAlgorithm.ecdsa;
 }
