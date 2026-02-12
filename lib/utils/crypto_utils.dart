@@ -1,8 +1,11 @@
 // Centralized cryptographic utilities to avoid code duplication
 import 'dart:typed_data';
-import 'package:pointycastle/export.dart';
+import 'package:pointycastle/export.dart' hide  Digest;
 import 'package:basic_utils/basic_utils.dart' as BasicUtils;
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
+
 
 /// Utilities for SecureRandom generation.
 @includeInBarrelFile
@@ -101,6 +104,12 @@ class SymmetricKeyUtils {
     final byteLength = bitLength ~/ 8;
     final keyBytes = SecureRandomUtils.generateRandomBytes(byteLength);
     return KeyEncodingUtils.bytesToHex(keyBytes);
+  }
+
+  /// Computes SHA-256 hash of the given bytes
+  static Digest sha256From(String data) {
+    //final digest = SHA256Digest();
+    return sha256.convert(utf8.encode(data));
   }
 }
 

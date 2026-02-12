@@ -9,9 +9,10 @@ typedef InputSymmetricSign = ({
 });
 
 /// Base class for symmetric signature implementations.
-/// Extends [Sign] and implements [ISymmetricSign].
+/// Extends [Sign], mixes in [ISymmetric] for keyId implementation, and implements [ISymmetricSign].
 @includeInBarrelFile
-abstract class SymmetricSign extends Sign implements ISymmetricSign {
+abstract class SymmetricSign extends Sign with ISymmetric
+    implements ISymmetricSign {
   final String _key;
 
   /// Constructs a [SymmetricSign] with the given input parameters.
@@ -21,7 +22,4 @@ abstract class SymmetricSign extends Sign implements ISymmetricSign {
 
   @override
   String get key => _key;
-
-  @override
-  int get keyId => key.hashCode;
 }

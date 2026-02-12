@@ -6,6 +6,8 @@ import 'package:cryptdart/interfaces/i_simmetric.dart';
 import 'handler.dart';
 import 'handler_asymmetric.dart';
 import 'handler_symmetric.dart';
+import 'package:crypto/crypto.dart';
+
 
 mixin HandlerCipher<T extends ICipher> on Handler<T>
     implements IHandlerCipher<T> {
@@ -28,7 +30,7 @@ class HandlerCipherSymmetric<T extends ISymmetricCipher> extends Handler<T>
   HandlerCipherSymmetric(InputHandler<T> input) : super(input);
 
   @override
-  int get keyId => currentCrypt.keyId;
+  Digest get keyId => currentCrypt.keyId;
 }
 
 @includeInBarrelFile
@@ -37,5 +39,5 @@ class HandlerCipherAsymmetric<T extends IAsymmetricCipher> extends Handler<T>
   HandlerCipherAsymmetric(InputHandler<T> input) : super(input);
 
   @override
-  int get keyId => currentCrypt.keyId;
+  Digest get keyId => currentCrypt.keyId;
 }
