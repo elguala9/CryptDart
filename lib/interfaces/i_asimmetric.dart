@@ -1,13 +1,17 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:cryptdart/utils/crypto_utils.dart';
 import 'i_cipher.dart';
 import 'i_expiration.dart';
 import 'i_key_id.dart';
 import 'i_sign.dart';
+import 'package:crypto/crypto.dart';
 
-/// Interface for asymmetric key objects.
-/// Extends [IExpiration] for expiration logic.
+
+/// Mixin for asymmetric key objects.
+/// Provides SHA-256 based keyId implementation using the public key.
+/// Must be mixed into classes that extend [IExpiration].
 @includeInBarrelFile
-abstract interface class IAsymmetric extends IExpiration implements IKeyId {
+mixin IAsymmetric on IExpiration implements IKeyId {
   /// The public key as a string.
   String get publicKey;
 
@@ -15,7 +19,7 @@ abstract interface class IAsymmetric extends IExpiration implements IKeyId {
   String? get privateKey;
 
   @override
-  int get keyId => publicKey.hashCode;
+  Digest get keyId => SymmetricKeyUtils.sha256From(publicKey);
 
   /// Generates a new asymmetric key pair (to be implemented by concrete classes).
   static KeyPair generateKeyPair() {
@@ -25,12 +29,12 @@ abstract interface class IAsymmetric extends IExpiration implements IKeyId {
 
 /// Interface for asymmetric ciphers.
 /// Combines [IAsymmetric] and [ICipher].
-abstract interface class IAsymmetricCipher extends IAsymmetric
-    implements ICipher {}
+abstract interface class IAsymmetricCipher extends ICipher
+    implements IAsymmetric {}
 
 /// Interface for asymmetric signature operations.
 /// Combines [IAsymmetric] and [ISign].
-abstract interface class IAsymmetricSign extends IAsymmetric implements ISign {}
+abstract interface class IAsymmetricSign implements IAsymmetric, ISign {}
 
 /// Typedef for an asymmetric key pair (public and private keys).
 typedef KeyPair = ({

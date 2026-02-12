@@ -9,9 +9,10 @@ typedef InputSymmetricCipher = ({
 });
 
 /// Base class for symmetric cipher implementations.
-/// Extends [Cipher] and implements [ISymmetricCipher].
+/// Extends [Cipher], mixes in [ISymmetric] for keyId implementation, and implements [ISymmetricCipher].
 @includeInBarrelFile
-abstract class SymmetricCipher extends Cipher implements ISymmetricCipher {
+abstract class SymmetricCipher extends Cipher with ISymmetric
+    implements ISymmetricCipher {
   final String _key;
 
   /// Constructs a [SymmetricCipher] with the given input parameters.
@@ -21,7 +22,4 @@ abstract class SymmetricCipher extends Cipher implements ISymmetricCipher {
 
   @override
   String get key => _key;
-
-  @override
-  int get keyId => key.hashCode;
 }

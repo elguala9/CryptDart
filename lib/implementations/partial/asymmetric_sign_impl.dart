@@ -8,8 +8,11 @@ typedef InputAsymmetricSign = ({
   String? privateKey,
 });
 
+/// Base class for asymmetric signature implementations.
+/// Extends [Sign], mixes in [IAsymmetric] for keyId implementation, and implements [IAsymmetricSign].
 @includeInBarrelFile
-abstract class AsymmetricSign extends Sign implements IAsymmetricSign {
+abstract class AsymmetricSign extends Sign with IAsymmetric
+    implements IAsymmetricSign {
   final String publicKey;
   final String? privateKey;
 
@@ -17,7 +20,4 @@ abstract class AsymmetricSign extends Sign implements IAsymmetricSign {
       : publicKey = input.publicKey,
         privateKey = input.privateKey,
         super(input.parent);
-
-  @override
-  int get keyId => publicKey.hashCode;
 }

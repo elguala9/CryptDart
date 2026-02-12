@@ -1,17 +1,21 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:cryptdart/utils/crypto_utils.dart';
 import 'i_cipher.dart';
 import 'i_expiration.dart';
 import 'i_key_id.dart';
 import 'i_sign.dart';
+import 'package:crypto/crypto.dart';
 
-/// Interface for symmetric key objects.
-/// Extends [IExpiration] for expiration logic.
+/// Mixin for symmetric key objects.
+/// Provides SHA-256 based keyId implementation.
+/// Must be mixed into classes that extend [IExpiration].
 @includeInBarrelFile
-abstract interface class ISymmetric extends IExpiration implements IKeyId {
+mixin ISymmetric on IExpiration implements IKeyId {
   /// The symmetric key as a string.
   String get key;
+
   @override
-  int get keyId => key.hashCode;
+  Digest get keyId => SymmetricKeyUtils.sha256From(key);
 
   /// Generates a new symmetric key (to be implemented by concrete classes).
   static String generateKey() {
@@ -26,4 +30,4 @@ abstract interface class ISymmetricCipher extends ICipher
 
 /// Interface for symmetric signature operations.
 /// Combines [ISymmetric] and [ISign].
-abstract interface class ISymmetricSign extends ISymmetric implements ISign {}
+abstract interface class ISymmetricSign implements ISymmetric, ISign {}
