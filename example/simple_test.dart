@@ -29,7 +29,6 @@ Future<void> testSymmetric() async {
       key: aesKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.aes,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -51,7 +50,6 @@ Future<void> testSymmetric() async {
       key: chachaKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.chacha20,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -74,7 +72,6 @@ Future<void> testAsymmetric() async {
       privateKey: keyPair['privateKey']!,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.rsa,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -98,7 +95,6 @@ Future<void> testSignatures() async {
       key: hmacKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.hmac,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -119,7 +115,6 @@ Future<void> testSignatures() async {
       privateKey: rsaKeys['privateKey']!,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.rsaSignature,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -171,14 +166,14 @@ Future<void> testSecureSessions() async {
   
   final session = await SecureCommunicationFactory.initiateSecureSession(
     localPeerId: 'test-alice',
-    supportedAsymmetric: [CryptoAlgorithm.rsa],
-    supportedSymmetric: [CryptoAlgorithm.chacha20],
+    supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+    supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
     sendToRemote: (initMessage) async {
       final bobResult = await SecureCommunicationFactory.respondToSecureSession(
         localPeerId: 'test-bob',
         initiationMessage: initMessage,
-        supportedAsymmetric: [CryptoAlgorithm.rsa],
-        supportedSymmetric: [CryptoAlgorithm.chacha20],
+        supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+        supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
       );
       return bobResult.responseMessage;
     },

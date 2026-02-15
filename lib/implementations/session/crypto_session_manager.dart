@@ -103,8 +103,8 @@ class CryptoSessionManager implements ICryptoSession {
     final responseMessage = _negotiator.createHandshakeMessage(localCapabilities);
     responseMessage['negotiation'] = {
       'keyExchange': _negotiationResult!.keyExchange.name,
-      'asymmetric': (_negotiationResult!.asymmetric as dynamic).name,
-      'symmetric': (_negotiationResult!.symmetric as dynamic).name,
+      'asymmetric': _algorithmToString(_negotiationResult!.asymmetric),
+      'symmetric': _algorithmToString(_negotiationResult!.symmetric),
     };
     responseMessage['keyExchangeData'] = {
       'type': 'ecdh',
@@ -149,6 +149,13 @@ class CryptoSessionManager implements ICryptoSession {
     }
 
     return _createSecureSession();
+  }
+
+  /// Extracts the algorithm name from a CryptoAlgorithm value
+  String _algorithmToString(CryptoAlgorithm algo) {
+    final str = algo.toString();
+    final parts = str.split('.');
+    return parts.length > 1 ? parts[1] : str;
   }
 
   /// Creates handlers based on negotiated algorithms

@@ -16,7 +16,6 @@ void main() {
           key: AESCipher.generateKey(),
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.aes,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -47,7 +46,6 @@ void main() {
           privateKey: keyPair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.rsa,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -76,7 +74,6 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.hmac,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -108,7 +105,6 @@ void main() {
           privateKey: keyPair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.rsaSignature,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),

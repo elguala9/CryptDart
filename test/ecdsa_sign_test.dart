@@ -15,7 +15,6 @@ void main() {
     setUpAll(() async {
       keyPair = await ECDSASign.generateKeyPair();
       InputExpirationBase expBase = (
-        algorithm: CryptoAlgorithm.ecdsa,
         expirationDate: null,
         expirationTimes: null,
       );
@@ -45,7 +44,6 @@ void main() {
 
     test('throws if signing without private key', () {
       InputExpirationBase expBase = (
-        algorithm: CryptoAlgorithm.ecdsa,
         expirationDate: null,
         expirationTimes: null,
       );
