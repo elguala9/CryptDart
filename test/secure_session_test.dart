@@ -41,11 +41,11 @@ void main() {
 
       // Verify sessions are established
       expect(aliceSession.negotiationResult.keyExchange, equals(KeyExchangeAlgorithm.ecdh));
-      expect(aliceSession.negotiationResult.asymmetric, equals(CryptoAlgorithm.rsa));
-      expect(aliceSession.negotiationResult.symmetric, equals(CryptoAlgorithm.chacha20));
+      expect(aliceSession.negotiationResult.asymmetric, equals(AsymmetricCipherAlgorithm.rsa));
+      expect(aliceSession.negotiationResult.symmetric, equals(SymmetricCipherAlgorithm.chacha20));
       expect(bobSession.negotiationResult.keyExchange, equals(KeyExchangeAlgorithm.ecdh));
-      expect(bobSession.negotiationResult.asymmetric, equals(CryptoAlgorithm.rsa));
-      expect(bobSession.negotiationResult.symmetric, equals(CryptoAlgorithm.chacha20));
+      expect(bobSession.negotiationResult.asymmetric, equals(AsymmetricCipherAlgorithm.rsa));
+      expect(bobSession.negotiationResult.symmetric, equals(SymmetricCipherAlgorithm.chacha20));
 
       // Test symmetric encryption/decryption
       final testData = utf8.encode('Hello secure world!');
@@ -72,16 +72,16 @@ void main() {
       final aliceCapabilities = SecureCommunicationFactory.createDefaultCapabilities(
         peerId: 'alice',
         supportedKeyExchange: [KeyExchangeAlgorithm.ecdh],
-        supportedAsymmetric: [CryptoAlgorithm.rsa],
-        supportedSymmetric: [CryptoAlgorithm.chacha20],
+        supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+        supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
       );
 
       // Bob only supports RSA key exchange and AES (incompatible key exchange)
       final bobCapabilities = SecureCommunicationFactory.createDefaultCapabilities(
         peerId: 'bob',
         supportedKeyExchange: [KeyExchangeAlgorithm.rsa],
-        supportedAsymmetric: [CryptoAlgorithm.rsa], 
-        supportedSymmetric: [CryptoAlgorithm.aes],
+        supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+        supportedSymmetric: [SymmetricCipherAlgorithm.aes],
       );
 
       final aliceSessionManager = CryptoSessionManager();

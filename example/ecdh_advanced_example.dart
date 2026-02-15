@@ -180,7 +180,7 @@ Future<void> keyRotationDemo() async {
   // Simulate 3 key rotations
   for (int rotation = 1; rotation <= 3; rotation++) {
     print('🔑 Key Rotation #$rotation:');
-    
+
     // Alice generates new ephemeral keys
     final aliceKeyPair = await ECDHKeyExchange.generateKeyPair();
     final alice = ECDHKeyExchange((
@@ -396,7 +396,6 @@ Future<void> ecdhWithSymmetricDemo() async {
       key: aesKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.aes,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),

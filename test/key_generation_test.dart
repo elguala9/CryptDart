@@ -18,14 +18,13 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.aes,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.aes));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.aes));
     });
     test('DES key generation', () {
       final key = DESCipher.generateKey();
@@ -35,14 +34,13 @@ void main() {
           key: '1234567890123456',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.des,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.des));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.des));
     });
     test('ChaCha20 key generation', () {
       final key = ChaCha20Cipher.generateKey();
@@ -55,14 +53,13 @@ void main() {
           key: '12345678901234567890123456789012',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.chacha20,
               expirationDate: expirationDate,
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.chacha20));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.chacha20));
     });
     test('HMAC key generation', () {
       final key = HMACSign.generateKey();
@@ -72,14 +69,13 @@ void main() {
           key: '12345678901234567890123456789012',
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.hmac,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.hmac));
+      expect(cipher.algorithm, equals(SymmetricSignAlgorithm.hmac));
     });
   });
 
@@ -94,14 +90,13 @@ void main() {
           privateKey: pair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.rsa,
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.rsa));
+      expect(cipher.algorithm, equals(AsymmetricCipherAlgorithm.rsa));
     });
     test('RSA Signature key pair generation', () async {
       final pair = await RSASignatureCipher.generateKeyPair();
@@ -114,14 +109,13 @@ void main() {
           privateKey: pair['privateKey']!,
           parent: (
             parent: (
-              algorithm: CryptoAlgorithm.rsaSignature,
               expirationDate: expirationDate,
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(CryptoAlgorithm.rsaSignature));
+      expect(cipher.algorithm, equals(AsymmetricSignAlgorithm.rsaSignature));
     });
   });
 }

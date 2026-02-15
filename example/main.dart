@@ -39,7 +39,6 @@ Future<void> demonstrateSymmetricEncryption() async {
       key: aesKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.aes,
           expirationDate: DateTime.now().add(Duration(hours: 24)),
           expirationTimes: null,
         ),
@@ -67,7 +66,6 @@ Future<void> demonstrateSymmetricEncryption() async {
       key: chachaKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.chacha20,
           expirationDate: DateTime.now().add(Duration(hours: 12)),
           expirationTimes: null,
         ),
@@ -93,7 +91,6 @@ Future<void> demonstrateSymmetricEncryption() async {
       key: desKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.des,
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -124,7 +121,6 @@ Future<void> demonstrateAsymmetricEncryption() async {
       privateKey: rsaKeys['privateKey']!,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.rsa,
           expirationDate: DateTime.now().add(Duration(days: 30)),
           expirationTimes: null,
         ),
@@ -155,7 +151,6 @@ Future<void> demonstrateDigitalSignatures() async {
       key: hmacKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.hmac,
           expirationDate: DateTime.now().add(Duration(hours: 6)),
           expirationTimes: null,
         ),
@@ -182,7 +177,6 @@ Future<void> demonstrateDigitalSignatures() async {
       privateKey: rsaSigKeys['privateKey']!,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.rsaSignature,
           expirationDate: DateTime.now().add(Duration(days: 365)),
           expirationTimes: null,
         ),
@@ -252,8 +246,8 @@ Future<void> demonstrateSecureSessions() async {
   // Alice initiates a secure session with Bob
   final aliceSession = await SecureCommunicationFactory.initiateSecureSession(
     localPeerId: 'alice@example.com',
-    supportedAsymmetric: [CryptoAlgorithm.rsa],
-    supportedSymmetric: [CryptoAlgorithm.chacha20, CryptoAlgorithm.aes],
+    supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+    supportedSymmetric: [SymmetricCipherAlgorithm.chacha20, SymmetricCipherAlgorithm.aes],
     sendToRemote: (initiationMessage) async {
       // Simulate Bob receiving Alice's message and responding
       print('   📨 Alice sent initiation message to Bob');
@@ -261,8 +255,8 @@ Future<void> demonstrateSecureSessions() async {
       final bobResponse = await SecureCommunicationFactory.respondToSecureSession(
         localPeerId: 'bob@example.com',
         initiationMessage: initiationMessage,
-        supportedAsymmetric: [CryptoAlgorithm.rsa],
-        supportedSymmetric: [CryptoAlgorithm.aes, CryptoAlgorithm.chacha20],
+        supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+        supportedSymmetric: [SymmetricCipherAlgorithm.aes, SymmetricCipherAlgorithm.chacha20],
       );
       
       print('   📬 Bob responded with negotiated parameters');
