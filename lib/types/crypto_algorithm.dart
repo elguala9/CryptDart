@@ -48,15 +48,22 @@ sealed class CryptoAlgorithm {
   static CryptoAlgorithm? findByName(String name) {
     try {
       // Try cipher algorithms first
-      return cipherAlgorithms.firstWhere((e) => (e as dynamic).name == name);
+      return cipherAlgorithms.firstWhere((e) => _extractAlgorithmName(e) == name);
     } catch (e) {
       try {
         // Then try signature algorithms
-        return signAlgorithms.firstWhere((e) => (e as dynamic).name == name);
+        return signAlgorithms.firstWhere((e) => _extractAlgorithmName(e) == name);
       } catch (e) {
         return null;
       }
     }
+  }
+
+  /// Helper to extract algorithm name from toString representation
+  static String _extractAlgorithmName(CryptoAlgorithm algo) {
+    final str = algo.toString();
+    final parts = str.split('.');
+    return parts.length > 1 ? parts[1] : str;
   }
 }
 

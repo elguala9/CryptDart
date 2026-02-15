@@ -8,7 +8,6 @@ void main() {
         key: 'test_key_32_characters_1234567890',
         parent: (
           parent: (
-            algorithm: CryptoAlgorithm.aes,
             expirationDate: null,
             expirationTimes: null,
           ),
@@ -16,7 +15,7 @@ void main() {
       ),
     ));
 
-    expect(aes.algorithm, equals(CryptoAlgorithm.aes));
+    expect(aes.algorithm, equals(SymmetricCipherAlgorithm.aes));
     print('AES test passed');
   });
 }

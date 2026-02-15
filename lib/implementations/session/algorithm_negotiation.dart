@@ -32,14 +32,21 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
           .map((e) => e.name)
           .toList(),
       'asymmetric': capabilities.asymmetric
-          .map((e) => (e as dynamic).name)
+          .map((e) => _algorithmToString(e))
           .toList(),
       'symmetric': capabilities.symmetric
-          .map((e) => (e as dynamic).name)
+          .map((e) => _algorithmToString(e))
           .toList(),
       'version': '1.0',
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     };
+  }
+
+  /// Extracts the algorithm name from a CryptoAlgorithm value
+  String _algorithmToString(CryptoAlgorithm algo) {
+    final str = algo.toString();
+    final parts = str.split('.');
+    return parts.length > 1 ? parts[1] : str;
   }
 
   @override

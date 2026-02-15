@@ -62,7 +62,6 @@ Future<void> medicalRecordsScenario() async {
       key: aesKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.aes,
           expirationDate: DateTime.now().add(Duration(days: 2555)), // 7 years HIPAA retention
           expirationTimes: null,
         ),
@@ -120,7 +119,6 @@ Future<void> financialTransactionScenario() async {
       privateKey: bankKeyPair['privateKey']!,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.rsaSignature,
           expirationDate: DateTime.now().add(Duration(days: 2555)), // Long-term key
           expirationTimes: null,
         ),
@@ -146,7 +144,6 @@ Future<void> financialTransactionScenario() async {
       key: transactionKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.aes,
           expirationDate: DateTime.now().add(Duration(days: 365)),
           expirationTimes: null,
         ),
@@ -167,7 +164,6 @@ Future<void> financialTransactionScenario() async {
       key: hmacKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.hmac,
           expirationDate: DateTime.now().add(Duration(hours: 24)),
           expirationTimes: null,
         ),
@@ -262,7 +258,6 @@ Future<void> iotDeviceScenario() async {
         key: chaChaKey,
         parent: (
           parent: (
-            algorithm: CryptoAlgorithm.chacha20,
             expirationDate: DateTime.now().add(Duration(days: 7)),
             expirationTimes: null,
           ),
@@ -331,8 +326,8 @@ Future<void> secureMessagingScenario() async {
   for (final user in users) {
     final session = await SecureCommunicationFactory.initiateSecureSession(
       localPeerId: '$user@securemsg.com',
-      supportedAsymmetric: [CryptoAlgorithm.rsa],
-      supportedSymmetric: [CryptoAlgorithm.chacha20],
+      supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
+      supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
       sendToRemote: (initMessage) async {
         // Simulate server-mediated key exchange
         return {
@@ -484,7 +479,6 @@ Future<void> fileEncryptionScenario() async {
         key: fileKey,
         parent: (
           parent: (
-            algorithm: CryptoAlgorithm.aes,
             expirationDate: DateTime.now().add(Duration(days: 1095)),
             expirationTimes: null,
           ),
@@ -558,7 +552,6 @@ Future<void> apiAuthenticationScenario() async {
       key: hmacKey,
       parent: (
         parent: (
-          algorithm: CryptoAlgorithm.hmac,
           expirationDate: DateTime.now().add(Duration(days: 90)), // API key rotation
           expirationTimes: 10000, // Rate limiting
         ),

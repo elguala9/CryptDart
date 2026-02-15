@@ -1,11 +1,10 @@
-/// Example demonstrating the new factory methods for all concrete cryptography classes.
+/// Example demonstrating createFull factory method pattern for all cryptography classes.
 ///
-/// Factory methods follow a consistent pattern:
-/// - create() - auto-generates keys and returns an instance
-/// - createWithKey()/createWithKeyPair() - uses existing keys and returns an instance
-///
-/// This design minimizes code duplication as create() internally calls createWithKey().
+/// createFull() accepts the complete input structure, allowing full customization
+/// of all nested parameters for each cipher/signature/key-exchange type.
 
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:cryptdart/cryptdart.dart';
 
 void main() async {
@@ -15,38 +14,48 @@ void main() async {
   print('📦 SYMMETRIC CIPHERS');
   print('─' * 50);
 
-  // AES: Auto-generate key
-  final aesAuto = AESCipher.create();
-  print('✅ AES with auto-generated key created');
+  // AES with createFull
+  final aes = AESCipher.createFull((
+    parent: (
+      key: AESCipher.generateKey(),
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(days: 7)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ AES with createFull created');
 
-  // AES: With specific key
-  final aesKey = AESCipher.generateKey();
-  final aesCustom = AESCipher.createWithKey(aesKey);
-  print('✅ AES with custom key created');
+  // ChaCha20 with createFull
+  final chacha = ChaCha20Cipher.createFull((
+    nonce: Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8]),
+    parent: (
+      key: ChaCha20Cipher.generateKey(),
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(hours: 12)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ ChaCha20 with createFull created');
 
-  // AES: With expiration
-  final aesExpiring = AESCipher.create(
-    expirationDate: DateTime.now().add(Duration(days: 7)),
-    expirationTimes: 1000,
-  );
-  print('✅ AES with expiration (7 days, 1000 uses) created');
-
-  // ChaCha20: Auto-generate key and nonce
-  final chachaAuto = ChaCha20Cipher.create();
-  print('✅ ChaCha20 with auto-generated key and nonce created');
-
-  // ChaCha20: With specific key and nonce
-  final chachaKey = ChaCha20Cipher.generateKey();
-  final chachaNonce = ChaCha20Cipher.generateNonce();
-  final chachaCustom = ChaCha20Cipher.createWithKey(
-    chachaKey,
-    nonce: chachaNonce,
-  );
-  print('✅ ChaCha20 with custom key and nonce created');
-
-  // DES: Auto-generate key
-  final desAuto = DESCipher.create();
-  print('✅ DES with auto-generated key created');
+  // DES with createFull
+  final des = DESCipher.createFull((
+    parent: (
+      key: DESCipher.generateKey(),
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(hours: 1)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ DES with createFull created');
 
   print('');
 
@@ -54,21 +63,21 @@ void main() async {
   print('🔑 ASYMMETRIC CIPHERS');
   print('─' * 50);
 
-  // RSA: Auto-generate key pair
-  final rsaAuto = await RSACipher.create();
-  print('✅ RSA (2048-bit) with auto-generated key pair created');
-
-  // RSA: Auto-generate with custom bit length
-  final rsa4096 = await RSACipher.create(bitLength: 4096);
-  print('✅ RSA (4096-bit) with auto-generated key pair created');
-
-  // RSA: With specific key pair
+  // RSA with createFull
   final rsaKeyPair = await RSACipher.generateKeyPair(bitLength: 2048);
-  final rsaCustom = RSACipher.createWithKeyPair(
-    rsaKeyPair['publicKey']!,
-    rsaKeyPair['privateKey']!,
-  );
-  print('✅ RSA with custom key pair created');
+  final rsa = RSACipher.createFull((
+    parent: (
+      publicKey: rsaKeyPair['publicKey']!,
+      privateKey: rsaKeyPair['privateKey']!,
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(days: 30)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ RSA (2048-bit) with createFull created');
 
   print('');
 
@@ -76,42 +85,51 @@ void main() async {
   print('✍️  DIGITAL SIGNATURES');
   print('─' * 50);
 
-  // HMAC: Auto-generate key
-  final hmacAuto = HMACSign.create();
-  print('✅ HMAC with auto-generated key created');
+  // HMAC with createFull
+  final hmac = HMACSign.createFull((
+    parent: (
+      key: HMACSign.generateKey(),
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(hours: 6)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ HMAC with createFull created');
 
-  // HMAC: With specific key
-  final hmacKey = HMACSign.generateKey();
-  final hmacCustom = HMACSign.createWithKey(hmacKey);
-  print('✅ HMAC with custom key created');
-
-  // RSA Signature: Auto-generate key pair
-  final rsaSigAuto = await RSASignatureCipher.create();
-  print('✅ RSA Signature (2048-bit) with auto-generated key pair created');
-
-  // RSA Signature: With specific key pair
+  // RSA Signature with createFull
   final rsaSigKeyPair = await RSASignatureCipher.generateKeyPair();
-  final rsaSigCustom = RSASignatureCipher.createWithKeyPair(
-    rsaSigKeyPair['publicKey']!,
-    rsaSigKeyPair['privateKey']!,
-  );
-  print('✅ RSA Signature with custom key pair created');
+  final rsaSig = RSASignatureCipher.createFull((
+    parent: (
+      publicKey: rsaSigKeyPair['publicKey']!,
+      privateKey: rsaSigKeyPair['privateKey']!,
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(days: 365)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ RSA Signature with createFull created');
 
-  // ECDSA: Auto-generate key pair with secp256r1 curve
-  final ecdsaAuto = await ECDSASign.create();
-  print('✅ ECDSA (secp256r1) with auto-generated key pair created');
-
-  // ECDSA: With custom curve
-  final ecdsa384 = await ECDSASign.create(curve: 'prime384v1');
-  print('✅ ECDSA (prime384v1) with auto-generated key pair created');
-
-  // ECDSA: With specific key pair
+  // ECDSA with createFull
   final ecdsaKeyPair = await ECDSASign.generateKeyPair();
-  final ecdsaCustom = ECDSASign.createWithKeyPair(
-    ecdsaKeyPair['publicKey']!,
-    ecdsaKeyPair['privateKey']!,
-  );
-  print('✅ ECDSA with custom key pair created');
+  final ecdsa = ECDSASign.createFull((
+    parent: (
+      publicKey: ecdsaKeyPair['publicKey']!,
+      privateKey: ecdsaKeyPair['privateKey']!,
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(days: 90)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
+  print('✅ ECDSA with createFull created');
 
   print('');
 
@@ -119,23 +137,19 @@ void main() async {
   print('🔄 KEY EXCHANGE');
   print('─' * 50);
 
-  // ECDH: Auto-generate key pair with secp256r1 curve
-  final ecdhAuto = await ECDHKeyExchange.create();
-  print('✅ ECDH (secp256r1) with auto-generated key pair created');
-
-  // ECDH: With custom curve
-  final ecdh384 = await ECDHKeyExchange.create(
-    curve: ECCKeyUtils.secp384r1,
-  );
-  print('✅ ECDH (secp384r1) with auto-generated key pair created');
-
-  // ECDH: With specific key pair
+  // ECDH with createFull
   final ecdhKeyPair = await ECDHKeyExchange.generateKeyPair();
-  final ecdhCustom = ECDHKeyExchange.createWithKeyPair(
-    ecdhKeyPair['publicKey']!,
-    ecdhKeyPair['privateKey']!,
-  );
-  print('✅ ECDH with custom key pair created');
+  final ecdh = ECDHKeyExchange.createFull((
+    parent: (
+      algorithm: KeyExchangeAlgorithm.ecdh,
+      expirationDate: DateTime.now().add(Duration(minutes: 30)),
+      expirationTimes: null,
+    ),
+    publicKey: ecdhKeyPair['publicKey']!,
+    privateKey: ecdhKeyPair['privateKey']!,
+    curve: ECCKeyUtils.secp256r1,
+  ));
+  print('✅ ECDH with createFull created');
 
   print('');
 
@@ -143,10 +157,18 @@ void main() async {
   print('🔐 PRACTICAL EXAMPLE: Encrypt & Decrypt');
   print('─' * 50);
 
-  // Create cipher with expiration
-  final cipher = AESCipher.create(
-    expirationDate: DateTime.now().add(Duration(hours: 24)),
-  );
+  // Create cipher with expiration using createFull
+  final cipher = AESCipher.createFull((
+    parent: (
+      key: AESCipher.generateKey(),
+      parent: (
+        parent: (
+          expirationDate: DateTime.now().add(Duration(hours: 24)),
+          expirationTimes: null,
+        ),
+      ),
+    ),
+  ));
 
   final plaintext = 'Secret message! 🤫';
   final encrypted = cipher.encrypt(plaintext.codeUnits);
@@ -160,5 +182,5 @@ void main() async {
   print('Expires:    ${cipher.expirationDate}');
 
   print('');
-  print('✨ All factory methods working correctly!');
+  print('✨ All factory methods (createFull) working correctly!');
 }
