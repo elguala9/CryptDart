@@ -92,13 +92,13 @@ void main() async {
 
   // Alice computes shared secret
   print('👤 Alice: Calcolando shared secret con chiave pubblica di Bob...');
-  final aliceSharedSecret = await aliceEcdh.generateSharedSecret(bobPublicKey);
+  final aliceSharedSecret = aliceEcdh.generateSharedSecret(bobPublicKey);
   print('✅ Shared Secret calcolato (${aliceSharedSecret.length} chars)');
   print('   Primi 32 chars: ${aliceSharedSecret.substring(0, 32)}...\n');
 
   // Bob computes shared secret
   print('👤 Bob: Calcolando shared secret con chiave pubblica di Alice...');
-  final bobSharedSecret = await bobEcdh.generateSharedSecret(alicePublicKey);
+  final bobSharedSecret = bobEcdh.generateSharedSecret(alicePublicKey);
   print('✅ Shared Secret calcolato (${bobSharedSecret.length} chars)');
   print('   Primi 32 chars: ${bobSharedSecret.substring(0, 32)}...\n');
 

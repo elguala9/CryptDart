@@ -228,8 +228,8 @@ Future<void> demonstrateECDHKeyExchange() async {
   print('   👨 Bob generated secp256r1 key pair');
   
   // Both compute the same shared secret
-  final aliceSharedSecret = await alice.generateSharedSecret(bob.publicKey);
-  final bobSharedSecret = await bob.generateSharedSecret(alice.publicKey);
+  final aliceSharedSecret = alice.generateSharedSecret(bob.publicKey);
+  final bobSharedSecret = bob.generateSharedSecret(alice.publicKey);
   
   print('   🔐 Alice computed shared secret: ${aliceSharedSecret.substring(0, 16)}...');
   print('   🔐 Bob computed shared secret: ${bobSharedSecret.substring(0, 16)}...');

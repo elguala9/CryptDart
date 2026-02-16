@@ -147,12 +147,12 @@ void main() {
         ));
 
         // Alice generates shared secret using Bob's public key
-        final aliceSharedSecret = await aliceECDH.generateSharedSecret(
+        final aliceSharedSecret = aliceECDH.generateSharedSecret(
           bobKeyPair['publicKey']!,
         );
 
         // Bob generates shared secret using Alice's public key
-        final bobSharedSecret = await bobECDH.generateSharedSecret(
+        final bobSharedSecret = bobECDH.generateSharedSecret(
           aliceKeyPair['publicKey']!,
         );
 
@@ -181,11 +181,11 @@ void main() {
         ));
 
         // Alice generates shared secrets with Bob and Charlie
-        final aliceBobSecret = await aliceECDH.generateSharedSecret(
+        final aliceBobSecret = aliceECDH.generateSharedSecret(
           bobKeyPair['publicKey']!,
         );
 
-        final aliceCharlieSecret = await aliceECDH.generateSharedSecret(
+        final aliceCharlieSecret = aliceECDH.generateSharedSecret(
           charlieKeyPair['publicKey']!,
         );
 
@@ -223,11 +223,11 @@ void main() {
           curve: ECCKeyUtils.secp384r1,
         ));
 
-        final aliceSecret = await aliceECDH.generateSharedSecret(
+        final aliceSecret = aliceECDH.generateSharedSecret(
           bobKeyPair['publicKey']!,
         );
 
-        final bobSecret = await bobECDH.generateSharedSecret(
+        final bobSecret = bobECDH.generateSharedSecret(
           aliceKeyPair['publicKey']!,
         );
 

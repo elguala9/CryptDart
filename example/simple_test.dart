@@ -156,8 +156,8 @@ Future<void> testECDH() async {
     curve: ECCKeyUtils.secp256r1,
   ));
   
-  final aliceSecret = await alice.generateSharedSecret(bob.publicKey);
-  final bobSecret = await bob.generateSharedSecret(alice.publicKey);
+  final aliceSecret = alice.generateSharedSecret(bob.publicKey);
+  final bobSecret = bob.generateSharedSecret(alice.publicKey);
   print('  ECDH: ${aliceSecret == bobSecret ? '✅' : '❌'}');
 }
 

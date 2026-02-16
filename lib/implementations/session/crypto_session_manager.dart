@@ -97,7 +97,7 @@ class CryptoSessionManager implements ICryptoSession {
 
     // Calculate shared secret with initiator's public key
     final initiatorPublicKey = initiationMessage['keyExchangeData']['publicKey'];
-    _sharedSecret = await _keyExchange!.generateSharedSecret(initiatorPublicKey);
+    _sharedSecret = _keyExchange!.generateSharedSecret(initiatorPublicKey);
 
     // Create response message
     final responseMessage = _negotiator.createHandshakeMessage(localCapabilities);
@@ -137,7 +137,7 @@ class CryptoSessionManager implements ICryptoSession {
 
     // Calculate shared secret with responder's public key
     final responderPublicKey = responseMessage['keyExchangeData']['publicKey'];
-    _sharedSecret = await _keyExchange!.generateSharedSecret(responderPublicKey);
+    _sharedSecret = _keyExchange!.generateSharedSecret(responderPublicKey);
 
     return _createSecureSession();
   }

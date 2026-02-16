@@ -78,8 +78,8 @@ Future<void> basicECDHDemo() async {
   print('  2. Bob sends public key to Alice');
   print('  3. Both compute shared secret independently');
 
-  final aliceSecret = await alice.generateSharedSecret(bob.publicKey);
-  final bobSecret = await bob.generateSharedSecret(alice.publicKey);
+  final aliceSecret = alice.generateSharedSecret(bob.publicKey);
+  final bobSecret = bob.generateSharedSecret(alice.publicKey);
 
   print('\n🔐 Results:');
   print('  Alice shared secret: ${aliceSecret.substring(0, 32)}...');
@@ -140,8 +140,8 @@ Future<void> multipleCurvesDemo() async {
 
     // Perform key exchange
     final exchangeStart = DateTime.now();
-    final secret1 = await ecdh1.generateSharedSecret(ecdh2.publicKey);
-    final secret2 = await ecdh2.generateSharedSecret(ecdh1.publicKey);
+    final secret1 = ecdh1.generateSharedSecret(ecdh2.publicKey);
+    final secret2 = ecdh2.generateSharedSecret(ecdh1.publicKey);
     final exchangeTime = DateTime.now().difference(exchangeStart);
 
     print('  Key generation time: ${keyGenTime.inMilliseconds}ms');
@@ -199,7 +199,7 @@ Future<void> keyRotationDemo() async {
     print('  Usage limit: ${alice.expirationTimes} time(s)');
 
     // Perform key exchange
-    final sharedSecret = await alice.generateSharedSecret(bob.publicKey);
+    final sharedSecret = alice.generateSharedSecret(bob.publicKey);
     alice.incrementUse(); // Consume one use
 
     print('  Shared secret: ${sharedSecret.substring(0, 20)}...');
@@ -208,7 +208,7 @@ Future<void> keyRotationDemo() async {
     // Try to use expired key
     if (alice.isExpired()) {
       try {
-        await alice.generateSharedSecret(bob.publicKey);
+        alice.generateSharedSecret(bob.publicKey);
         print('  ❌ ERROR: Expired key was accepted!');
       } catch (e) {
         print('  ✅ SECURITY: Expired key correctly rejected');
@@ -266,10 +266,10 @@ Future<void> multiPartyKeyExchangeDemo() async {
       final party1 = parties[i];
       final party2 = parties[j];
       
-      final secret1 = await ecdhInstances[party1]!.generateSharedSecret(
+      final secret1 = ecdhInstances[party1]!.generateSharedSecret(
         ecdhInstances[party2]!.publicKey,
       );
-      final secret2 = await ecdhInstances[party2]!.generateSharedSecret(
+      final secret2 = ecdhInstances[party2]!.generateSharedSecret(
         ecdhInstances[party1]!.publicKey,
       );
 
@@ -325,7 +325,7 @@ Future<void> performanceBenchmark() async {
             curve: curve,
           ));
           
-          await ecdh1.generateSharedSecret(keyPairs[i + 1]['publicKey']!);
+          ecdh1.generateSharedSecret(keyPairs[i + 1]['publicKey']!);
         }
       }
       final exchangeTime = DateTime.now().difference(exchangeStart);
@@ -382,7 +382,7 @@ Future<void> ecdhWithSymmetricDemo() async {
     curve: ECCKeyUtils.secp256r1,
   ));
 
-  final sharedSecret = await alice.generateSharedSecret(bob.publicKey);
+  final sharedSecret = alice.generateSharedSecret(bob.publicKey);
   print('  ✅ Shared secret established: ${sharedSecret.substring(0, 20)}...');
 
   // Derive AES key from shared secret (first 64 hex chars = 256 bits)

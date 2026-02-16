@@ -38,7 +38,7 @@ class ECDHKeyExchange extends KeyExchangeBase implements IKeyExchange {
   String get curve => _curve;
 
   @override
-  Future<String> generateSharedSecret(String otherPublicKey) async {
+  String generateSharedSecret(String otherPublicKey) {
     if (isExpired()) {
       throw StateError('ECDH key exchange has expired');
     }
@@ -49,7 +49,7 @@ class ECDHKeyExchange extends KeyExchangeBase implements IKeyExchange {
     );
 
     final otherPubKey = ECCKeyUtils.parsePublicKey(otherPublicKey);
-    
+
     final sharedSecretBytes = ECCKeyUtils.performECDH(
       keyPair.privateKey!,
       otherPubKey,
