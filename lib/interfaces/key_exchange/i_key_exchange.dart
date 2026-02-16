@@ -16,7 +16,7 @@ abstract class IKeyExchange implements IBaseExpiration {
 
   /// Generates a shared secret using the other party's public key.
   /// Returns the shared secret as hex string.
-  Future<String> generateSharedSecret(String otherPublicKey);
+  String generateSharedSecret(String otherPublicKey);
 
   /// Returns the public key for sharing with the other party.
   String getPublicKey();

@@ -245,8 +245,8 @@ Future<void> iotDeviceScenario() async {
     ));
 
     // Perform ECDH key exchange
-    final sharedSecret = await hubECDH.generateSharedSecret(deviceECDH.publicKey);
-    final deviceSharedSecret = await deviceECDH.generateSharedSecret(hubECDH.publicKey);
+    final sharedSecret = hubECDH.generateSharedSecret(deviceECDH.publicKey);
+    final deviceSharedSecret = deviceECDH.generateSharedSecret(hubECDH.publicKey);
     
     // Derive ChaCha20 key from ECDH secret (efficient for IoT)
     final chaChaKey = sharedSecret.substring(0, 64); // 256 bits
@@ -455,7 +455,7 @@ Future<void> fileEncryptionScenario() async {
     curve: ECCKeyUtils.secp384r1,
   ));
 
-  final masterSecret = await masterECDH.generateSharedSecret(backupECDH.publicKey);
+  final masterSecret = masterECDH.generateSharedSecret(backupECDH.publicKey);
   print('   Master secret derived: ${masterSecret.substring(0, 20)}...');
   print('   Security level: 192-bit (secp384r1)');
   print('   Key rotation: Every 3 years');
