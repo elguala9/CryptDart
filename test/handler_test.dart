@@ -1,12 +1,10 @@
 import 'package:test/test.dart';
-import 'dart:typed_data';
 import 'package:cryptdart/implementations/symmetric/aes_cipher.dart';
 import 'package:cryptdart/implementations/handlers/handler_cipher.dart';
 import 'package:cryptdart/implementations/handlers/handler_sign.dart';
 import 'package:cryptdart/implementations/signed_based/hmac_sign.dart';
 import 'package:cryptdart/implementations/asymmetric/prime_based/rsa_cipher.dart';
 import 'package:cryptdart/implementations/signed_based/rsa_signature_cipher.dart';
-import 'package:cryptdart/types/crypto_algorithm.dart';
 
 void main() {
   group('HandlerCipherSymmetric', () {

@@ -11,7 +11,6 @@
 
 import 'package:cryptdart/cryptdart.dart';
 import 'dart:convert';
-import 'dart:math';
 
 void main() async {
   print('🔐 ECDH Advanced Key Exchange Examples\n');
