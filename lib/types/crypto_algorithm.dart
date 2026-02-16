@@ -65,32 +65,84 @@ sealed class CryptoAlgorithm {
     final parts = str.split('.');
     return parts.length > 1 ? parts[1] : str;
   }
+
+  /// Find an algorithm by its numeric code
+  static CryptoAlgorithm? findByCode(int code) {
+    try {
+      return allAlgorithms.firstWhere((algo) {
+        if (algo is SymmetricCipherAlgorithm) return algo.code == code;
+        if (algo is AsymmetricCipherAlgorithm) return algo.code == code;
+        if (algo is SymmetricSignAlgorithm) return algo.code == code;
+        if (algo is AsymmetricSignAlgorithm) return algo.code == code;
+        return false;
+      });
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 /// Symmetric cipher algorithms.
 @includeInBarrelFile
 enum SymmetricCipherAlgorithm implements CryptoAlgorithm {
-  aes,
-  des,
-  chacha20,
+  aes(1),
+  des(2),
+  chacha20(3);
+
+  final int code;
+  const SymmetricCipherAlgorithm(this.code);
 }
 
 /// Asymmetric cipher algorithms.
 @includeInBarrelFile
 enum AsymmetricCipherAlgorithm implements CryptoAlgorithm {
-  rsa,
-  ecdsa,
+  rsa(11),
+  ecdsa(12);
+
+  final int code;
+  const AsymmetricCipherAlgorithm(this.code);
 }
 
 /// Symmetric signature algorithms.
 @includeInBarrelFile
 enum SymmetricSignAlgorithm implements CryptoAlgorithm {
-  hmac,
+  hmac(21);
+
+  final int code;
+  const SymmetricSignAlgorithm(this.code);
 }
 
 /// Asymmetric signature algorithms.
 @includeInBarrelFile
 enum AsymmetricSignAlgorithm implements CryptoAlgorithm {
-  rsaSignature,
-  ecdsa,
+  rsaSignature(31),
+  ecdsa(32);
+
+  final int code;
+  const AsymmetricSignAlgorithm(this.code);
+}
+
+/// All symmetric algorithms (both ciphers and signatures).
+@includeInBarrelFile
+enum SymmetricAlgorithm implements CryptoAlgorithm {
+  aes(1),
+  des(2),
+  chacha20(3),
+  hmac(21);
+
+  final int code;
+  const SymmetricAlgorithm(this.code);
+}
+
+/// All asymmetric algorithms (both ciphers and signatures).
+/// Note: ECDSA has different codes for cipher (12) and signature (32).
+@includeInBarrelFile
+enum AsymmetricAlgorithm implements CryptoAlgorithm {
+  rsa(11),
+  ecdsaCipher(12),
+  rsaSignature(31),
+  ecdsaSign(32);
+
+  final int code;
+  const AsymmetricAlgorithm(this.code);
 }

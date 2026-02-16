@@ -33,7 +33,6 @@ class KeyExchangeBase implements IBaseExpiration {
     return false;
   }
 
-  @override
   void incrementUse() {
     if (_expirationTimes != null) {
       _expirationTimesRemaining ??= _expirationTimes!;

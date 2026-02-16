@@ -67,8 +67,8 @@ class RSAKeyUtils {
     generator.init(rngParams);
     final pair = generator.generateKeyPair();
 
-    final pub = pair.publicKey as RSAPublicKey;
-    final priv = pair.privateKey as RSAPrivateKey;
+    final pub = pair.publicKey;
+    final priv = pair.privateKey;
     final pubPem = BasicUtils.CryptoUtils.encodeRSAPublicKeyToPem(pub);
     final privPem = BasicUtils.CryptoUtils.encodeRSAPrivateKeyToPem(priv);
 
@@ -134,8 +134,8 @@ class ECCKeyUtils {
     generator.init(rngParams);
     final pair = generator.generateKeyPair();
 
-    final privateKey = pair.privateKey as ECPrivateKey;
-    final publicKey = pair.publicKey as ECPublicKey;
+    final privateKey = pair.privateKey;
+    final publicKey = pair.publicKey;
 
     // Convert to PEM format
     final publicPem = BasicUtils.CryptoUtils.encodeEcPublicKeyToPem(publicKey);

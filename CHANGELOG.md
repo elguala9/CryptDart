@@ -2,6 +2,19 @@
 
 # Changelog
 
+## [0.1.5] - 2026-02-16
+- Feature: Aggiunto sistema di codici numerici univoci per gli algoritmi crittografici
+  - Tutti gli enum (SymmetricCipherAlgorithm, AsymmetricCipherAlgorithm, SymmetricSignAlgorithm, AsymmetricSignAlgorithm) ora hanno un campo `code: int`
+  - Codici organizzati per categoria: Symmetric (1-3, 21), Asymmetric Cipher (11-12), Asymmetric Sign (31-32)
+  - ECDSA ha codici diversi per cipher (12) e sign (32) per evitare conflitti
+- Feature: Aggiunti nuovi enum per categorizzare gli algoritmi
+  - `SymmetricAlgorithm`: aes(1), des(2), chacha20(3), hmac(21)
+  - `AsymmetricAlgorithm`: rsa(11), ecdsaCipher(12), rsaSignature(31), ecdsaSign(32)
+- Feature: Aggiunto metodo `CryptoAlgorithm.findByCode(int code)` per lookup rapido per codice numerico
+- Miglioramento: Codici occupano poco spazio (1 byte per algoritmo) per serializzazione ottimale
+- Tutti i 38 test passano ✓
+- Verificato con `dart analyze` ✓
+
 ## [0.1.4] - 2026-02-16
 - Refactoring: Reso sincrono il metodo `generateSharedSecret()` in `ECDHKeyExchange`
   - Rimosso `Future<String>` dal tipo di ritorno (ora `String`)

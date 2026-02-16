@@ -43,8 +43,8 @@ class ECDSASign extends AsymmetricSign {
         32, (_) => DateTime.now().microsecondsSinceEpoch % 256))));
     keyGen.init(ParametersWithRandom(params, random));
     final pair = keyGen.generateKeyPair();
-    final pubKey = pair.publicKey as ECPublicKey;
-    final privKey = pair.privateKey as ECPrivateKey;
+    final pubKey = pair.publicKey;
+    final privKey = pair.privateKey;
     final pubPem = BasicUtils.CryptoUtils.encodeEcPublicKeyToPem(pubKey);
     final privPem = BasicUtils.CryptoUtils.encodeEcPrivateKeyToPem(privKey);
     return {'publicKey': pubPem, 'privateKey': privPem};
