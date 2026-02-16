@@ -3,7 +3,6 @@
 /// createFull() accepts the complete input structure, allowing full customization
 /// of all nested parameters for each cipher/signature/key-exchange type.
 
-import 'dart:convert';
 import 'dart:typed_data';
 import 'package:cryptdart/cryptdart.dart';
 
@@ -15,47 +14,56 @@ void main() async {
   print('─' * 50);
 
   // AES with createFull
-  final aes = AESCipher.createFull((
-    parent: (
-      key: AESCipher.generateKey(),
+  {
+    // ignore: unused_local_variable
+    final _ = AESCipher.createFull((
       parent: (
+        key: AESCipher.generateKey(),
         parent: (
-          expirationDate: DateTime.now().add(Duration(days: 7)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(days: 7)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ AES with createFull created');
+    ));
+    print('✅ AES with createFull created');
+  }
 
   // ChaCha20 with createFull
-  final chacha = ChaCha20Cipher.createFull((
-    nonce: Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8]),
-    parent: (
-      key: ChaCha20Cipher.generateKey(),
+  {
+    // ignore: unused_local_variable
+    final _ = ChaCha20Cipher.createFull((
+      nonce: Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8]),
       parent: (
+        key: ChaCha20Cipher.generateKey(),
         parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 12)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(hours: 12)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ ChaCha20 with createFull created');
+    ));
+    print('✅ ChaCha20 with createFull created');
+  }
 
   // DES with createFull
-  final des = DESCipher.createFull((
-    parent: (
-      key: DESCipher.generateKey(),
+  {
+    // ignore: unused_local_variable
+    final _ = DESCipher.createFull((
       parent: (
+        key: DESCipher.generateKey(),
         parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 1)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(hours: 1)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ DES with createFull created');
+    ));
+    print('✅ DES with createFull created');
+  }
 
   print('');
 
@@ -64,20 +72,23 @@ void main() async {
   print('─' * 50);
 
   // RSA with createFull
-  final rsaKeyPair = await RSACipher.generateKeyPair(bitLength: 2048);
-  final rsa = RSACipher.createFull((
-    parent: (
-      publicKey: rsaKeyPair['publicKey']!,
-      privateKey: rsaKeyPair['privateKey']!,
+  {
+    final rsaKeyPair = await RSACipher.generateKeyPair(bitLength: 2048);
+    // ignore: unused_local_variable
+    final _ = RSACipher.createFull((
       parent: (
+        publicKey: rsaKeyPair['publicKey']!,
+        privateKey: rsaKeyPair['privateKey']!,
         parent: (
-          expirationDate: DateTime.now().add(Duration(days: 30)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(days: 30)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ RSA (2048-bit) with createFull created');
+    ));
+    print('✅ RSA (2048-bit) with createFull created');
+  }
 
   print('');
 
@@ -86,50 +97,59 @@ void main() async {
   print('─' * 50);
 
   // HMAC with createFull
-  final hmac = HMACSign.createFull((
-    parent: (
-      key: HMACSign.generateKey(),
+  {
+    // ignore: unused_local_variable
+    final _ = HMACSign.createFull((
       parent: (
+        key: HMACSign.generateKey(),
         parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 6)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(hours: 6)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ HMAC with createFull created');
+    ));
+    print('✅ HMAC with createFull created');
+  }
 
   // RSA Signature with createFull
-  final rsaSigKeyPair = await RSASignatureCipher.generateKeyPair();
-  final rsaSig = RSASignatureCipher.createFull((
-    parent: (
-      publicKey: rsaSigKeyPair['publicKey']!,
-      privateKey: rsaSigKeyPair['privateKey']!,
+  {
+    final rsaSigKeyPair = await RSASignatureCipher.generateKeyPair();
+    // ignore: unused_local_variable
+    final _ = RSASignatureCipher.createFull((
       parent: (
+        publicKey: rsaSigKeyPair['publicKey']!,
+        privateKey: rsaSigKeyPair['privateKey']!,
         parent: (
-          expirationDate: DateTime.now().add(Duration(days: 365)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(days: 365)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ RSA Signature with createFull created');
+    ));
+    print('✅ RSA Signature with createFull created');
+  }
 
   // ECDSA with createFull
-  final ecdsaKeyPair = await ECDSASign.generateKeyPair();
-  final ecdsa = ECDSASign.createFull((
-    parent: (
-      publicKey: ecdsaKeyPair['publicKey']!,
-      privateKey: ecdsaKeyPair['privateKey']!,
+  {
+    final ecdsaKeyPair = await ECDSASign.generateKeyPair();
+    // ignore: unused_local_variable
+    final _ = ECDSASign.createFull((
       parent: (
+        publicKey: ecdsaKeyPair['publicKey']!,
+        privateKey: ecdsaKeyPair['privateKey']!,
         parent: (
-          expirationDate: DateTime.now().add(Duration(days: 90)),
-          expirationTimes: null,
+          parent: (
+            expirationDate: DateTime.now().add(Duration(days: 90)),
+            expirationTimes: null,
+          ),
         ),
       ),
-    ),
-  ));
-  print('✅ ECDSA with createFull created');
+    ));
+    print('✅ ECDSA with createFull created');
+  }
 
   print('');
 
@@ -138,18 +158,21 @@ void main() async {
   print('─' * 50);
 
   // ECDH with createFull
-  final ecdhKeyPair = await ECDHKeyExchange.generateKeyPair();
-  final ecdh = ECDHKeyExchange.createFull((
-    parent: (
-      algorithm: KeyExchangeAlgorithm.ecdh,
-      expirationDate: DateTime.now().add(Duration(minutes: 30)),
-      expirationTimes: null,
-    ),
-    publicKey: ecdhKeyPair['publicKey']!,
-    privateKey: ecdhKeyPair['privateKey']!,
-    curve: ECCKeyUtils.secp256r1,
-  ));
-  print('✅ ECDH with createFull created');
+  {
+    final ecdhKeyPair = await ECDHKeyExchange.generateKeyPair();
+    // ignore: unused_local_variable
+    final _ = ECDHKeyExchange.createFull((
+      parent: (
+        algorithm: KeyExchangeAlgorithm.ecdh,
+        expirationDate: DateTime.now().add(Duration(minutes: 30)),
+        expirationTimes: null,
+      ),
+      publicKey: ecdhKeyPair['publicKey']!,
+      privateKey: ecdhKeyPair['privateKey']!,
+      curve: ECCKeyUtils.secp256r1,
+    ));
+    print('✅ ECDH with createFull created');
+  }
 
   print('');
 

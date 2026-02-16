@@ -2,7 +2,6 @@ import 'package:test/test.dart';
 import 'package:cryptdart/implementations/key_exchange/ecdh_key_exchange.dart';
 import 'package:cryptdart/types/key_exchange_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
-import 'dart:typed_data';
 
 void main() {
   group('ECDH Key Exchange Tests', () {

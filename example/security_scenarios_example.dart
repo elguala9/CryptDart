@@ -12,7 +12,6 @@
 
 import 'package:cryptdart/cryptdart.dart';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 void main() async {
@@ -471,7 +470,8 @@ Future<void> fileEncryptionScenario() async {
     // Derive unique key for each file from master secret
     final fileKeyMaterial = '$masterSecret:$fileName';
     final fileKeyBytes = utf8.encode(fileKeyMaterial);
-    
+    assert(fileKeyBytes.isNotEmpty);
+
     // Use ChaCha20 for large file encryption (streaming)
     final fileKey = AESCipher.generateKey(); // Generate proper AES key
     final fileCipher = AESCipher((
@@ -610,6 +610,7 @@ Future<void> apiAuthenticationScenario() async {
       'X-Signature': base64Encode(signature),
       'Content-Type': 'application/json',
     };
+    assert(headers.isNotEmpty);
 
     print('   ${i + 1}. $method $endpoint');
     print('     Payload: ${signaturePayload.replaceAll('\n', ' | ').substring(0, 60)}...');
