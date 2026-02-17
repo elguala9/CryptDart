@@ -202,7 +202,7 @@ class CryptoSessionManager implements ICryptoSession {
   Future<HandlerCipherAsymmetric> _createAsymmetricHandler(
       CryptoAlgorithm algorithm) async {
     switch (algorithm) {
-      case AsymmetricCipherAlgorithm.rsa:
+      case RSAAlgorithm():
         final keyPair = await RSACipher.generateKeyPair();
         final rsaCipher = RSACipher(
           InputRSACipher(
@@ -241,7 +241,7 @@ class CryptoSessionManager implements ICryptoSession {
     );
 
     switch (algorithm) {
-      case SymmetricCipherAlgorithm.aes:
+      case AESAlgorithm():
         final aesCipher = AESCipher(
           InputAESCipher(
             parent: InputSymmetricCipher(
@@ -264,7 +264,7 @@ class CryptoSessionManager implements ICryptoSession {
           ),
         );
 
-      case SymmetricCipherAlgorithm.chacha20:
+      case ChaCha20Algorithm():
         final nonce = SecureRandomUtils.generateRandomBytes(8); // ChaCha20 uses 8-byte IV in PointyCastle
         final chacha20Cipher = ChaCha20Cipher(
           InputChaCha20Cipher(
@@ -289,7 +289,7 @@ class CryptoSessionManager implements ICryptoSession {
           ),
         );
 
-      case SymmetricCipherAlgorithm.des:
+      case DESAlgorithm():
         // DES uses smaller keys
         final desKey = derivedKey.substring(0, 16);
         final desCipher = DESCipher(

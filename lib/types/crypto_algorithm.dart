@@ -4,6 +4,14 @@ import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 /// Used as a common type for cipher and signature algorithms.
 @includeInBarrelFile
 sealed class CryptoAlgorithm {
+  /// Numeric code identifying this algorithm
+  final int code;
+
+  /// Name of this algorithm
+  final String name;
+
+  const CryptoAlgorithm(this.code, this.name);
+
   /// All available cipher algorithms (symmetric and asymmetric)
   static List<CryptoAlgorithm> get cipherAlgorithms {
     return [
@@ -28,7 +36,7 @@ sealed class CryptoAlgorithm {
     ];
   }
 
-  /// Get all symmetric cipher algorithms
+  /// Get all symmetric algorithms (both ciphers and signatures)
   static List<CryptoAlgorithm> get symmetricAlgorithms {
     return [
       ...SymmetricCipherAlgorithm.values,
@@ -36,7 +44,7 @@ sealed class CryptoAlgorithm {
     ];
   }
 
-  /// Get all asymmetric algorithms
+  /// Get all asymmetric algorithms (both ciphers and signatures)
   static List<CryptoAlgorithm> get asymmetricAlgorithms {
     return [
       ...AsymmetricCipherAlgorithm.values,
@@ -47,35 +55,16 @@ sealed class CryptoAlgorithm {
   /// Find an algorithm by name across all types
   static CryptoAlgorithm? findByName(String name) {
     try {
-      // Try cipher algorithms first
-      return cipherAlgorithms.firstWhere((e) => _extractAlgorithmName(e) == name);
+      return allAlgorithms.firstWhere((algo) => algo.name == name);
     } catch (e) {
-      try {
-        // Then try signature algorithms
-        return signAlgorithms.firstWhere((e) => _extractAlgorithmName(e) == name);
-      } catch (e) {
-        return null;
-      }
+      return null;
     }
-  }
-
-  /// Helper to extract algorithm name from toString representation
-  static String _extractAlgorithmName(CryptoAlgorithm algo) {
-    final str = algo.toString();
-    final parts = str.split('.');
-    return parts.length > 1 ? parts[1] : str;
   }
 
   /// Find an algorithm by its numeric code
   static CryptoAlgorithm? findByCode(int code) {
     try {
-      return allAlgorithms.firstWhere((algo) {
-        if (algo is SymmetricCipherAlgorithm) return algo.code == code;
-        if (algo is AsymmetricCipherAlgorithm) return algo.code == code;
-        if (algo is SymmetricSignAlgorithm) return algo.code == code;
-        if (algo is AsymmetricSignAlgorithm) return algo.code == code;
-        return false;
-      });
+      return allAlgorithms.firstWhere((algo) => algo.code == code);
     } catch (e) {
       return null;
     }
@@ -84,65 +73,192 @@ sealed class CryptoAlgorithm {
 
 /// Symmetric cipher algorithms.
 @includeInBarrelFile
-enum SymmetricCipherAlgorithm implements CryptoAlgorithm {
-  aes(1),
-  des(2),
-  chacha20(3);
+sealed class SymmetricCipherAlgorithm extends CryptoAlgorithm {
+  const SymmetricCipherAlgorithm(super.code, super.name);
 
-  final int code;
-  const SymmetricCipherAlgorithm(this.code);
+  /// Static getters for enum-like access
+  static AESAlgorithm get aes => AESAlgorithm.instance;
+  static DESAlgorithm get des => DESAlgorithm.instance;
+  static ChaCha20Algorithm get chacha20 => ChaCha20Algorithm.instance;
+
+  static const List<SymmetricCipherAlgorithm> values = [
+    AESAlgorithm.instance,
+    DESAlgorithm.instance,
+    ChaCha20Algorithm.instance,
+  ];
+
+  @override
+  String toString() => 'SymmetricCipherAlgorithm.$name';
+}
+
+/// AES cipher algorithm
+@includeInBarrelFile
+final class AESAlgorithm extends SymmetricCipherAlgorithm {
+  const AESAlgorithm._() : super(1, 'aes');
+
+  /// The singleton instance
+  static const instance = AESAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
+}
+
+/// DES cipher algorithm
+@includeInBarrelFile
+final class DESAlgorithm extends SymmetricCipherAlgorithm {
+  const DESAlgorithm._() : super(2, 'des');
+
+  /// The singleton instance
+  static const instance = DESAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
+}
+
+/// ChaCha20 cipher algorithm
+@includeInBarrelFile
+final class ChaCha20Algorithm extends SymmetricCipherAlgorithm {
+  const ChaCha20Algorithm._() : super(3, 'chacha20');
+
+  /// The singleton instance
+  static const instance = ChaCha20Algorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
 }
 
 /// Asymmetric cipher algorithms.
 @includeInBarrelFile
-enum AsymmetricCipherAlgorithm implements CryptoAlgorithm {
-  rsa(11),
-  ecdsa(12);
+sealed class AsymmetricCipherAlgorithm extends CryptoAlgorithm {
+  const AsymmetricCipherAlgorithm(super.code, super.name);
 
-  final int code;
-  const AsymmetricCipherAlgorithm(this.code);
+  /// Static getters for enum-like access
+  static RSAAlgorithm get rsa => RSAAlgorithm.instance;
+  static ECDSACipherAlgorithm get ecdsa => ECDSACipherAlgorithm.instance;
+
+  static const List<AsymmetricCipherAlgorithm> values = [
+    RSAAlgorithm.instance,
+    ECDSACipherAlgorithm.instance,
+  ];
+
+  @override
+  String toString() => 'AsymmetricCipherAlgorithm.$name';
+}
+
+/// RSA cipher algorithm
+@includeInBarrelFile
+final class RSAAlgorithm extends AsymmetricCipherAlgorithm {
+  const RSAAlgorithm._() : super(11, 'rsa');
+
+  /// The singleton instance
+  static const instance = RSAAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
+}
+
+/// ECDSA cipher algorithm
+@includeInBarrelFile
+final class ECDSACipherAlgorithm extends AsymmetricCipherAlgorithm {
+  const ECDSACipherAlgorithm._() : super(12, 'ecdsa');
+
+  /// The singleton instance
+  static const instance = ECDSACipherAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
 }
 
 /// Symmetric signature algorithms.
 @includeInBarrelFile
-enum SymmetricSignAlgorithm implements CryptoAlgorithm {
-  hmac(21);
+sealed class SymmetricSignAlgorithm extends CryptoAlgorithm {
+  const SymmetricSignAlgorithm(super.code, super.name);
 
-  final int code;
-  const SymmetricSignAlgorithm(this.code);
+  /// Static getters for enum-like access
+  static HMACAlgorithm get hmac => HMACAlgorithm.instance;
+
+  static const List<SymmetricSignAlgorithm> values = [
+    HMACAlgorithm.instance,
+  ];
+
+  @override
+  String toString() => 'SymmetricSignAlgorithm.$name';
+}
+
+/// HMAC signature algorithm
+@includeInBarrelFile
+final class HMACAlgorithm extends SymmetricSignAlgorithm {
+  const HMACAlgorithm._() : super(21, 'hmac');
+
+  /// The singleton instance
+  static const instance = HMACAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
 }
 
 /// Asymmetric signature algorithms.
 @includeInBarrelFile
-enum AsymmetricSignAlgorithm implements CryptoAlgorithm {
-  rsaSignature(31),
-  ecdsa(32);
+sealed class AsymmetricSignAlgorithm extends CryptoAlgorithm {
+  const AsymmetricSignAlgorithm(super.code, super.name);
 
-  final int code;
-  const AsymmetricSignAlgorithm(this.code);
+  /// Static getters for enum-like access
+  static RSASignatureAlgorithm get rsaSignature => RSASignatureAlgorithm.instance;
+  static ECDSASignAlgorithm get ecdsa => ECDSASignAlgorithm.instance;
+
+  static const List<AsymmetricSignAlgorithm> values = [
+    RSASignatureAlgorithm.instance,
+    ECDSASignAlgorithm.instance,
+  ];
+
+  @override
+  String toString() => 'AsymmetricSignAlgorithm.$name';
 }
 
-/// All symmetric algorithms (both ciphers and signatures).
+/// RSA signature algorithm
 @includeInBarrelFile
-enum SymmetricAlgorithm implements CryptoAlgorithm {
-  aes(1),
-  des(2),
-  chacha20(3),
-  hmac(21);
+final class RSASignatureAlgorithm extends AsymmetricSignAlgorithm {
+  const RSASignatureAlgorithm._() : super(31, 'rsaSignature');
 
-  final int code;
-  const SymmetricAlgorithm(this.code);
+  /// The singleton instance
+  static const instance = RSASignatureAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
 }
 
-/// All asymmetric algorithms (both ciphers and signatures).
-/// Note: ECDSA has different codes for cipher (12) and signature (32).
+/// ECDSA signature algorithm
 @includeInBarrelFile
-enum AsymmetricAlgorithm implements CryptoAlgorithm {
-  rsa(11),
-  ecdsaCipher(12),
-  rsaSignature(31),
-  ecdsaSign(32);
+final class ECDSASignAlgorithm extends AsymmetricSignAlgorithm {
+  const ECDSASignAlgorithm._() : super(32, 'ecdsa');
 
-  final int code;
-  const AsymmetricAlgorithm(this.code);
+  /// The singleton instance
+  static const instance = ECDSASignAlgorithm._();
+
+  @override
+  bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int get hashCode => code;
 }

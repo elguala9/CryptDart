@@ -68,5 +68,5 @@ class DESCipher extends SymmetricCipher {
   }
 
   @override
-  CryptoAlgorithm get algorithm => SymmetricCipherAlgorithm.des;
+  CryptoAlgorithm get algorithm => DESAlgorithm.instance;
 }

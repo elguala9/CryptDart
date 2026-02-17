@@ -128,5 +128,5 @@ class ECDSASign extends AsymmetricSign {
   }
 
   @override
-  CryptoAlgorithm get algorithm => AsymmetricSignAlgorithm.ecdsa;
+  CryptoAlgorithm get algorithm => ECDSASignAlgorithm.instance;
 }
