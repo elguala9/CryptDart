@@ -1,15 +1,46 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:meta/meta.dart';
 import '../../interfaces/key_exchange/i_key_exchange.dart';
 import '../../implementations/partial/key_exchange_base.dart';
 import '../../types/key_exchange_algorithm.dart';
 import '../../utils/crypto_utils.dart';
 
-typedef InputECDHKeyExchange = ({
-  InputKeyExchangeBase parent,
-  String publicKey,
-  String privateKey,
-  String curve,
-});
+/// Input parameters for [ECDHKeyExchange] constructor.
+@immutable
+class InputECDHKeyExchange {
+  final InputKeyExchangeBase parent;
+  final String publicKey;
+  final String privateKey;
+  final String curve;
+
+  const InputECDHKeyExchange({
+    required this.parent,
+    required this.publicKey,
+    required this.privateKey,
+    required this.curve,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputECDHKeyExchange &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent &&
+          publicKey == other.publicKey &&
+          privateKey == other.privateKey &&
+          curve == other.curve;
+
+  @override
+  int get hashCode =>
+      parent.hashCode ^
+      publicKey.hashCode ^
+      privateKey.hashCode ^
+      curve.hashCode;
+
+  @override
+  String toString() =>
+      'InputECDHKeyExchange(parent: $parent, publicKey: $publicKey, privateKey: $privateKey, curve: $curve)';
+}
 
 /// ECDH key exchange implementation
 @includeInBarrelFile
@@ -22,7 +53,7 @@ class ECDHKeyExchange extends KeyExchangeBase implements IKeyExchange {
       : _publicKey = input.publicKey,
         _privateKey = input.privateKey,
         _curve = input.curve,
-        super((
+        super(InputKeyExchangeBase(
           algorithm: KeyExchangeAlgorithm.ecdh,
           expirationDate: input.parent.expirationDate,
           expirationTimes: input.parent.expirationTimes,

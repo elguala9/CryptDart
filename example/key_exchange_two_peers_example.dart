@@ -43,8 +43,8 @@ void main() async {
   print('📍 PHASE 2: Creazione istanze ECDH\n');
 
   // Create ECDH instance for Alice
-  final aliceEcdh = ECDHKeyExchange.createFull((
-    parent: (
+  final aliceEcdh = ECDHKeyExchange.createFull(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -56,8 +56,8 @@ void main() async {
   print('✅ Alice ECDH istanza creata');
 
   // Create ECDH instance for Bob
-  final bobEcdh = ECDHKeyExchange.createFull((
-    parent: (
+  final bobEcdh = ECDHKeyExchange.createFull(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -141,11 +141,11 @@ void main() async {
 
   // Alice creates AES cipher from the shared secret
   print('👤 Alice: Creando AES cipher dalla chiave derivata...');
-  final aes = AESCipher.createFull((
-    parent: (
+  final aes = AESCipher.createFull(InputAESCipher(
+    parent: InputSymmetricCipher(
       key: aesKeyFromSecret,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),
@@ -182,11 +182,11 @@ void main() async {
 
   // Create the same AES cipher from the shared secret
   print('👤 Bob: Creando AES cipher dalla chiave derivata (stesso secret)...');
-  final aesForBob = AESCipher.createFull((
-    parent: (
+  final aesForBob = AESCipher.createFull(InputAESCipher(
+    parent: InputSymmetricCipher(
       key: aesKeyFromSecret, // Same key as Alice
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),

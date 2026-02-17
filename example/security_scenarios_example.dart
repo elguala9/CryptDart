@@ -11,6 +11,13 @@
 /// Run with: dart run example/security_scenarios_example.dart
 
 import 'package:cryptdart/cryptdart.dart';
+import 'package:cryptdart/implementations/partial/key_exchange_base.dart';
+import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/symmetric_sign_impl.dart';
+import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
+import 'package:cryptdart/implementations/partial/cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/sign_impl.dart';
+import 'package:cryptdart/implementations/partial/expiration_base.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -56,11 +63,11 @@ Future<void> medicalRecordsScenario() async {
 
   // Use AES-256 for medical data (industry standard)
   final aesKey = AESCipher.generateKey();
-  final medicalCipher = AESCipher((
-    parent: (
+  final medicalCipher = AESCipher(InputAESCipher(
+    parent: InputSymmetricCipher(
       key: aesKey,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 2555)), // 7 years HIPAA retention
           expirationTimes: null,
         ),
@@ -112,12 +119,12 @@ Future<void> financialTransactionScenario() async {
   // RSA for digital signatures (non-repudiation)
   print('\n🔏 Phase 1: Digital Signature for Non-Repudiation');
   final bankKeyPair = await RSASignatureCipher.generateKeyPair(bitLength: 3072);
-  final bankSignature = RSASignatureCipher((
-    parent: (
+  final bankSignature = RSASignatureCipher(InputRSASignatureCipher(
+    parent: InputAsymmetricSign(
       publicKey: bankKeyPair['publicKey']!,
       privateKey: bankKeyPair['privateKey']!,
-      parent: (
-        parent: (
+      parent: InputSign(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 2555)), // Long-term key
           expirationTimes: null,
         ),
@@ -138,11 +145,11 @@ Future<void> financialTransactionScenario() async {
   // AES for data encryption
   print('\n🔒 Phase 2: AES Encryption for Data Protection');
   final transactionKey = AESCipher.generateKey();
-  final transactionCipher = AESCipher((
-    parent: (
+  final transactionCipher = AESCipher(InputAESCipher(
+    parent: InputSymmetricCipher(
       key: transactionKey,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 365)),
           expirationTimes: null,
         ),
@@ -158,11 +165,11 @@ Future<void> financialTransactionScenario() async {
   // HMAC for integrity
   print('\n🔐 Phase 3: HMAC for Message Integrity');
   final hmacKey = HMACSign.generateKey();
-  final hmacSign = HMACSign((
-    parent: (
+  final hmacSign = HMACSign(InputHMACSign(
+    parent: InputSymmetricSign(
       key: hmacKey,
-      parent: (
-        parent: (
+      parent: InputSign(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(hours: 24)),
           expirationTimes: null,
         ),
@@ -206,8 +213,8 @@ Future<void> iotDeviceScenario() async {
   final hubKeyPair = await ECDHKeyExchange.generateKeyPair(
     curve: ECCKeyUtils.secp256r1, // Optimal for IoT performance
   );
-  final hubECDH = ECDHKeyExchange((
-    parent: (
+  final hubECDH = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(days: 30)), // Monthly rotation
       expirationTimes: null,
@@ -232,8 +239,8 @@ Future<void> iotDeviceScenario() async {
     final deviceKeyPair = await ECDHKeyExchange.generateKeyPair(
       curve: ECCKeyUtils.secp256r1,
     );
-    final deviceECDH = ECDHKeyExchange((
-      parent: (
+    final deviceECDH = ECDHKeyExchange(InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
         algorithm: KeyExchangeAlgorithm.ecdh,
         expirationDate: DateTime.now().add(Duration(days: 7)), // Weekly rotation for devices
         expirationTimes: null,
@@ -251,12 +258,12 @@ Future<void> iotDeviceScenario() async {
     final chaChaKey = sharedSecret.substring(0, 64); // 256 bits
     final nonce = Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8]); // In practice, use random nonce
     
-    final deviceCipher = ChaCha20Cipher((
+    final deviceCipher = ChaCha20Cipher(InputChaCha20Cipher(
       nonce: nonce,
-      parent: (
+      parent: InputSymmetricCipher(
         key: chaChaKey,
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(days: 7)),
             expirationTimes: null,
           ),
@@ -432,8 +439,8 @@ Future<void> fileEncryptionScenario() async {
     curve: ECCKeyUtils.secp384r1,
   );
 
-  final masterECDH = ECDHKeyExchange((
-    parent: (
+  final masterECDH = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(days: 1095)), // 3 years
       expirationTimes: null,
@@ -443,8 +450,8 @@ Future<void> fileEncryptionScenario() async {
     curve: ECCKeyUtils.secp384r1,
   ));
 
-  final backupECDH = ECDHKeyExchange((
-    parent: (
+  final backupECDH = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(days: 1095)),
       expirationTimes: null,
@@ -474,11 +481,11 @@ Future<void> fileEncryptionScenario() async {
 
     // Use ChaCha20 for large file encryption (streaming)
     final fileKey = AESCipher.generateKey(); // Generate proper AES key
-    final fileCipher = AESCipher((
-      parent: (
+    final fileCipher = AESCipher(InputAESCipher(
+      parent: InputSymmetricCipher(
         key: fileKey,
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(days: 1095)),
             expirationTimes: null,
           ),
@@ -547,11 +554,11 @@ Future<void> apiAuthenticationScenario() async {
   print('🔑 API Client Setup:');
   final clientId = 'CLIENT-${DateTime.now().millisecondsSinceEpoch}';
   final hmacKey = HMACSign.generateKey();
-  final apiAuth = HMACSign((
-    parent: (
+  final apiAuth = HMACSign(InputHMACSign(
+    parent: InputSymmetricSign(
       key: hmacKey,
-      parent: (
-        parent: (
+      parent: InputSign(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 90)), // API key rotation
           expirationTimes: 10000, // Rate limiting
         ),

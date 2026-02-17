@@ -1,15 +1,48 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:meta/meta.dart';
 import '../i_handler.dart';
 import 'i_algorithm_negotiation.dart';
 
 /// Represents an established secure session between two peers.
-typedef SecureSession = ({
-  IHandlerCipher asymmetricHandler,
-  IHandlerCipher symmetricHandler,
-  NegotiationResult negotiationResult,
-  String sharedSecret,
-  DateTime establishedAt,
-});
+@immutable
+class SecureSession {
+  final IHandlerCipher asymmetricHandler;
+  final IHandlerCipher symmetricHandler;
+  final NegotiationResult negotiationResult;
+  final String sharedSecret;
+  final DateTime establishedAt;
+
+  const SecureSession({
+    required this.asymmetricHandler,
+    required this.symmetricHandler,
+    required this.negotiationResult,
+    required this.sharedSecret,
+    required this.establishedAt,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SecureSession &&
+          runtimeType == other.runtimeType &&
+          asymmetricHandler == other.asymmetricHandler &&
+          symmetricHandler == other.symmetricHandler &&
+          negotiationResult == other.negotiationResult &&
+          sharedSecret == other.sharedSecret &&
+          establishedAt == other.establishedAt;
+
+  @override
+  int get hashCode =>
+      asymmetricHandler.hashCode ^
+      symmetricHandler.hashCode ^
+      negotiationResult.hashCode ^
+      sharedSecret.hashCode ^
+      establishedAt.hashCode;
+
+  @override
+  String toString() =>
+      'SecureSession(asymmetricHandler: $asymmetricHandler, symmetricHandler: $symmetricHandler, negotiationResult: $negotiationResult, sharedSecret: $sharedSecret, establishedAt: $establishedAt)';
+}
 
 /// Interface for managing cryptographic sessions between peers.
 @includeInBarrelFile

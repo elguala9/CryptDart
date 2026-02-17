@@ -14,6 +14,14 @@ import '../symmetric/chacha20_cipher.dart';
 import '../symmetric/des_cipher.dart';
 import '../asymmetric/prime_based/rsa_cipher.dart';
 
+// Import input classes
+import '../../implementations/partial/key_exchange_base.dart';
+import '../../implementations/partial/expiration_base.dart';
+import '../../implementations/partial/cipher_impl.dart';
+import '../../implementations/partial/symmetric_cipher_impl.dart';
+import '../../implementations/partial/asymmetric_cipher_impl.dart';
+import '../../implementations/handlers/handler.dart';
+
 /// Manages cryptographic sessions between peers with algorithm negotiation and key exchange
 @includeInBarrelFile
 class CryptoSessionManager implements ICryptoSession {
@@ -34,16 +42,18 @@ class CryptoSessionManager implements ICryptoSession {
       CryptoPeerCapabilities localCapabilities) async {
     // Generate ECDH key pair for session
     final keyPairData = await ECDHKeyExchange.generateKeyPair();
-    _keyExchange = ECDHKeyExchange((
-      parent: (
-        algorithm: KeyExchangeAlgorithm.ecdh,
-        expirationDate: DateTime.now().add(const Duration(hours: 24)),
-        expirationTimes: null,
+    _keyExchange = ECDHKeyExchange(
+      InputECDHKeyExchange(
+        parent: InputKeyExchangeBase(
+          algorithm: KeyExchangeAlgorithm.ecdh,
+          expirationDate: DateTime.now().add(const Duration(hours: 24)),
+          expirationTimes: null,
+        ),
+        publicKey: keyPairData['publicKey']!,
+        privateKey: keyPairData['privateKey']!,
+        curve: keyPairData['curve']!,
       ),
-      publicKey: keyPairData['publicKey']!,
-      privateKey: keyPairData['privateKey']!,
-      curve: keyPairData['curve']!,
-    ));
+    );
 
     // Create handshake message
     final handshakeMessage = _negotiator.createHandshakeMessage(localCapabilities);
@@ -84,16 +94,18 @@ class CryptoSessionManager implements ICryptoSession {
     // Generate our ECDH key pair
     // Generate ECDH key pair for session
     final keyPairData = await ECDHKeyExchange.generateKeyPair();
-    _keyExchange = ECDHKeyExchange((
-      parent: (
-        algorithm: KeyExchangeAlgorithm.ecdh,
-        expirationDate: DateTime.now().add(const Duration(hours: 24)),
-        expirationTimes: null,
+    _keyExchange = ECDHKeyExchange(
+      InputECDHKeyExchange(
+        parent: InputKeyExchangeBase(
+          algorithm: KeyExchangeAlgorithm.ecdh,
+          expirationDate: DateTime.now().add(const Duration(hours: 24)),
+          expirationTimes: null,
+        ),
+        publicKey: keyPairData['publicKey']!,
+        privateKey: keyPairData['privateKey']!,
+        curve: keyPairData['curve']!,
       ),
-      publicKey: keyPairData['publicKey']!,
-      privateKey: keyPairData['privateKey']!,
-      curve: keyPairData['curve']!,
-    ));
+    );
 
     // Calculate shared secret with initiator's public key
     final initiatorPublicKey = initiationMessage['keyExchangeData']['publicKey'];
@@ -125,7 +137,7 @@ class CryptoSessionManager implements ICryptoSession {
     final remoteCapabilities = _negotiator.parseHandshakeMessage(responseMessage);
     final negotiation = responseMessage['negotiation'];
     
-    _negotiationResult = (
+    _negotiationResult = NegotiationResult(
       keyExchange: KeyExchangeAlgorithm.values
           .firstWhere((e) => e.name == negotiation['keyExchange']),
       asymmetric: CryptoAlgorithm.findByName(negotiation['asymmetric'])!,
@@ -175,7 +187,7 @@ class CryptoSessionManager implements ICryptoSession {
       _sharedSecret!,
     );
 
-    _currentSession = (
+    _currentSession = SecureSession(
       asymmetricHandler: asymmetricHandler,
       symmetricHandler: symmetricHandler,
       negotiationResult: _negotiationResult!,
@@ -192,24 +204,28 @@ class CryptoSessionManager implements ICryptoSession {
     switch (algorithm) {
       case AsymmetricCipherAlgorithm.rsa:
         final keyPair = await RSACipher.generateKeyPair();
-        final rsaCipher = RSACipher((
-          parent: (
-            publicKey: keyPair['publicKey']!,
-            privateKey: keyPair['privateKey']!,
-            parent: (
-              parent: (
-                expirationDate: DateTime.now().add(const Duration(hours: 24)),
-                expirationTimes: null,
+        final rsaCipher = RSACipher(
+          InputRSACipher(
+            parent: InputAsymmetricCipher(
+              publicKey: keyPair['publicKey']!,
+              privateKey: keyPair['privateKey']!,
+              parent: InputCipher(
+                parent: InputExpirationBase(
+                  expirationDate: DateTime.now().add(const Duration(hours: 24)),
+                  expirationTimes: null,
+                ),
               ),
             ),
           ),
-        ));
-        return HandlerCipherAsymmetric((
-          initialCrypt: rsaCipher,
-          maxCrypts: 10,
-          maxExpiredCrypts: 5,
-          maxDaysExpiredCrypts: 7,
-        ));
+        );
+        return HandlerCipherAsymmetric(
+          InputHandler(
+            initialCrypt: rsaCipher,
+            maxCrypts: 10,
+            maxExpiredCrypts: 5,
+            maxDaysExpiredCrypts: 7,
+          ),
+        );
 
       default:
         throw UnsupportedError('Asymmetric algorithm $algorithm not supported');
@@ -226,65 +242,77 @@ class CryptoSessionManager implements ICryptoSession {
 
     switch (algorithm) {
       case SymmetricCipherAlgorithm.aes:
-        final aesCipher = AESCipher((
-          parent: (
-            key: derivedKey,
-            parent: (
-              parent: (
-                expirationDate: DateTime.now().add(const Duration(hours: 24)),
-                expirationTimes: null,
+        final aesCipher = AESCipher(
+          InputAESCipher(
+            parent: InputSymmetricCipher(
+              key: derivedKey,
+              parent: InputCipher(
+                parent: InputExpirationBase(
+                  expirationDate: DateTime.now().add(const Duration(hours: 24)),
+                  expirationTimes: null,
+                ),
               ),
             ),
           ),
-        ));
-        return HandlerCipherSymmetric((
-          initialCrypt: aesCipher,
-          maxCrypts: 100,
-          maxExpiredCrypts: 10,
-          maxDaysExpiredCrypts: 7,
-        ));
+        );
+        return HandlerCipherSymmetric(
+          InputHandler(
+            initialCrypt: aesCipher,
+            maxCrypts: 100,
+            maxExpiredCrypts: 10,
+            maxDaysExpiredCrypts: 7,
+          ),
+        );
 
       case SymmetricCipherAlgorithm.chacha20:
         final nonce = SecureRandomUtils.generateRandomBytes(8); // ChaCha20 uses 8-byte IV in PointyCastle
-        final chacha20Cipher = ChaCha20Cipher((
-          parent: (
-            key: derivedKey,
-            parent: (
-              parent: (
-                expirationDate: DateTime.now().add(const Duration(hours: 24)),
-                expirationTimes: null,
+        final chacha20Cipher = ChaCha20Cipher(
+          InputChaCha20Cipher(
+            parent: InputSymmetricCipher(
+              key: derivedKey,
+              parent: InputCipher(
+                parent: InputExpirationBase(
+                  expirationDate: DateTime.now().add(const Duration(hours: 24)),
+                  expirationTimes: null,
+                ),
               ),
             ),
+            nonce: nonce,
           ),
-          nonce: nonce,
-        ));
-        return HandlerCipherSymmetric((
-          initialCrypt: chacha20Cipher,
-          maxCrypts: 100,
-          maxExpiredCrypts: 10,
-          maxDaysExpiredCrypts: 7,
-        ));
+        );
+        return HandlerCipherSymmetric(
+          InputHandler(
+            initialCrypt: chacha20Cipher,
+            maxCrypts: 100,
+            maxExpiredCrypts: 10,
+            maxDaysExpiredCrypts: 7,
+          ),
+        );
 
       case SymmetricCipherAlgorithm.des:
         // DES uses smaller keys
         final desKey = derivedKey.substring(0, 16);
-        final desCipher = DESCipher((
-          parent: (
-            key: desKey,
-            parent: (
-              parent: (
-                expirationDate: DateTime.now().add(const Duration(hours: 24)),
-                expirationTimes: null,
+        final desCipher = DESCipher(
+          InputDESCipher(
+            parent: InputSymmetricCipher(
+              key: desKey,
+              parent: InputCipher(
+                parent: InputExpirationBase(
+                  expirationDate: DateTime.now().add(const Duration(hours: 24)),
+                  expirationTimes: null,
+                ),
               ),
             ),
           ),
-        ));
-        return HandlerCipherSymmetric((
-          initialCrypt: desCipher,
-          maxCrypts: 50,
-          maxExpiredCrypts: 5,
-          maxDaysExpiredCrypts: 3,
-        ));
+        );
+        return HandlerCipherSymmetric(
+          InputHandler(
+            initialCrypt: desCipher,
+            maxCrypts: 50,
+            maxExpiredCrypts: 5,
+            maxDaysExpiredCrypts: 3,
+          ),
+        );
 
       default:
         throw UnsupportedError('Symmetric algorithm $algorithm not supported');

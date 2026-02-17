@@ -34,17 +34,19 @@ Future<void> demonstrateSymmetricEncryption() async {
   final aesKey = AESCipher.generateKey();
   print('   Generated key: ${aesKey.substring(0, 16)}...');
   
-  final aes = AESCipher((
-    parent: (
-      key: aesKey,
-      parent: (
-        parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 24)),
-          expirationTimes: null,
+  final aes = AESCipher(
+    InputAESCipher(
+      parent: InputSymmetricCipher(
+        key: aesKey,
+        parent: InputCipher(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(hours: 24)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
   
   final message = 'Confidential AES message';
   final aesEncrypted = aes.encrypt(utf8.encode(message));
@@ -60,18 +62,20 @@ Future<void> demonstrateSymmetricEncryption() async {
   final nonce = Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8]);
   print('   Generated key: ${chachaKey.substring(0, 16)}...');
   
-  final chacha = ChaCha20Cipher((
-    nonce: nonce,
-    parent: (
-      key: chachaKey,
-      parent: (
-        parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 12)),
-          expirationTimes: null,
+  final chacha = ChaCha20Cipher(
+    InputChaCha20Cipher(
+      nonce: nonce,
+      parent: InputSymmetricCipher(
+        key: chachaKey,
+        parent: InputCipher(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(hours: 12)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
   
   final chachaMessage = 'High-performance ChaCha20 message';
   final chachaEncrypted = chacha.encrypt(utf8.encode(chachaMessage));
@@ -86,17 +90,19 @@ Future<void> demonstrateSymmetricEncryption() async {
   final desKey = DESCipher.generateKey();
   print('   Generated key: ${desKey.substring(0, 16)}...');
   
-  final des = DESCipher((
-    parent: (
-      key: desKey,
-      parent: (
-        parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 1)),
-          expirationTimes: null,
+  final des = DESCipher(
+    InputDESCipher(
+      parent: InputSymmetricCipher(
+        key: desKey,
+        parent: InputCipher(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(hours: 1)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
   
   final desMessage = 'Legacy DES message';
   final desEncrypted = des.encrypt(utf8.encode(desMessage));
@@ -115,18 +121,20 @@ Future<void> demonstrateAsymmetricEncryption() async {
   final rsaKeys = await RSACipher.generateKeyPair(bitLength: 2048);
   print('   Generated RSA key pair (2048-bit)');
   
-  final rsa = RSACipher((
-    parent: (
-      publicKey: rsaKeys['publicKey']!,
-      privateKey: rsaKeys['privateKey']!,
-      parent: (
-        parent: (
-          expirationDate: DateTime.now().add(Duration(days: 30)),
-          expirationTimes: null,
+  final rsa = RSACipher(
+    InputRSACipher(
+      parent: InputAsymmetricCipher(
+        publicKey: rsaKeys['publicKey']!,
+        privateKey: rsaKeys['privateKey']!,
+        parent: InputCipher(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(days: 30)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
   
   final rsaMessage = 'Secret RSA message';
   final rsaEncrypted = await rsa.encrypt(utf8.encode(rsaMessage));
@@ -146,17 +154,19 @@ Future<void> demonstrateDigitalSignatures() async {
   final hmacKey = HMACSign.generateKey();
   print('   Generated HMAC key: ${hmacKey.substring(0, 16)}...');
   
-  final hmac = HMACSign((
-    parent: (
-      key: hmacKey,
-      parent: (
-        parent: (
-          expirationDate: DateTime.now().add(Duration(hours: 6)),
-          expirationTimes: null,
+  final hmac = HMACSign(
+    InputHMACSign(
+      parent: InputSymmetricSign(
+        key: hmacKey,
+        parent: InputSign(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(hours: 6)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
   
   final contract = 'Important contract to sign';
   final hmacSignature = hmac.sign(utf8.encode(contract));
@@ -171,18 +181,20 @@ Future<void> demonstrateDigitalSignatures() async {
   final rsaSigKeys = await RSASignatureCipher.generateKeyPair(bitLength: 2048);
   print('   Generated RSA signature key pair (2048-bit)');
   
-  final rsaSign = RSASignatureCipher((
-    parent: (
-      publicKey: rsaSigKeys['publicKey']!,
-      privateKey: rsaSigKeys['privateKey']!,
-      parent: (
-        parent: (
-          expirationDate: DateTime.now().add(Duration(days: 365)),
-          expirationTimes: null,
+  final rsaSign = RSASignatureCipher(
+    InputRSASignatureCipher(
+      parent: InputAsymmetricSign(
+        publicKey: rsaSigKeys['publicKey']!,
+        privateKey: rsaSigKeys['privateKey']!,
+        parent: InputSign(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(days: 365)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
   
   final certificate = 'Digital certificate content';
   final rsaSignature = rsaSign.sign(utf8.encode(certificate));
@@ -201,30 +213,34 @@ Future<void> demonstrateECDHKeyExchange() async {
   
   // Alice generates her key pair
   final aliceKeys = await ECDHKeyExchange.generateKeyPair(curve: ECCKeyUtils.secp256r1);
-  final alice = ECDHKeyExchange((
-    parent: (
-      algorithm: KeyExchangeAlgorithm.ecdh,
-      expirationDate: DateTime.now().add(Duration(minutes: 30)),
-      expirationTimes: null,
+  final alice = ECDHKeyExchange(
+    InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
+        algorithm: KeyExchangeAlgorithm.ecdh,
+        expirationDate: DateTime.now().add(Duration(minutes: 30)),
+        expirationTimes: null,
+      ),
+      publicKey: aliceKeys['publicKey']!,
+      privateKey: aliceKeys['privateKey']!,
+      curve: ECCKeyUtils.secp256r1,
     ),
-    publicKey: aliceKeys['publicKey']!,
-    privateKey: aliceKeys['privateKey']!,
-    curve: ECCKeyUtils.secp256r1,
-  ));
+  );
   print('   👩 Alice generated secp256r1 key pair');
   
   // Bob generates his key pair
   final bobKeys = await ECDHKeyExchange.generateKeyPair(curve: ECCKeyUtils.secp256r1);
-  final bob = ECDHKeyExchange((
-    parent: (
-      algorithm: KeyExchangeAlgorithm.ecdh,
-      expirationDate: DateTime.now().add(Duration(minutes: 30)),
-      expirationTimes: null,
+  final bob = ECDHKeyExchange(
+    InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
+        algorithm: KeyExchangeAlgorithm.ecdh,
+        expirationDate: DateTime.now().add(Duration(minutes: 30)),
+        expirationTimes: null,
+      ),
+      publicKey: bobKeys['publicKey']!,
+      privateKey: bobKeys['privateKey']!,
+      curve: ECCKeyUtils.secp256r1,
     ),
-    publicKey: bobKeys['publicKey']!,
-    privateKey: bobKeys['privateKey']!,
-    curve: ECCKeyUtils.secp256r1,
-  ));
+  );
   print('   👨 Bob generated secp256r1 key pair');
   
   // Both compute the same shared secret

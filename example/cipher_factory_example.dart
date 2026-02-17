@@ -21,10 +21,10 @@ void main() async {
   final aesKey = AESCipher.generateKey();
   final aes = CipherFactory.symmetric(
     SymmetricCipherAlgorithm.aes,
-    (
+    InputSymmetricCipher(
       key: aesKey,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 30)),
           expirationTimes: 1000,
         ),
@@ -39,10 +39,10 @@ void main() async {
   final desKey = DESCipher.generateKey();
   final des = CipherFactory.symmetric(
     SymmetricCipherAlgorithm.des,
-    (
+    InputSymmetricCipher(
       key: desKey,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 7)),
           expirationTimes: null,
         ),
@@ -56,11 +56,11 @@ void main() async {
   final chachaKey = ChaCha20Cipher.generateKey();
   final chachaNonce = ChaCha20Cipher.generateNonce();
   final chacha = CipherFactory.chacha20(
-    (
-      parent: (
+    InputChaCha20Cipher(
+      parent: InputSymmetricCipher(
         key: chachaKey,
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: null,
             expirationTimes: 500,
           ),
@@ -83,10 +83,10 @@ void main() async {
   final hmacKey = HMACSign.generateKey();
   final hmac = CipherFactory.symmetricSign(
     SymmetricSignAlgorithm.hmac,
-    (
+    InputSymmetricSign(
       key: hmacKey,
-      parent: (
-        parent: (
+      parent: InputSign(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(hours: 24)),
           expirationTimes: 5000,
         ),
@@ -114,11 +114,11 @@ void main() async {
   final rsaKeyPair = await RSACipher.generateKeyPair(bitLength: 2048);
   final rsa = CipherFactory.asymmetric(
     AsymmetricCipherAlgorithm.rsa,
-    (
+    InputAsymmetricCipher(
       publicKey: rsaKeyPair['publicKey']!,
       privateKey: rsaKeyPair['privateKey']!,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 365)),
           expirationTimes: null,
         ),
@@ -143,11 +143,11 @@ void main() async {
   );
   final rsaSig = CipherFactory.asymmetricSign(
     AsymmetricSignAlgorithm.rsaSignature,
-    (
+    InputAsymmetricSign(
       publicKey: rsaSigKeyPair['publicKey']!,
       privateKey: rsaSigKeyPair['privateKey']!,
-      parent: (
-        parent: (
+      parent: InputSign(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 365)),
           expirationTimes: null,
         ),
@@ -168,11 +168,11 @@ void main() async {
   final ecdsaSigKeyPair = await ECDSASign.generateKeyPair();
   final ecdsaSig = CipherFactory.asymmetricSign(
     AsymmetricSignAlgorithm.ecdsa,
-    (
+    InputAsymmetricSign(
       publicKey: ecdsaSigKeyPair['publicKey']!,
       privateKey: ecdsaSigKeyPair['privateKey']!,
-      parent: (
-        parent: (
+      parent: InputSign(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(days: 30)),
           expirationTimes: null,
         ),
@@ -191,16 +191,18 @@ void main() async {
   // Create ECDH Key Exchange
   print('Creating ECDH Key Exchange...');
   final ecdhKeyPair = await ECDHKeyExchange.generateKeyPair();
-  final ecdh = ECDHKeyExchange.createFull((
-    parent: (
-      algorithm: KeyExchangeAlgorithm.ecdh,
-      expirationDate: DateTime.now().add(Duration(hours: 1)),
-      expirationTimes: null,
+  final ecdh = ECDHKeyExchange.createFull(
+    InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
+        algorithm: KeyExchangeAlgorithm.ecdh,
+        expirationDate: DateTime.now().add(Duration(hours: 1)),
+        expirationTimes: null,
+      ),
+      publicKey: ecdhKeyPair['publicKey']!,
+      privateKey: ecdhKeyPair['privateKey']!,
+      curve: '', // Default curve will be used if empty
     ),
-    publicKey: ecdhKeyPair['publicKey']!,
-    privateKey: ecdhKeyPair['privateKey']!,
-    curve: '', // Default curve will be used if empty
-  ));
+  );
   print('✅ ECDH Key Exchange created: ${ecdh.runtimeType}\n');
 
   // ============================================================================

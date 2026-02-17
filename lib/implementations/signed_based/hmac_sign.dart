@@ -7,11 +7,30 @@ import 'package:cryptdart/implementations/partial/symmetric_sign_impl.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 // ...existing code...
 import 'package:cryptdart/utils/crypto_utils.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [HMACSign] constructor.
-typedef InputHMACSign = ({
-  InputSymmetricSign parent,
-});
+@immutable
+class InputHMACSign {
+  final InputSymmetricSign parent;
+
+  const InputHMACSign({
+    required this.parent,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputHMACSign &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent;
+
+  @override
+  int get hashCode => parent.hashCode;
+
+  @override
+  String toString() => 'InputHMACSign(parent: $parent)';
+}
 
 /// HMAC (Hash-based Message Authentication Code) signature implementation.
 /// Extends [SymmetricSign] and provides HMAC signing and verification.

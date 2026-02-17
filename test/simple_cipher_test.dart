@@ -3,11 +3,11 @@ import 'package:cryptdart/cryptdart.dart';
 
 void main() {
   test('simple AES test to see structure', () {
-    final aes = AESCipher((
-      parent: (
+    final aes = AESCipher(InputAESCipher(
+      parent: InputSymmetricCipher(
         key: 'test_key_32_characters_1234567890',
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: null,
             expirationTimes: null,
           ),

@@ -2,17 +2,20 @@ import 'package:test/test.dart';
 import 'package:cryptdart/implementations/symmetric/aes_cipher.dart';
 import 'package:cryptdart/implementations/symmetric/des_cipher.dart';
 import 'package:cryptdart/implementations/symmetric/chacha20_cipher.dart';
+import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/expiration_base.dart';
 import 'dart:typed_data';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 
 void main() {
   group('SymmetricCipher', () {
     test('AES encrypt/decrypt', () {
-      final cipher = AESCipher((
-        parent: (
+      final cipher = AESCipher(InputAESCipher(
+        parent: InputSymmetricCipher(
           key: AESCipher.generateKey(), // Use generated hex key
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -26,11 +29,11 @@ void main() {
       expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.aes));
     });
     test('DES encrypt/decrypt', () {
-      final cipher = DESCipher((
-        parent: (
+      final cipher = DESCipher(InputDESCipher(
+        parent: InputSymmetricCipher(
           key: DESCipher.generateKey(), // Use generated hex key
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
@@ -46,12 +49,12 @@ void main() {
     test('ChaCha20 encrypt/decrypt', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
       final expirationDate = DateTime.now().add(Duration(days: 1));
-      final cipher = ChaCha20Cipher((
+      final cipher = ChaCha20Cipher(InputChaCha20Cipher(
         nonce: nonce,
-        parent: (
+        parent: InputSymmetricCipher(
           key: '12345678901234567890123456789012',
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: expirationDate,
               expirationTimes: null,
             ),
@@ -65,11 +68,11 @@ void main() {
       expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.chacha20));
     });
     test('AES encrypt/decrypt without expirationDate', () {
-      final cipher = AESCipher((
-        parent: (
+      final cipher = AESCipher(InputAESCipher(
+        parent: InputSymmetricCipher(
           key: AESCipher.generateKey(),
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: null,
               expirationTimes: null,
             ),
@@ -83,11 +86,11 @@ void main() {
       expect(cipher.isExpired(), isTrue);
     });
     test('DES encrypt/decrypt without expirationDate', () {
-      final cipher = DESCipher((
-        parent: (
+      final cipher = DESCipher(InputDESCipher(
+        parent: InputSymmetricCipher(
           key: DESCipher.generateKey(),
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: null,
               expirationTimes: null,
             ),
@@ -102,12 +105,12 @@ void main() {
     });
     test('ChaCha20 encrypt/decrypt without expirationDate', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
-      final cipher = ChaCha20Cipher((
+      final cipher = ChaCha20Cipher(InputChaCha20Cipher(
         nonce: nonce,
-        parent: (
+        parent: InputSymmetricCipher(
           key: '12345678901234567890123456789012',
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: null,
               expirationTimes: null,
             ),

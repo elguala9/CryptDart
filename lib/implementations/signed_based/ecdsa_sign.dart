@@ -5,11 +5,30 @@ import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:basic_utils/basic_utils.dart' as BasicUtils;
+import 'package:meta/meta.dart';
 
 /// Input parameters for [ECDSASign] constructor.
-typedef InputECDSASign = ({
-  InputAsymmetricSign parent,
-});
+@immutable
+class InputECDSASign {
+  final InputAsymmetricSign parent;
+
+  const InputECDSASign({
+    required this.parent,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputECDSASign &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent;
+
+  @override
+  int get hashCode => parent.hashCode;
+
+  @override
+  String toString() => 'InputECDSASign(parent: $parent)';
+}
 
 /// ECDSA signature implementation.
 /// Extends [AsymmetricSign] and provides ECC-based digital signature operations.

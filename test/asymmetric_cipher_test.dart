@@ -1,5 +1,8 @@
 import 'package:test/test.dart';
 import 'package:cryptdart/implementations/asymmetric/prime_based/rsa_cipher.dart';
+import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/expiration_base.dart';
 // import 'package:cryptdart/implementations/asymmetric/prime_based/ecc_cipher.dart'; // ECC test only if implemented
 
 void main() {
@@ -42,12 +45,12 @@ Mqq+H4NPVgR92OeuMJOoyYtt+9+kdLDkOLfdX0m8vfRc70YZnDFpBha+TD8Lk9nw
 HYQO19pjopyeTzV0EdPNxPrZzcLanxf1CwcTOkYmzRv2WEv/j2PRjeoHw5JRvOSc
 bX2NFAnbaGQW/Wnmw0lnXnk=
 -----END PRIVATE KEY-----''';
-      final cipher = RSACipher((
-        parent: (
+      final cipher = RSACipher(InputRSACipher(
+        parent: InputAsymmetricCipher(
           publicKey: publicKey,
           privateKey: privateKey,
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),

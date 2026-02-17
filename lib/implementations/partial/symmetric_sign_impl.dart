@@ -1,12 +1,34 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/interfaces/i_simmetric.dart';
 import 'package:cryptdart/implementations/partial/sign_impl.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [SymmetricSign] constructor.
-typedef InputSymmetricSign = ({
-  InputSign parent,
-  String key,
-});
+@immutable
+class InputSymmetricSign {
+  final InputSign parent;
+  final String key;
+
+  const InputSymmetricSign({
+    required this.parent,
+    required this.key,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputSymmetricSign &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent &&
+          key == other.key;
+
+  @override
+  int get hashCode => parent.hashCode ^ key.hashCode;
+
+  @override
+  String toString() =>
+      'InputSymmetricSign(parent: $parent, key: $key)';
+}
 
 /// Base class for symmetric signature implementations.
 /// Extends [Sign], mixes in [ISymmetric] for keyId implementation, and implements [ISymmetricSign].

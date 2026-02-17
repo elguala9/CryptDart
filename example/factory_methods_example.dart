@@ -16,11 +16,11 @@ void main() async {
   // AES with createFull
   {
     // ignore: unused_local_variable
-    final _ = AESCipher.createFull((
-      parent: (
+    final _ = AESCipher.createFull(InputAESCipher(
+      parent: InputSymmetricCipher(
         key: AESCipher.generateKey(),
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(days: 7)),
             expirationTimes: null,
           ),
@@ -33,12 +33,12 @@ void main() async {
   // ChaCha20 with createFull
   {
     // ignore: unused_local_variable
-    final _ = ChaCha20Cipher.createFull((
+    final _ = ChaCha20Cipher.createFull(InputChaCha20Cipher(
       nonce: Uint8List.fromList([1, 2, 3, 4, 5, 6, 7, 8]),
-      parent: (
+      parent: InputSymmetricCipher(
         key: ChaCha20Cipher.generateKey(),
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(hours: 12)),
             expirationTimes: null,
           ),
@@ -51,11 +51,11 @@ void main() async {
   // DES with createFull
   {
     // ignore: unused_local_variable
-    final _ = DESCipher.createFull((
-      parent: (
+    final _ = DESCipher.createFull(InputDESCipher(
+      parent: InputSymmetricCipher(
         key: DESCipher.generateKey(),
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(hours: 1)),
             expirationTimes: null,
           ),
@@ -75,12 +75,12 @@ void main() async {
   {
     final rsaKeyPair = await RSACipher.generateKeyPair(bitLength: 2048);
     // ignore: unused_local_variable
-    final _ = RSACipher.createFull((
-      parent: (
+    final _ = RSACipher.createFull(InputRSACipher(
+      parent: InputAsymmetricCipher(
         publicKey: rsaKeyPair['publicKey']!,
         privateKey: rsaKeyPair['privateKey']!,
-        parent: (
-          parent: (
+        parent: InputCipher(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(days: 30)),
             expirationTimes: null,
           ),
@@ -99,11 +99,11 @@ void main() async {
   // HMAC with createFull
   {
     // ignore: unused_local_variable
-    final _ = HMACSign.createFull((
-      parent: (
+    final _ = HMACSign.createFull(InputHMACSign(
+      parent: InputSymmetricSign(
         key: HMACSign.generateKey(),
-        parent: (
-          parent: (
+        parent: InputSign(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(hours: 6)),
             expirationTimes: null,
           ),
@@ -117,12 +117,12 @@ void main() async {
   {
     final rsaSigKeyPair = await RSASignatureCipher.generateKeyPair();
     // ignore: unused_local_variable
-    final _ = RSASignatureCipher.createFull((
-      parent: (
+    final _ = RSASignatureCipher.createFull(InputRSASignatureCipher(
+      parent: InputAsymmetricSign(
         publicKey: rsaSigKeyPair['publicKey']!,
         privateKey: rsaSigKeyPair['privateKey']!,
-        parent: (
-          parent: (
+        parent: InputSign(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(days: 365)),
             expirationTimes: null,
           ),
@@ -136,12 +136,12 @@ void main() async {
   {
     final ecdsaKeyPair = await ECDSASign.generateKeyPair();
     // ignore: unused_local_variable
-    final _ = ECDSASign.createFull((
-      parent: (
+    final _ = ECDSASign.createFull(InputECDSASign(
+      parent: InputAsymmetricSign(
         publicKey: ecdsaKeyPair['publicKey']!,
         privateKey: ecdsaKeyPair['privateKey']!,
-        parent: (
-          parent: (
+        parent: InputSign(
+          parent: InputExpirationBase(
             expirationDate: DateTime.now().add(Duration(days: 90)),
             expirationTimes: null,
           ),
@@ -161,8 +161,8 @@ void main() async {
   {
     final ecdhKeyPair = await ECDHKeyExchange.generateKeyPair();
     // ignore: unused_local_variable
-    final _ = ECDHKeyExchange.createFull((
-      parent: (
+    final _ = ECDHKeyExchange.createFull(InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
         algorithm: KeyExchangeAlgorithm.ecdh,
         expirationDate: DateTime.now().add(Duration(minutes: 30)),
         expirationTimes: null,
@@ -181,11 +181,11 @@ void main() async {
   print('─' * 50);
 
   // Create cipher with expiration using createFull
-  final cipher = AESCipher.createFull((
-    parent: (
+  final cipher = AESCipher.createFull(InputAESCipher(
+    parent: InputSymmetricCipher(
       key: AESCipher.generateKey(),
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(hours: 24)),
           expirationTimes: null,
         ),

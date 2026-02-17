@@ -69,7 +69,7 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
         .cast<CryptoAlgorithm>()
         .toList();
 
-    return (
+    return CryptoPeerCapabilities(
       peerId: message['peerId'].toString(),
       keyExchange: keyExchange,
       asymmetric: asymmetric,
@@ -110,7 +110,7 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
     final selectedSymmetric = _symmetricPriority
         .firstWhere((alg) => commonSymmetric.contains(alg));
 
-    return (
+    return NegotiationResult(
       keyExchange: selectedKeyExchange,
       asymmetric: selectedAsymmetric,
       symmetric: selectedSymmetric,

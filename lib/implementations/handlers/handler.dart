@@ -5,12 +5,44 @@ import 'package:cryptdart/interfaces/i_expiration.dart';
 import 'package:cryptdart/interfaces/i_handler.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 
-typedef InputHandler<T extends IExpiration> = ({
-  T initialCrypt,
-  int maxCrypts,
-  int? maxExpiredCrypts, // 0 = no limit, -1 = remove all immediately (expiredCrypts always empty)
-  int? maxDaysExpiredCrypts, // 0 = no limit, -1 = remove all immediately
-});
+/// Input parameters for [Handler] constructor.
+@immutable
+class InputHandler<T extends IExpiration> {
+  final T initialCrypt;
+  final int maxCrypts;
+  // 0 = no limit, -1 = remove all immediately (expiredCrypts always empty)
+  final int? maxExpiredCrypts;
+  // 0 = no limit, -1 = remove all immediately
+  final int? maxDaysExpiredCrypts;
+
+  const InputHandler({
+    required this.initialCrypt,
+    required this.maxCrypts,
+    this.maxExpiredCrypts,
+    this.maxDaysExpiredCrypts,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputHandler<T> &&
+          runtimeType == other.runtimeType &&
+          initialCrypt == other.initialCrypt &&
+          maxCrypts == other.maxCrypts &&
+          maxExpiredCrypts == other.maxExpiredCrypts &&
+          maxDaysExpiredCrypts == other.maxDaysExpiredCrypts;
+
+  @override
+  int get hashCode =>
+      initialCrypt.hashCode ^
+      maxCrypts.hashCode ^
+      maxExpiredCrypts.hashCode ^
+      maxDaysExpiredCrypts.hashCode;
+
+  @override
+  String toString() =>
+      'InputHandler(initialCrypt: $initialCrypt, maxCrypts: $maxCrypts, maxExpiredCrypts: $maxExpiredCrypts, maxDaysExpiredCrypts: $maxDaysExpiredCrypts)';
+}
 
 @includeInBarrelFile
 abstract class Handler<T extends IExpiration> implements IHandler<T> {

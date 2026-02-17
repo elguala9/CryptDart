@@ -1,5 +1,6 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
+import 'package:meta/meta.dart';
 import 'i_cipher.dart';
 import 'i_expiration.dart';
 import 'i_key_id.dart';
@@ -36,8 +37,29 @@ abstract interface class IAsymmetricCipher extends ICipher
 /// Combines [IAsymmetric] and [ISign].
 abstract interface class IAsymmetricSign implements IAsymmetric, ISign {}
 
-/// Typedef for an asymmetric key pair (public and private keys).
-typedef KeyPair = ({
-  String publicKey,
-  String privateKey,
-});
+/// An asymmetric key pair (public and private keys).
+@immutable
+class KeyPair {
+  final String publicKey;
+  final String privateKey;
+
+  const KeyPair({
+    required this.publicKey,
+    required this.privateKey,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is KeyPair &&
+          runtimeType == other.runtimeType &&
+          publicKey == other.publicKey &&
+          privateKey == other.privateKey;
+
+  @override
+  int get hashCode => publicKey.hashCode ^ privateKey.hashCode;
+
+  @override
+  String toString() =>
+      'KeyPair(publicKey: $publicKey, privateKey: $privateKey)';
+}
