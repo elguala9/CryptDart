@@ -26,7 +26,7 @@ void main() {
       final encrypted = cipher.encrypt(data); // No manual padding needed
       final decrypted = cipher.decrypt(encrypted);
       expect(decrypted, equals(data)); // No manual unpadding needed
-      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.aes));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithmEnum.aes));
     });
     test('DES encrypt/decrypt', () {
       final cipher = DESCipher(InputDESCipher(
@@ -44,7 +44,7 @@ void main() {
       final encrypted = cipher.encrypt(data); // No manual padding needed
       final decrypted = cipher.decrypt(encrypted);
       expect(decrypted, equals(data)); // No manual unpadding needed
-      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.des));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithmEnum.des));
     });
     test('ChaCha20 encrypt/decrypt', () {
       final nonce = Uint8List.fromList(List<int>.generate(8, (i) => i));
@@ -65,7 +65,7 @@ void main() {
       final encrypted = cipher.encrypt(data);
       final decrypted = cipher.decrypt(encrypted);
       expect(decrypted, equals(data));
-      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.chacha20));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithmEnum.chacha20));
     });
     test('AES encrypt/decrypt without expirationDate', () {
       final cipher = AESCipher(InputAESCipher(

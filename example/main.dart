@@ -262,8 +262,8 @@ Future<void> demonstrateSecureSessions() async {
   // Alice initiates a secure session with Bob
   final aliceSession = await SecureCommunicationFactory.initiateSecureSession(
     localPeerId: 'alice@example.com',
-    supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
-    supportedSymmetric: [SymmetricCipherAlgorithm.chacha20, SymmetricCipherAlgorithm.aes],
+    supportedAsymmetric: [AsymmetricCipherAlgorithmEnum.rsa],
+    supportedSymmetric: [SymmetricCipherAlgorithmEnum.chacha20, SymmetricCipherAlgorithmEnum.aes],
     sendToRemote: (initiationMessage) async {
       // Simulate Bob receiving Alice's message and responding
       print('   📨 Alice sent initiation message to Bob');
@@ -271,8 +271,8 @@ Future<void> demonstrateSecureSessions() async {
       final bobResponse = await SecureCommunicationFactory.respondToSecureSession(
         localPeerId: 'bob@example.com',
         initiationMessage: initiationMessage,
-        supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
-        supportedSymmetric: [SymmetricCipherAlgorithm.aes, SymmetricCipherAlgorithm.chacha20],
+        supportedAsymmetric: [AsymmetricCipherAlgorithmEnum.rsa],
+        supportedSymmetric: [SymmetricCipherAlgorithmEnum.aes, SymmetricCipherAlgorithmEnum.chacha20],
       );
       
       print('   📬 Bob responded with negotiated parameters');

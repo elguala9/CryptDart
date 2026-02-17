@@ -25,12 +25,12 @@ class SecureCommunicationFactory {
         KeyExchangeAlgorithm.rsa,
       ],
       asymmetric: supportedAsymmetric ?? [
-        AsymmetricCipherAlgorithm.rsa,
+        AsymmetricCipherAlgorithmEnum.rsa,
       ],
       symmetric: supportedSymmetric ?? [
-        SymmetricCipherAlgorithm.chacha20,
-        SymmetricCipherAlgorithm.aes,
-        SymmetricCipherAlgorithm.des,
+        SymmetricCipherAlgorithmEnum.chacha20,
+        SymmetricCipherAlgorithmEnum.aes,
+        SymmetricCipherAlgorithmEnum.des,
       ],
     );
   }

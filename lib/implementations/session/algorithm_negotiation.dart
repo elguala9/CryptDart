@@ -13,15 +13,15 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
   ];
 
   /// Priority order for asymmetric algorithms (most secure first)
-  static final List<AsymmetricCipherAlgorithm> _asymmetricPriority = [
-    AsymmetricCipherAlgorithm.rsa,
+  static final List<CryptoAlgorithm> _asymmetricPriority = [
+    AsymmetricCipherAlgorithmEnum.rsa,
   ];
 
   /// Priority order for symmetric algorithms (most secure first)
-  static final List<SymmetricCipherAlgorithm> _symmetricPriority = [
-    SymmetricCipherAlgorithm.chacha20,
-    SymmetricCipherAlgorithm.aes,
-    SymmetricCipherAlgorithm.des,
+  static final List<CryptoAlgorithm> _symmetricPriority = [
+    SymmetricCipherAlgorithmEnum.chacha20,
+    SymmetricCipherAlgorithmEnum.aes,
+    SymmetricCipherAlgorithmEnum.des,
   ];
 
   @override
@@ -140,7 +140,12 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
 
   /// Helper method to convert string to CryptoAlgorithm
   CryptoAlgorithm? _stringToAlgorithm(String algorithmName) {
-    return CryptoAlgorithm.findByName(algorithmName);
+    try {
+      return CryptoAlgorithm.values
+          .firstWhere((e) => e.name == algorithmName);
+    } catch (e) {
+      return null;
+    }
   }
 
   /// Helper method to convert string to KeyExchangeAlgorithm

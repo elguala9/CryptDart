@@ -31,7 +31,7 @@ void main() {
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.aes));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithmEnum.aes));
     });
     test('DES key generation', () {
       final key = DESCipher.generateKey();
@@ -47,7 +47,7 @@ void main() {
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.des));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithmEnum.des));
     });
     test('ChaCha20 key generation', () {
       final key = ChaCha20Cipher.generateKey();
@@ -66,7 +66,7 @@ void main() {
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(SymmetricCipherAlgorithm.chacha20));
+      expect(cipher.algorithm, equals(SymmetricCipherAlgorithmEnum.chacha20));
     });
     test('HMAC key generation', () {
       final key = HMACSign.generateKey();
@@ -82,7 +82,7 @@ void main() {
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(SymmetricSignAlgorithm.hmac));
+      expect(cipher.algorithm, equals(SymmetricSignAlgorithmEnum.hmac));
     });
   });
 
@@ -103,7 +103,7 @@ void main() {
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(AsymmetricCipherAlgorithm.rsa));
+      expect(cipher.algorithm, equals(AsymmetricCipherAlgorithmEnum.rsa));
     });
     test('RSA Signature key pair generation', () async {
       final pair = await RSASignatureCipher.generateKeyPair();
@@ -122,7 +122,7 @@ void main() {
           ),
         ),
       ));
-      expect(cipher.algorithm, equals(AsymmetricSignAlgorithm.rsaSignature));
+      expect(cipher.algorithm, equals(AsymmetricSignAlgorithmEnum.rsaSignature));
     });
   });
 }

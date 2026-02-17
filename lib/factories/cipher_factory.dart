@@ -42,7 +42,7 @@ import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 /// ```dart
 /// // Create symmetric cipher
 /// final aes = CipherFactory.symmetric(
-///   SymmetricCipherAlgorithm.aes,
+///   SymmetricCipherAlgorithmEnum.aes,
 ///   InputSymmetricCipher(
 ///     parent: (...),
 ///     key: AESCipher.generateKey(),
@@ -51,7 +51,7 @@ import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 ///
 /// // Create asymmetric cipher
 /// final rsa = CipherFactory.asymmetric(
-///   AsymmetricCipherAlgorithm.rsa,
+///   AsymmetricCipherAlgorithmEnum.rsa,
 ///   InputAsymmetricCipher(
 ///     parent: (...),
 ///     publicKey: '...',
@@ -60,8 +60,8 @@ import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 /// );
 ///
 /// // Create signature
-/// final hmac = CipherFactory.signature(
-///   SymmetricSignAlgorithm.hmac,
+/// final hmac = CipherFactory.symmetricSign(
+///   SymmetricSignAlgorithmEnum.hmac,
 ///   InputSymmetricSign(
 ///     parent: (...),
 ///     key: HMACSign.generateKey(),
@@ -81,15 +81,16 @@ class CipherFactory {
   ///
   /// Note: For ChaCha20, use the [chacha20] factory method instead.
   static ISymmetricCipher symmetric(
-    SymmetricCipherAlgorithm algorithm,
+    CryptoAlgorithm algorithm,
     InputSymmetricCipher input,
   ) {
     return switch (algorithm) {
-      AESAlgorithm() => AESCipher.createFull(InputAESCipher(parent: input)),
-      DESAlgorithm() => DESCipher.createFull(InputDESCipher(parent: input)),
-      ChaCha20Algorithm() => throw ArgumentError(
+      CryptoAlgorithm.aes => AESCipher.createFull(InputAESCipher(parent: input)),
+      CryptoAlgorithm.des => DESCipher.createFull(InputDESCipher(parent: input)),
+      CryptoAlgorithm.chacha20 => throw ArgumentError(
         'Use chacha20() factory method for ChaCha20 cipher',
       ),
+      _ => throw ArgumentError('Not a symmetric cipher algorithm: $algorithm'),
     };
   }
 
@@ -98,29 +99,30 @@ class CipherFactory {
   /// [input]: The complete [InputChaCha20Cipher] record with configuration
   ///
   /// Returns: A [ChaCha20Cipher] instance
-  static ISymmetricCipher chacha20(dynamic input) {
-    return ChaCha20Cipher.createFull(input as dynamic);
+  static ISymmetricCipher chacha20(InputChaCha20Cipher input) {
+    return ChaCha20Cipher.createFull(input);
   }
 
   /// Creates an asymmetric cipher based on the given algorithm.
   ///
-  /// [algorithm]: The asymmetric cipher algorithm (RSA)
+  /// [algorithm]: The asymmetric cipher algorithm (RSA, ECDSA)
   /// [input]: The complete input record with configuration
   ///
   /// Returns: An instance of the specified asymmetric cipher
   ///
   /// Throws: [ArgumentError] if algorithm is not supported
   ///
-  /// Note: ECDSA is supported only as signature (ECDSASign), not as cipher.
+  /// Note: ECDSA is supported only as signature, not as cipher.
   static IAsymmetricCipher asymmetric(
-    AsymmetricCipherAlgorithm algorithm,
+    CryptoAlgorithm algorithm,
     InputAsymmetricCipher input,
   ) {
     return switch (algorithm) {
-      RSAAlgorithm() => RSACipher.createFull(InputRSACipher(parent: input)),
-      ECDSACipherAlgorithm() => throw ArgumentError(
-        'ECDSA is not supported as a cipher. Use ECDSASign for signature operations.',
+      CryptoAlgorithm.rsa => RSACipher.createFull(InputRSACipher(parent: input)),
+      CryptoAlgorithm.ecdsa => throw ArgumentError(
+        'ECDSA is not supported as a cipher. Use asymmetricSign() for signature operations.',
       ),
+      _ => throw ArgumentError('Not an asymmetric cipher algorithm: $algorithm'),
     };
   }
 
@@ -133,11 +135,12 @@ class CipherFactory {
   ///
   /// Throws: [ArgumentError] if algorithm is not supported
   static ISymmetricSign symmetricSign(
-    SymmetricSignAlgorithm algorithm,
+    CryptoAlgorithm algorithm,
     InputSymmetricSign input,
   ) {
     return switch (algorithm) {
-      HMACAlgorithm() => HMACSign.createFull(InputHMACSign(parent: input)),
+      CryptoAlgorithm.hmac => HMACSign.createFull(InputHMACSign(parent: input)),
+      _ => throw ArgumentError('Not a symmetric signature algorithm: $algorithm'),
     };
   }
 
@@ -150,13 +153,15 @@ class CipherFactory {
   ///
   /// Throws: [ArgumentError] if algorithm is not supported
   static IAsymmetricSign asymmetricSign(
-    AsymmetricSignAlgorithm algorithm,
+    CryptoAlgorithm algorithm,
     InputAsymmetricSign input,
   ) {
     return switch (algorithm) {
-      RSASignatureAlgorithm() =>
+      CryptoAlgorithm.rsaSignature =>
         RSASignatureCipher.createFull(InputRSASignatureCipher(parent: input)),
-      ECDSASignAlgorithm() => ECDSASign.createFull(InputECDSASign(parent: input)),
+      CryptoAlgorithm.ecdsaSign =>
+        ECDSASign.createFull(InputECDSASign(parent: input)),
+      _ => throw ArgumentError('Not an asymmetric signature algorithm: $algorithm'),
     };
   }
 
@@ -172,7 +177,7 @@ class CipherFactory {
   /// Creates a cipher/signature instance from a generic algorithm type.
   ///
   /// This is a convenience method that dispatches to the appropriate
-  /// factory method based on the algorithm's runtime type.
+  /// factory method based on the algorithm enum value.
   ///
   /// Note: For asymmetric operations, ensure you pass the correct Input type
   /// that matches your algorithm.
@@ -180,13 +185,13 @@ class CipherFactory {
     CryptoAlgorithm algorithm,
     dynamic input,
   ) {
-    if (algorithm is SymmetricCipherAlgorithm) {
+    if (SymmetricCipherAlgorithmEnum.values.contains(algorithm)) {
       return symmetric(algorithm, input as InputSymmetricCipher);
-    } else if (algorithm is AsymmetricCipherAlgorithm) {
+    } else if (AsymmetricCipherAlgorithmEnum.values.contains(algorithm)) {
       return asymmetric(algorithm, input as InputAsymmetricCipher);
-    } else if (algorithm is SymmetricSignAlgorithm) {
+    } else if (SymmetricSignAlgorithmEnum.values.contains(algorithm)) {
       return symmetricSign(algorithm, input as InputSymmetricSign);
-    } else if (algorithm is AsymmetricSignAlgorithm) {
+    } else if (AsymmetricSignAlgorithmEnum.values.contains(algorithm)) {
       return asymmetricSign(algorithm, input as InputAsymmetricSign);
     } else {
       throw ArgumentError('Unsupported algorithm type: $algorithm');

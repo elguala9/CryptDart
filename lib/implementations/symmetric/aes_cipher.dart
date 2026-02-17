@@ -68,5 +68,5 @@ class AESCipher extends SymmetricCipher {
   }
 
   @override
-  CryptoAlgorithm get algorithm => AESAlgorithm.instance;
+  CryptoAlgorithm get algorithm => CryptoAlgorithm.aes;
 }
