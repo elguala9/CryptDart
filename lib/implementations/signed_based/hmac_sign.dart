@@ -72,5 +72,5 @@ class HMACSign extends SymmetricSign {
   static HMACSign createFull(InputHMACSign input) => HMACSign(input);
 
   @override
-  CryptoAlgorithm get algorithm => HMACAlgorithm.instance;
+  CryptoAlgorithm get algorithm => CryptoAlgorithm.hmac;
 }

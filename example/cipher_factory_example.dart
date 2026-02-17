@@ -20,7 +20,7 @@ void main() async {
   print('Creating AES cipher...');
   final aesKey = AESCipher.generateKey();
   final aes = CipherFactory.symmetric(
-    SymmetricCipherAlgorithm.aes,
+    SymmetricCipherAlgorithmEnum.aes,
     InputSymmetricCipher(
       key: aesKey,
       parent: InputCipher(
@@ -38,7 +38,7 @@ void main() async {
   print('Creating DES cipher...');
   final desKey = DESCipher.generateKey();
   final des = CipherFactory.symmetric(
-    SymmetricCipherAlgorithm.des,
+    SymmetricCipherAlgorithmEnum.des,
     InputSymmetricCipher(
       key: desKey,
       parent: InputCipher(
@@ -82,7 +82,7 @@ void main() async {
   print('Creating HMAC signature...');
   final hmacKey = HMACSign.generateKey();
   final hmac = CipherFactory.symmetricSign(
-    SymmetricSignAlgorithm.hmac,
+    SymmetricSignAlgorithmEnum.hmac,
     InputSymmetricSign(
       key: hmacKey,
       parent: InputSign(
@@ -113,7 +113,7 @@ void main() async {
   print('Creating RSA cipher (2048-bit)...');
   final rsaKeyPair = await RSACipher.generateKeyPair(bitLength: 2048);
   final rsa = CipherFactory.asymmetric(
-    AsymmetricCipherAlgorithm.rsa,
+    AsymmetricCipherAlgorithmEnum.rsa,
     InputAsymmetricCipher(
       publicKey: rsaKeyPair['publicKey']!,
       privateKey: rsaKeyPair['privateKey']!,
@@ -142,7 +142,7 @@ void main() async {
     bitLength: 2048,
   );
   final rsaSig = CipherFactory.asymmetricSign(
-    AsymmetricSignAlgorithm.rsaSignature,
+    AsymmetricSignAlgorithmEnum.rsaSignature,
     InputAsymmetricSign(
       publicKey: rsaSigKeyPair['publicKey']!,
       privateKey: rsaSigKeyPair['privateKey']!,
@@ -167,7 +167,7 @@ void main() async {
   print('Creating ECDSA Signature...');
   final ecdsaSigKeyPair = await ECDSASign.generateKeyPair();
   final ecdsaSig = CipherFactory.asymmetricSign(
-    AsymmetricSignAlgorithm.ecdsa,
+    AsymmetricSignAlgorithmEnum.ecdsaSign,
     InputAsymmetricSign(
       publicKey: ecdsaSigKeyPair['publicKey']!,
       privateKey: ecdsaSigKeyPair['privateKey']!,

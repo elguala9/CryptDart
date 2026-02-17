@@ -15,7 +15,7 @@ void main() {
       ),
     ));
 
-    expect(aes.algorithm, equals(SymmetricCipherAlgorithm.aes));
+    expect(aes.algorithm, equals(SymmetricCipherAlgorithmEnum.aes));
     print('AES test passed');
   });
 }

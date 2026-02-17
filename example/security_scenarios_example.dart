@@ -325,8 +325,8 @@ Future<void> secureMessagingScenario() async {
   for (final user in users) {
     final session = await SecureCommunicationFactory.initiateSecureSession(
       localPeerId: '$user@securemsg.com',
-      supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
-      supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
+      supportedAsymmetric: [AsymmetricCipherAlgorithmEnum.rsa],
+      supportedSymmetric: [SymmetricCipherAlgorithmEnum.chacha20],
       sendToRemote: (initMessage) async {
         // Simulate server-mediated key exchange
         return {

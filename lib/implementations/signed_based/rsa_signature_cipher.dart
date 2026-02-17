@@ -85,5 +85,5 @@ class RSASignatureCipher extends AsymmetricSign {
   }
 
   @override
-  CryptoAlgorithm get algorithm => RSASignatureAlgorithm.instance;
+  CryptoAlgorithm get algorithm => CryptoAlgorithm.rsaSignature;
 }

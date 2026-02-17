@@ -2,6 +2,44 @@
 
 # Changelog
 
+## [0.2.0] - 2026-02-17
+### 🔄 BREAKING CHANGES
+- **Refactor**: Sostituzione completa del sistema di algoritmi da classi sealed a enum + classi statiche
+  - Rimossi tutti i sealed class: `CryptoAlgorithm`, `SymmetricCipherAlgorithm`, `AsymmetricCipherAlgorithm`, `SymmetricSignAlgorithm`, `AsymmetricSignAlgorithm`
+  - Rimossi tutti i singleton: `AESAlgorithm`, `DESAlgorithm`, `ChaCha20Algorithm`, `RSAAlgorithm`, `ECDSACipherAlgorithm`, `HMACAlgorithm`, `RSASignatureAlgorithm`, `ECDSASignAlgorithm`
+  - Nuovo enum `CryptoAlgorithm` con 8 valori: aes, des, chacha20, rsa, ecdsa, hmac, rsaSignature, ecdsaSign
+  - Nuove classi statiche non istanziabili per accedere agli enum:
+    - `SymmetricAlgorithm` (cipher simmetrici + HMAC)
+    - `AsymmetricAlgorithm` (cipher + firme asimmetriche)
+    - `SymmetricSignAlgorithmEnum`, `SymmetricCipherAlgorithmEnum`
+    - `AsymmetricCipherAlgorithmEnum`, `AsymmetricSignAlgorithmEnum`
+
+### Migrazione
+Prima (v0.1.x):
+```dart
+final algo = AESAlgorithm.instance;
+final cipher = CipherFactory.symmetric(algo, input);
+```
+
+Dopo (v0.2.0):
+```dart
+final algo = SymmetricCipherAlgorithmEnum.aes;
+final cipher = CipherFactory.symmetric(algo, input);
+```
+
+### Miglioramenti
+- ✅ Semplificazione: Meno classi, meno overhead
+- ✅ Type safety: Enum è type-safe e exhaustive
+- ✅ Performance: Niente singleton instance lookups
+- ✅ Manutenibilità: Pattern matching più pulito su enum values
+- ✅ Coerenza: Factory methods aggiornati per usare il nuovo enum
+- ✅ Testing: Aggiornati 40+ file di test e example
+
+### Verifica
+- Tutti i 38 test passano ✓
+- Verificato con `dart analyze` - 0 errori ✓
+- Tutti i file di example funzionano ✓
+
 ## [0.1.7] - 2026-02-17
 - Refactor: Pulizia e stabilizzazione post-refactoring typedef
   - Rimozione di esempi duplicati e file di documentazione temporanei

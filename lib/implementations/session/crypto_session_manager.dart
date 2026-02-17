@@ -140,8 +140,10 @@ class CryptoSessionManager implements ICryptoSession {
     _negotiationResult = NegotiationResult(
       keyExchange: KeyExchangeAlgorithm.values
           .firstWhere((e) => e.name == negotiation['keyExchange']),
-      asymmetric: CryptoAlgorithm.findByName(negotiation['asymmetric'])!,
-      symmetric: CryptoAlgorithm.findByName(negotiation['symmetric'])!,
+      asymmetric: CryptoAlgorithm.values
+          .firstWhere((e) => e.name == negotiation['asymmetric']),
+      symmetric: CryptoAlgorithm.values
+          .firstWhere((e) => e.name == negotiation['symmetric']),
       localPeerId: 'local',
       remotePeerId: remoteCapabilities.peerId,
       isInitiator: true,
@@ -202,7 +204,7 @@ class CryptoSessionManager implements ICryptoSession {
   Future<HandlerCipherAsymmetric> _createAsymmetricHandler(
       CryptoAlgorithm algorithm) async {
     switch (algorithm) {
-      case RSAAlgorithm():
+      case CryptoAlgorithm.rsa:
         final keyPair = await RSACipher.generateKeyPair();
         final rsaCipher = RSACipher(
           InputRSACipher(
@@ -241,7 +243,7 @@ class CryptoSessionManager implements ICryptoSession {
     );
 
     switch (algorithm) {
-      case AESAlgorithm():
+      case CryptoAlgorithm.aes:
         final aesCipher = AESCipher(
           InputAESCipher(
             parent: InputSymmetricCipher(
@@ -264,7 +266,7 @@ class CryptoSessionManager implements ICryptoSession {
           ),
         );
 
-      case ChaCha20Algorithm():
+      case CryptoAlgorithm.chacha20:
         final nonce = SecureRandomUtils.generateRandomBytes(8); // ChaCha20 uses 8-byte IV in PointyCastle
         final chacha20Cipher = ChaCha20Cipher(
           InputChaCha20Cipher(
@@ -289,7 +291,7 @@ class CryptoSessionManager implements ICryptoSession {
           ),
         );
 
-      case DESAlgorithm():
+      case CryptoAlgorithm.des:
         // DES uses smaller keys
         final desKey = derivedKey.substring(0, 16);
         final desCipher = DESCipher(

@@ -84,5 +84,5 @@ class ChaCha20Cipher extends SymmetricCipher {
   }
 
   @override
-  CryptoAlgorithm get algorithm => ChaCha20Algorithm.instance;
+  CryptoAlgorithm get algorithm => CryptoAlgorithm.chacha20;
 }

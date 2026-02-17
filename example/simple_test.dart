@@ -180,14 +180,14 @@ Future<void> testSecureSessions() async {
   
   final session = await SecureCommunicationFactory.initiateSecureSession(
     localPeerId: 'test-alice',
-    supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
-    supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
+    supportedAsymmetric: [AsymmetricCipherAlgorithmEnum.rsa],
+    supportedSymmetric: [SymmetricCipherAlgorithmEnum.chacha20],
     sendToRemote: (initMessage) async {
       final bobResult = await SecureCommunicationFactory.respondToSecureSession(
         localPeerId: 'test-bob',
         initiationMessage: initMessage,
-        supportedAsymmetric: [AsymmetricCipherAlgorithm.rsa],
-        supportedSymmetric: [SymmetricCipherAlgorithm.chacha20],
+        supportedAsymmetric: [AsymmetricCipherAlgorithmEnum.rsa],
+        supportedSymmetric: [SymmetricCipherAlgorithmEnum.chacha20],
       );
       return bobResult.responseMessage;
     },

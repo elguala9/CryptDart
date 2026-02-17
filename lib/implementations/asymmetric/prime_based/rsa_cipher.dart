@@ -82,5 +82,5 @@ class RSACipher extends AsymmetricCipher {
   }
 
   @override
-  CryptoAlgorithm get algorithm => RSAAlgorithm.instance;
+  CryptoAlgorithm get algorithm => CryptoAlgorithm.rsa;
 }
