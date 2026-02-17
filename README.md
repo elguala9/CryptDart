@@ -40,7 +40,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cryptdart: ^0.1.6
+  cryptdart: ^0.1.7
 ```
 
 Run:

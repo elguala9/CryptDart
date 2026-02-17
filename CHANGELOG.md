@@ -2,6 +2,17 @@
 
 # Changelog
 
+## [0.1.7] - 2026-02-17
+- Refactor: Pulizia e stabilizzazione post-refactoring typedef
+  - Rimozione di esempi duplicati e file di documentazione temporanei
+  - Consolidamento della documentazione in guide ufficiali
+- Miglioramento: Aggiornamento della versione di referenza in pubspec.yaml e README
+- Stabilizzazione: Verifica completa della suite di test e analisi codice
+  - Tutti i 38 test passano ✓
+  - Verificato con `dart analyze` - 0 errori ✓
+  - Dry-run su pub.dev: 0 warnings ✓
+- Preparazione: Pacchetto pronto per la pubblicazione stabile su pub.dev
+
 ## [0.1.6] - 2026-02-17
 - Refactor: Trasformati tutti i 22 typedef da record a classi immutabili
   - InputExpirationBase, InputCipher, InputSign, InputKeyExchangeBase
