@@ -54,5 +54,5 @@ class ECDSACipher extends AsymmetricCipher {
   }
 
   @override
-  CryptoAlgorithm get algorithm => AsymmetricCipherAlgorithm.ecdsa;
+  CryptoAlgorithm get algorithm => ECDSACipherAlgorithm.instance;
 }

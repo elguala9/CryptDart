@@ -13,12 +13,12 @@ class AlgorithmNegotiation implements IAlgorithmNegotiation {
   ];
 
   /// Priority order for asymmetric algorithms (most secure first)
-  static const List<AsymmetricCipherAlgorithm> _asymmetricPriority = [
+  static final List<AsymmetricCipherAlgorithm> _asymmetricPriority = [
     AsymmetricCipherAlgorithm.rsa,
   ];
 
   /// Priority order for symmetric algorithms (most secure first)
-  static const List<SymmetricCipherAlgorithm> _symmetricPriority = [
+  static final List<SymmetricCipherAlgorithm> _symmetricPriority = [
     SymmetricCipherAlgorithm.chacha20,
     SymmetricCipherAlgorithm.aes,
     SymmetricCipherAlgorithm.des,
