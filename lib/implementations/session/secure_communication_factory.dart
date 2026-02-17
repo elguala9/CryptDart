@@ -18,7 +18,7 @@ class SecureCommunicationFactory {
     CryptoAlgorithm? preferredAsymmetric,
     CryptoAlgorithm? preferredSymmetric,
   }) {
-    return (
+    return CryptoPeerCapabilities(
       peerId: peerId,
       keyExchange: supportedKeyExchange ?? [
         KeyExchangeAlgorithm.ecdh,

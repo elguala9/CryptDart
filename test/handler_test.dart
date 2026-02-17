@@ -5,23 +5,31 @@ import 'package:cryptdart/implementations/handlers/handler_sign.dart';
 import 'package:cryptdart/implementations/signed_based/hmac_sign.dart';
 import 'package:cryptdart/implementations/asymmetric/prime_based/rsa_cipher.dart';
 import 'package:cryptdart/implementations/signed_based/rsa_signature_cipher.dart';
+import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/symmetric_sign_impl.dart';
+import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
+import 'package:cryptdart/implementations/partial/cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/sign_impl.dart';
+import 'package:cryptdart/implementations/partial/expiration_base.dart';
+import 'package:cryptdart/implementations/handlers/handler.dart';
 
 void main() {
   group('HandlerCipherSymmetric', () {
     test('AES encrypt/decrypt', () {
-      final cipher = AESCipher((
-        parent: (
+      final cipher = AESCipher(InputAESCipher(
+        parent: InputSymmetricCipher(
           key: AESCipher.generateKey(),
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      final handler = HandlerCipherSymmetric<AESCipher>(
-        (
+      final handler = HandlerCipherSymmetric(
+        InputHandler(
           initialCrypt: cipher,
           maxCrypts: 5,
           maxExpiredCrypts: 5,
@@ -38,20 +46,20 @@ void main() {
   group('HandlerCipherAsymmetric', () {
     test('RSA encrypt/decrypt', () async {
       final keyPair = await RSACipher.generateKeyPair();
-      final cipher = RSACipher((
-        parent: (
+      final cipher = RSACipher(InputRSACipher(
+        parent: InputAsymmetricCipher(
           publicKey: keyPair['publicKey']!,
           privateKey: keyPair['privateKey']!,
-          parent: (
-            parent: (
+          parent: InputCipher(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      final handler = HandlerCipherAsymmetric<RSACipher>(
-        (
+      final handler = HandlerCipherAsymmetric(
+        InputHandler(
           initialCrypt: cipher,
           maxCrypts: 5,
           maxExpiredCrypts: 5,
@@ -67,19 +75,19 @@ void main() {
 
   group('HandlerSignSymmetric', () {
     test('HMAC sign/verify', () {
-      final sign = HMACSign((
-        parent: (
+      final sign = HMACSign(InputHMACSign(
+        parent: InputSymmetricSign(
           key: '1234567890123456',
-          parent: (
-            parent: (
+          parent: InputSign(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      final handler = HandlerSignSymmetric<HMACSign>(
-        (
+      final handler = HandlerSignSymmetric(
+        InputHandler(
           initialCrypt: sign,
           maxCrypts: 5,
           maxExpiredCrypts: 5,
@@ -97,20 +105,20 @@ void main() {
   group('HandlerSignAsymmetric', () {
     test('RSA signature sign/verify', () async {
       final keyPair = await RSASignatureCipher.generateKeyPair();
-      final sign = RSASignatureCipher((
-        parent: (
+      final sign = RSASignatureCipher(InputRSASignatureCipher(
+        parent: InputAsymmetricSign(
           publicKey: keyPair['publicKey']!,
           privateKey: keyPair['privateKey']!,
-          parent: (
-            parent: (
+          parent: InputSign(
+            parent: InputExpirationBase(
               expirationDate: DateTime.now().add(Duration(days: 1)),
               expirationTimes: null,
             ),
           ),
         ),
       ));
-      final handler = HandlerSignAsymmetric<RSASignatureCipher>(
-        (
+      final handler = HandlerSignAsymmetric(
+        InputHandler(
           initialCrypt: sign,
           maxCrypts: 5,
           maxExpiredCrypts: 5,

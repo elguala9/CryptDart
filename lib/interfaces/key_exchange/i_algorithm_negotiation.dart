@@ -1,24 +1,89 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
+import 'package:meta/meta.dart';
 import '../../types/crypto_algorithm.dart';
 import '../../types/key_exchange_algorithm.dart';
 
 /// Represents the capability set of a cryptographic peer.
-typedef CryptoPeerCapabilities = ({
-  List<KeyExchangeAlgorithm> keyExchange,
-  List<CryptoAlgorithm> asymmetric,
-  List<CryptoAlgorithm> symmetric,
-  String peerId,
-});
+@immutable
+class CryptoPeerCapabilities {
+  final List<KeyExchangeAlgorithm> keyExchange;
+  final List<CryptoAlgorithm> asymmetric;
+  final List<CryptoAlgorithm> symmetric;
+  final String peerId;
+
+  const CryptoPeerCapabilities({
+    required this.keyExchange,
+    required this.asymmetric,
+    required this.symmetric,
+    required this.peerId,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CryptoPeerCapabilities &&
+          runtimeType == other.runtimeType &&
+          keyExchange == other.keyExchange &&
+          asymmetric == other.asymmetric &&
+          symmetric == other.symmetric &&
+          peerId == other.peerId;
+
+  @override
+  int get hashCode =>
+      keyExchange.hashCode ^
+      asymmetric.hashCode ^
+      symmetric.hashCode ^
+      peerId.hashCode;
+
+  @override
+  String toString() =>
+      'CryptoPeerCapabilities(keyExchange: $keyExchange, asymmetric: $asymmetric, symmetric: $symmetric, peerId: $peerId)';
+}
 
 /// Result of algorithm negotiation between two peers.
-typedef NegotiationResult = ({
-  KeyExchangeAlgorithm keyExchange,
-  CryptoAlgorithm asymmetric,
-  CryptoAlgorithm symmetric,
-  String localPeerId,
-  String remotePeerId,
-  bool isInitiator,
-});
+@immutable
+class NegotiationResult {
+  final KeyExchangeAlgorithm keyExchange;
+  final CryptoAlgorithm asymmetric;
+  final CryptoAlgorithm symmetric;
+  final String localPeerId;
+  final String remotePeerId;
+  final bool isInitiator;
+
+  const NegotiationResult({
+    required this.keyExchange,
+    required this.asymmetric,
+    required this.symmetric,
+    required this.localPeerId,
+    required this.remotePeerId,
+    required this.isInitiator,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NegotiationResult &&
+          runtimeType == other.runtimeType &&
+          keyExchange == other.keyExchange &&
+          asymmetric == other.asymmetric &&
+          symmetric == other.symmetric &&
+          localPeerId == other.localPeerId &&
+          remotePeerId == other.remotePeerId &&
+          isInitiator == other.isInitiator;
+
+  @override
+  int get hashCode =>
+      keyExchange.hashCode ^
+      asymmetric.hashCode ^
+      symmetric.hashCode ^
+      localPeerId.hashCode ^
+      remotePeerId.hashCode ^
+      isInitiator.hashCode;
+
+  @override
+  String toString() =>
+      'NegotiationResult(keyExchange: $keyExchange, asymmetric: $asymmetric, symmetric: $symmetric, localPeerId: $localPeerId, remotePeerId: $remotePeerId, isInitiator: $isInitiator)';
+}
 
 /// Interface for algorithm negotiation between cryptographic peers.
 @includeInBarrelFile

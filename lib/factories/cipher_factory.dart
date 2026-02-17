@@ -30,6 +30,12 @@ import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
 import 'package:cryptdart/implementations/partial/symmetric_sign_impl.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
+import 'package:cryptdart/implementations/symmetric/aes_cipher.dart' show InputAESCipher;
+import 'package:cryptdart/implementations/symmetric/des_cipher.dart' show InputDESCipher;
+import 'package:cryptdart/implementations/asymmetric/prime_based/rsa_cipher.dart' show InputRSACipher;
+import 'package:cryptdart/implementations/signed_based/hmac_sign.dart' show InputHMACSign;
+import 'package:cryptdart/implementations/signed_based/rsa_signature_cipher.dart' show InputRSASignatureCipher;
+import 'package:cryptdart/implementations/signed_based/ecdsa_sign.dart' show InputECDSASign;
 
 /// Central factory for creating cipher, signature, and key exchange instances.
 ///
@@ -85,8 +91,8 @@ class CipherFactory {
     InputSymmetricCipher input,
   ) {
     return switch (algorithm) {
-      SymmetricCipherAlgorithm.aes => AESCipher.createFull((parent: input)),
-      SymmetricCipherAlgorithm.des => DESCipher.createFull((parent: input)),
+      SymmetricCipherAlgorithm.aes => AESCipher.createFull(InputAESCipher(parent: input)),
+      SymmetricCipherAlgorithm.des => DESCipher.createFull(InputDESCipher(parent: input)),
       SymmetricCipherAlgorithm.chacha20 => throw ArgumentError(
         'Use chacha20() factory method for ChaCha20 cipher',
       ),
@@ -117,7 +123,7 @@ class CipherFactory {
     InputAsymmetricCipher input,
   ) {
     return switch (algorithm) {
-      AsymmetricCipherAlgorithm.rsa => RSACipher.createFull((parent: input)),
+      AsymmetricCipherAlgorithm.rsa => RSACipher.createFull(InputRSACipher(parent: input)),
       AsymmetricCipherAlgorithm.ecdsa => throw ArgumentError(
         'ECDSA is not supported as a cipher. Use ECDSASign for signature operations.',
       ),
@@ -137,7 +143,7 @@ class CipherFactory {
     InputSymmetricSign input,
   ) {
     return switch (algorithm) {
-      SymmetricSignAlgorithm.hmac => HMACSign.createFull((parent: input)),
+      SymmetricSignAlgorithm.hmac => HMACSign.createFull(InputHMACSign(parent: input)),
     };
   }
 
@@ -155,8 +161,8 @@ class CipherFactory {
   ) {
     return switch (algorithm) {
       AsymmetricSignAlgorithm.rsaSignature =>
-        RSASignatureCipher.createFull((parent: input)),
-      AsymmetricSignAlgorithm.ecdsa => ECDSASign.createFull((parent: input)),
+        RSASignatureCipher.createFull(InputRSASignatureCipher(parent: input)),
+      AsymmetricSignAlgorithm.ecdsa => ECDSASign.createFull(InputECDSASign(parent: input)),
     };
   }
 

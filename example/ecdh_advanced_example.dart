@@ -10,6 +10,10 @@
 /// Run with: dart run example/ecdh_advanced_example.dart
 
 import 'package:cryptdart/cryptdart.dart';
+import 'package:cryptdart/implementations/partial/key_exchange_base.dart';
+import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/cipher_impl.dart';
+import 'package:cryptdart/implementations/partial/expiration_base.dart';
 import 'dart:convert';
 
 void main() async {
@@ -37,8 +41,8 @@ Future<void> basicECDHDemo() async {
   // Alice setup
   print('👩 Alice:');
   final aliceKeyPair = await ECDHKeyExchange.generateKeyPair();
-  final alice = ECDHKeyExchange((
-    parent: (
+  final alice = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -56,8 +60,8 @@ Future<void> basicECDHDemo() async {
   // Bob setup
   print('\n👨 Bob:');
   final bobKeyPair = await ECDHKeyExchange.generateKeyPair();
-  final bob = ECDHKeyExchange((
-    parent: (
+  final bob = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -115,8 +119,8 @@ Future<void> multipleCurvesDemo() async {
     final keyGenTime = DateTime.now().difference(startTime);
 
     // Create ECDH instances
-    final ecdh1 = ECDHKeyExchange((
-      parent: (
+    final ecdh1 = ECDHKeyExchange(InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
         algorithm: KeyExchangeAlgorithm.ecdh,
         expirationDate: DateTime.now().add(Duration(hours: 1)),
         expirationTimes: null,
@@ -126,8 +130,8 @@ Future<void> multipleCurvesDemo() async {
       curve: curve,
     ));
 
-    final ecdh2 = ECDHKeyExchange((
-      parent: (
+    final ecdh2 = ECDHKeyExchange(InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
         algorithm: KeyExchangeAlgorithm.ecdh,
         expirationDate: DateTime.now().add(Duration(hours: 1)),
         expirationTimes: null,
@@ -165,8 +169,8 @@ Future<void> keyRotationDemo() async {
   print('Simulating automatic key rotation every 5 seconds...\n');
 
   final bobKeyPair = await ECDHKeyExchange.generateKeyPair();
-  final bob = ECDHKeyExchange((
-    parent: (
+  final bob = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -182,8 +186,8 @@ Future<void> keyRotationDemo() async {
 
     // Alice generates new ephemeral keys
     final aliceKeyPair = await ECDHKeyExchange.generateKeyPair();
-    final alice = ECDHKeyExchange((
-      parent: (
+    final alice = ECDHKeyExchange(InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
         algorithm: KeyExchangeAlgorithm.ecdh,
         expirationDate: DateTime.now().add(Duration(seconds: 5)), // Short expiration
         expirationTimes: 1, // Single use
@@ -242,8 +246,8 @@ Future<void> multiPartyKeyExchangeDemo() async {
     final keyPair = await ECDHKeyExchange.generateKeyPair();
     keyPairs[party] = keyPair;
     
-    ecdhInstances[party] = ECDHKeyExchange((
-      parent: (
+    ecdhInstances[party] = ECDHKeyExchange(InputECDHKeyExchange(
+      parent: InputKeyExchangeBase(
         algorithm: KeyExchangeAlgorithm.ecdh,
         expirationDate: DateTime.now().add(Duration(hours: 2)),
         expirationTimes: null,
@@ -313,8 +317,8 @@ Future<void> performanceBenchmark() async {
       final exchangeStart = DateTime.now();
       for (int i = 0; i < iter; i += 2) {
         if (i + 1 < keyPairs.length) {
-          final ecdh1 = ECDHKeyExchange((
-            parent: (
+          final ecdh1 = ECDHKeyExchange(InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
               algorithm: KeyExchangeAlgorithm.ecdh,
               expirationDate: DateTime.now().add(Duration(hours: 1)),
               expirationTimes: null,
@@ -323,7 +327,7 @@ Future<void> performanceBenchmark() async {
             privateKey: keyPairs[i]['privateKey']!,
             curve: curve,
           ));
-          
+
           ecdh1.generateSharedSecret(keyPairs[i + 1]['publicKey']!);
         }
       }
@@ -359,8 +363,8 @@ Future<void> ecdhWithSymmetricDemo() async {
   final aliceKeyPair = await ECDHKeyExchange.generateKeyPair();
   final bobKeyPair = await ECDHKeyExchange.generateKeyPair();
 
-  final alice = ECDHKeyExchange((
-    parent: (
+  final alice = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -370,8 +374,8 @@ Future<void> ecdhWithSymmetricDemo() async {
     curve: ECCKeyUtils.secp256r1,
   ));
 
-  final bob = ECDHKeyExchange((
-    parent: (
+  final bob = ECDHKeyExchange(InputECDHKeyExchange(
+    parent: InputKeyExchangeBase(
       algorithm: KeyExchangeAlgorithm.ecdh,
       expirationDate: DateTime.now().add(Duration(hours: 1)),
       expirationTimes: null,
@@ -390,11 +394,11 @@ Future<void> ecdhWithSymmetricDemo() async {
 
   // Setup AES cipher with derived key
   print('\n🔐 Phase 2: Symmetric Encryption with Derived Key');
-  final aesCipher = AESCipher((
-    parent: (
+  final aesCipher = AESCipher(InputAESCipher(
+    parent: InputSymmetricCipher(
       key: aesKey,
-      parent: (
-        parent: (
+      parent: InputCipher(
+        parent: InputExpirationBase(
           expirationDate: DateTime.now().add(Duration(hours: 1)),
           expirationTimes: null,
         ),

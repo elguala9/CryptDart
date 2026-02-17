@@ -5,11 +5,30 @@ import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_sign_impl.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [RSASignatureCipher] constructor.
-typedef InputRSASignatureCipher = ({
-  InputAsymmetricSign parent,
-});
+@immutable
+class InputRSASignatureCipher {
+  final InputAsymmetricSign parent;
+
+  const InputRSASignatureCipher({
+    required this.parent,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputRSASignatureCipher &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent;
+
+  @override
+  int get hashCode => parent.hashCode;
+
+  @override
+  String toString() => 'InputRSASignatureCipher(parent: $parent)';
+}
 
 /// RSA signature implementation.
 /// Extends [AsymmetricSign] and provides RSA digital signature operations.

@@ -1,12 +1,34 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/interfaces/i_expiration.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [ExpirationBase] constructor.
-typedef InputExpirationBase = ({
-  DateTime? expirationDate,
-  int? expirationTimes,
-});
+@immutable
+class InputExpirationBase {
+  final DateTime? expirationDate;
+  final int? expirationTimes;
+
+  const InputExpirationBase({
+    this.expirationDate,
+    this.expirationTimes,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputExpirationBase &&
+          runtimeType == other.runtimeType &&
+          expirationDate == other.expirationDate &&
+          expirationTimes == other.expirationTimes;
+
+  @override
+  int get hashCode => expirationDate.hashCode ^ expirationTimes.hashCode;
+
+  @override
+  String toString() =>
+      'InputExpirationBase(expirationDate: $expirationDate, expirationTimes: $expirationTimes)';
+}
 
 /// Base class for expiration logic in cryptographic objects.
 /// Implements [IExpiration] and manages expiration date, usage limits, and algorithm.

@@ -11,17 +11,17 @@ void main() {
 
     setUpAll(() async {
       keyPair = await ECDSASign.generateKeyPair();
-      InputExpirationBase expBase = (
+      InputExpirationBase expBase = InputExpirationBase(
         expirationDate: null,
         expirationTimes: null,
       );
-      InputSign signInput = (parent: expBase,);
-      InputAsymmetricSign asymInput = (
+      InputSign signInput = InputSign(parent: expBase);
+      InputAsymmetricSign asymInput = InputAsymmetricSign(
         parent: signInput,
         publicKey: keyPair['publicKey']!,
         privateKey: keyPair['privateKey'],
       );
-      InputECDSASign ecdsaInput = (parent: asymInput,);
+      InputECDSASign ecdsaInput = InputECDSASign(parent: asymInput);
       signer = ECDSASign(ecdsaInput);
       message = 'CryptDart ECDSA test message';
     });
@@ -40,17 +40,17 @@ void main() {
     });
 
     test('throws if signing without private key', () {
-      InputExpirationBase expBase = (
+      InputExpirationBase expBase = InputExpirationBase(
         expirationDate: null,
         expirationTimes: null,
       );
-      InputSign signInput = (parent: expBase,);
-      InputAsymmetricSign asymInput = (
+      InputSign signInput = InputSign(parent: expBase);
+      InputAsymmetricSign asymInput = InputAsymmetricSign(
         parent: signInput,
         publicKey: keyPair['publicKey']!,
         privateKey: null,
       );
-      InputECDSASign ecdsaInput = (parent: asymInput,);
+      InputECDSASign ecdsaInput = InputECDSASign(parent: asymInput);
       final pubOnly = ECDSASign(ecdsaInput);
       expect(() => pubOnly.sign(utf8.encode(message)), throwsStateError);
     });

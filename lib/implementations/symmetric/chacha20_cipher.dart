@@ -5,12 +5,34 @@ import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [ChaCha20Cipher] constructor.
-typedef InputChaCha20Cipher = ({
-  InputSymmetricCipher parent,
-  Uint8List nonce,
-});
+@immutable
+class InputChaCha20Cipher {
+  final InputSymmetricCipher parent;
+  final Uint8List nonce;
+
+  const InputChaCha20Cipher({
+    required this.parent,
+    required this.nonce,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputChaCha20Cipher &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent &&
+          nonce == other.nonce;
+
+  @override
+  int get hashCode => parent.hashCode ^ nonce.hashCode;
+
+  @override
+  String toString() =>
+      'InputChaCha20Cipher(parent: $parent, nonce: $nonce)';
+}
 
 /// ChaCha20 symmetric cipher implementation.
 /// Extends [SymmetricCipher] and provides ChaCha20 encryption/decryption.

@@ -1,11 +1,30 @@
 import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/asymmetric_cipher_impl.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [ECDSACipher] constructor.
-typedef InputECDSACipher = ({
-  InputAsymmetricCipher parent,
-});
+@immutable
+class InputECDSACipher {
+  final InputAsymmetricCipher parent;
+
+  const InputECDSACipher({
+    required this.parent,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputECDSACipher &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent;
+
+  @override
+  int get hashCode => parent.hashCode;
+
+  @override
+  String toString() => 'InputECDSACipher(parent: $parent)';
+}
 
 /// ECDSA asymmetric cipher implementation (encryption/decryption).
 /// Extends [AsymmetricCipher] and provides ECC-based operations.

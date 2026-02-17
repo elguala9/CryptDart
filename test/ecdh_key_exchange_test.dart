@@ -1,5 +1,6 @@
 import 'package:test/test.dart';
 import 'package:cryptdart/implementations/key_exchange/ecdh_key_exchange.dart';
+import 'package:cryptdart/implementations/partial/key_exchange_base.dart';
 import 'package:cryptdart/types/key_exchange_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
 
@@ -63,16 +64,18 @@ void main() {
 
       test('creates ECDH instance with valid parameters', () {
         final expirationDate = DateTime.now().add(Duration(days: 1));
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: expirationDate,
-            expirationTimes: null,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: expirationDate,
+              expirationTimes: null,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         expect(ecdh.algorithm, equals(KeyExchangeAlgorithm.ecdh));
         expect(ecdh.publicKey, equals(keyPair['publicKey']!));
@@ -83,16 +86,18 @@ void main() {
       });
 
       test('creates ECDH instance without expiration date', () {
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: null,
-            expirationTimes: null,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: null,
+              expirationTimes: null,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         expect(ecdh.algorithm, equals(KeyExchangeAlgorithm.ecdh));
         expect(ecdh.expirationDate, isNull);
@@ -100,16 +105,18 @@ void main() {
       });
 
       test('creates ECDH instance with expiration times limit', () {
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: null,
-            expirationTimes: 3,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: null,
+              expirationTimes: 3,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp384r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp384r1,
-        ));
+        );
 
         expect(ecdh.algorithm, equals(KeyExchangeAlgorithm.ecdh));
         expect(ecdh.curve, equals(ECCKeyUtils.secp384r1));
@@ -123,27 +130,31 @@ void main() {
         final aliceKeyPair = await ECDHKeyExchange.generateKeyPair();
         final bobKeyPair = await ECDHKeyExchange.generateKeyPair();
 
-        final aliceECDH = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final aliceECDH = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: aliceKeyPair['publicKey']!,
+            privateKey: aliceKeyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: aliceKeyPair['publicKey']!,
-          privateKey: aliceKeyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
-        final bobECDH = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final bobECDH = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: bobKeyPair['publicKey']!,
+            privateKey: bobKeyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: bobKeyPair['publicKey']!,
-          privateKey: bobKeyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         // Alice generates shared secret using Bob's public key
         final aliceSharedSecret = aliceECDH.generateSharedSecret(
@@ -168,16 +179,18 @@ void main() {
         final bobKeyPair = await ECDHKeyExchange.generateKeyPair();
         final charlieKeyPair = await ECDHKeyExchange.generateKeyPair();
 
-        final aliceECDH = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final aliceECDH = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: aliceKeyPair['publicKey']!,
+            privateKey: aliceKeyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: aliceKeyPair['publicKey']!,
-          privateKey: aliceKeyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         // Alice generates shared secrets with Bob and Charlie
         final aliceBobSecret = aliceECDH.generateSharedSecret(
@@ -200,27 +213,31 @@ void main() {
           curve: ECCKeyUtils.secp384r1,
         );
 
-        final aliceECDH = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final aliceECDH = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: aliceKeyPair['publicKey']!,
+            privateKey: aliceKeyPair['privateKey']!,
+            curve: ECCKeyUtils.secp384r1,
           ),
-          publicKey: aliceKeyPair['publicKey']!,
-          privateKey: aliceKeyPair['privateKey']!,
-          curve: ECCKeyUtils.secp384r1,
-        ));
+        );
 
-        final bobECDH = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final bobECDH = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: bobKeyPair['publicKey']!,
+            privateKey: bobKeyPair['privateKey']!,
+            curve: ECCKeyUtils.secp384r1,
           ),
-          publicKey: bobKeyPair['publicKey']!,
-          privateKey: bobKeyPair['privateKey']!,
-          curve: ECCKeyUtils.secp384r1,
-        ));
+        );
 
         final aliceSecret = aliceECDH.generateSharedSecret(
           bobKeyPair['publicKey']!,
@@ -239,16 +256,18 @@ void main() {
       test('getPublicKey returns the same as publicKey property', () async {
         final keyPair = await ECDHKeyExchange.generateKeyPair();
         
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         expect(ecdh.getPublicKey(), equals(ecdh.publicKey));
         expect(ecdh.getPublicKey(), equals(keyPair['publicKey']!));
@@ -260,16 +279,18 @@ void main() {
         final keyPair = await ECDHKeyExchange.generateKeyPair();
         final otherKeyPair = await ECDHKeyExchange.generateKeyPair();
 
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().subtract(Duration(days: 1)),
-            expirationTimes: null,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().subtract(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         expect(ecdh.isExpired(), isTrue);
         
@@ -282,16 +303,18 @@ void main() {
       test('handles expiration times correctly', () async {
         final keyPair = await ECDHKeyExchange.generateKeyPair();
 
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: null,
-            expirationTimes: 2,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: null,
+              expirationTimes: 2,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         expect(ecdh.isExpired(), isFalse);
 
@@ -309,16 +332,18 @@ void main() {
       test('handles invalid public key format gracefully', () async {
         final keyPair = await ECDHKeyExchange.generateKeyPair();
 
-        final ecdh = ECDHKeyExchange((
-          parent: (
-            algorithm: KeyExchangeAlgorithm.ecdh,
-            expirationDate: DateTime.now().add(Duration(days: 1)),
-            expirationTimes: null,
+        final ecdh = ECDHKeyExchange(
+          InputECDHKeyExchange(
+            parent: InputKeyExchangeBase(
+              algorithm: KeyExchangeAlgorithm.ecdh,
+              expirationDate: DateTime.now().add(Duration(days: 1)),
+              expirationTimes: null,
+            ),
+            publicKey: keyPair['publicKey']!,
+            privateKey: keyPair['privateKey']!,
+            curve: ECCKeyUtils.secp256r1,
           ),
-          publicKey: keyPair['publicKey']!,
-          privateKey: keyPair['privateKey']!,
-          curve: ECCKeyUtils.secp256r1,
-        ));
+        );
 
         expect(
           () => ecdh.generateSharedSecret('invalid-public-key'),

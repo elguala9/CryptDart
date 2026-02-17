@@ -5,11 +5,30 @@ import 'package:barrel_files_annotation/barrel_files_annotation.dart';
 import 'package:cryptdart/implementations/partial/symmetric_cipher_impl.dart';
 import 'package:cryptdart/types/crypto_algorithm.dart';
 import 'package:cryptdart/utils/crypto_utils.dart';
+import 'package:meta/meta.dart';
 
 /// Input parameters for [AESCipher] constructor.
-typedef InputAESCipher = ({
-  InputSymmetricCipher parent,
-});
+@immutable
+class InputAESCipher {
+  final InputSymmetricCipher parent;
+
+  const InputAESCipher({
+    required this.parent,
+  });
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is InputAESCipher &&
+          runtimeType == other.runtimeType &&
+          parent == other.parent;
+
+  @override
+  int get hashCode => parent.hashCode;
+
+  @override
+  String toString() => 'InputAESCipher(parent: $parent)';
+}
 
 /// AES symmetric cipher implementation.
 /// Extends [SymmetricCipher] and provides AES encryption/decryption.
