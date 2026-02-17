@@ -40,7 +40,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  cryptdart: ^0.1.2
+  cryptdart: ^0.1.6
 ```
 
 Run:
@@ -62,18 +62,19 @@ void main() async {
   print('Generated AES key: ${aesKey.substring(0, 16)}...');
 
   // Create cipher with expiration
-  final cipher = AESCipher((
-    parent: (
-      key: aesKey,
-      parent: (
-        parent: (
-          algorithm: CryptoAlgorithm.aes,
-          expirationDate: DateTime.now().add(Duration(hours: 24)),
-          expirationTimes: null,
+  final cipher = AESCipher(
+    InputAESCipher(
+      parent: InputSymmetricCipher(
+        key: aesKey,
+        parent: InputCipher(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(hours: 24)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
 
   // Encrypt data
   final data = 'Hello, secure world! 🔐';
@@ -97,19 +98,20 @@ void main() async {
   print('Generated RSA ${keyPair['publicKey']!.contains('BEGIN PUBLIC KEY') ? '✓' : '✗'}');
 
   // RSA Encryption
-  final rsaCipher = RSACipher((
-    parent: (
-      publicKey: keyPair['publicKey']!,
-      privateKey: keyPair['privateKey']!,
-      parent: (
-        parent: (
-          algorithm: CryptoAlgorithm.rsa,
-          expirationDate: DateTime.now().add(Duration(days: 30)),
-          expirationTimes: null,
+  final rsaCipher = RSACipher(
+    InputRSACipher(
+      parent: InputAsymmetricCipher(
+        publicKey: keyPair['publicKey']!,
+        privateKey: keyPair['privateKey']!,
+        parent: InputCipher(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(days: 30)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
 
   final message = 'Secret message 🤫';
   final encrypted = await rsaCipher.encrypt(message.codeUnits);
@@ -117,19 +119,20 @@ void main() async {
   print('RSA decrypted: ${String.fromCharCodes(decrypted)}');
 
   // RSA Digital Signature
-  final signature = RSASignatureCipher((
-    parent: (
-      publicKey: keyPair['publicKey']!,
-      privateKey: keyPair['privateKey']!,
-      parent: (
-        parent: (
-          algorithm: CryptoAlgorithm.rsaSignature,
-          expirationDate: DateTime.now().add(Duration(days: 30)),
-          expirationTimes: null,
+  final signature = RSASignatureCipher(
+    InputRSASignatureCipher(
+      parent: InputAsymmetricSign(
+        publicKey: keyPair['publicKey']!,
+        privateKey: keyPair['privateKey']!,
+        parent: InputSign(
+          parent: InputExpirationBase(
+            expirationDate: DateTime.now().add(Duration(days: 30)),
+            expirationTimes: null,
+          ),
         ),
       ),
     ),
-  ));
+  );
 
   final signData = 'Document to sign';
   final sig = await signature.sign(signData.codeUnits);

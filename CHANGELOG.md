@@ -2,6 +2,23 @@
 
 # Changelog
 
+## [0.1.6] - 2026-02-17
+- Refactor: Trasformati tutti i 22 typedef da record a classi immutabili
+  - InputExpirationBase, InputCipher, InputSign, InputKeyExchangeBase
+  - InputSymmetricCipher, InputSymmetricSign, InputAsymmetricCipher, InputAsymmetricSign
+  - InputHandler<T>, InputECDHKeyExchange
+  - InputAESCipher, InputDESCipher, InputChaCha20Cipher, InputRSACipher, InputECDSACipher
+  - InputHMACSign, InputRSASignatureCipher, InputECDSASign
+  - KeyPair, CryptoPeerCapabilities, NegotiationResult, SecureSession
+- Benefici della trasformazione:
+  - Inizializzazione più semplice con costruttori anziché record annidati
+  - Implementazioni type-safe di equals/hashCode
+  - API coerente con sintassi di classe consistente
+  - Validazione e documentazione più facili
+- Aggiornati 37 file (lib/, example/, test/)
+- Tutti i 38 test passano ✓
+- Verificato con `dart analyze` - 0 errori ✓
+
 ## [0.1.5] - 2026-02-16
 - Feature: Aggiunto sistema di codici numerici univoci per gli algoritmi crittografici
   - Tutti gli enum (SymmetricCipherAlgorithm, AsymmetricCipherAlgorithm, SymmetricSignAlgorithm, AsymmetricSignAlgorithm) ora hanno un campo `code: int`
