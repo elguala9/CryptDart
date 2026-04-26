@@ -11,7 +11,8 @@
       "Bash(dart test:*)",
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "mcp__serena__search_for_pattern"
     ]
   }
 }
