@@ -11,3 +11,4 @@ pubspec.lock
 *.log
 .vexp/
 .serena/
+.*
